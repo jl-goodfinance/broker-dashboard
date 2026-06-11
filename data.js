@@ -40,7 +40,7 @@ window.DASH_DATA = {
   "market": {
     "turnoverYear": 101.08,
     "turnoverPrev": 99.81,
-    "turnoverMonth": 11.34,
+    "turnoverMonth": 12.67,
     "turnoverMonthLabel": "2026/06 本月累計",
     "turnoverSeries": [
       {
@@ -92,9 +92,9 @@ window.DASH_DATA = {
         "v": 26.34
       }
     ],
-    "taiex": 43225.54,
-    "taiexChg": -1478.9,
-    "taiexDate": "2026-06-10",
+    "taiex": 43149.46,
+    "taiexChg": -76.08,
+    "taiexDate": "2026-06-11",
     "taiexYearPct": 25,
     "mcap": 94,
     "turnoverTTM": 155.1,
