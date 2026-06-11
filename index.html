@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>證券市場儀表板</title>
+<style>
+  :root{
+    --page:#0e0e16; --card:#1a1b27; --soft:#141522; --inset:#101019;
+    --ink:#f3f4fb; --muted:#8a8ca6; --muted2:#5f6178; --line:#2a2b3c;
+    --green:#38bdf8; --green-l:#5fd0ff; /* 正向/上漲色，改為青藍 */
+    --blue:#3b82f6; --blue-l:#60a5fa; --cyan:#38bdf8; --indigo:#6366f1;
+    --purple:#818cf8; /* 美好證券 highlight：柔和淡靛藍 periwinkle */ --red:#ff5d6c; --amber:#ffb340;
+    --r:24px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",
+      "PingFang TC","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;
+    background:var(--page); color:var(--ink); padding:34px 26px 64px; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1200px;margin:0 auto}
+  .top{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:10px;margin:0 4px 22px}
+  .top h1{font-size:26px;font-weight:700;letter-spacing:-.4px}
+  .top .as{font-size:13px;color:var(--muted)}
+
+  .bento{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;align-items:stretch;
+    grid-template-areas:
+      "turn  turn  turn  turn  turn  turn"
+      "chart chart chart chart rank  rank"
+      "mcap  mcap  idx   idx   rank  rank"
+      "grow  grow  usco  usco  rank  rank"
+      "table table table table table table"
+      "note  note  note  note  note  note";}
+  .card{background:var(--card);border-radius:var(--r);padding:22px 24px;position:relative;overflow:hidden}
+  .a-chart{grid-area:chart}.a-rank{grid-area:rank}.a-turn{grid-area:turn}
+  .a-grow{grid-area:grow}.a-usco{grid-area:usco}.a-mcap{grid-area:mcap}
+  .a-idx{grid-area:idx}.a-table{grid-area:table}.a-note{grid-area:note}
+
+  .label{font-size:13px;color:var(--muted);font-weight:500}
+  .ctitle{font-size:17px;font-weight:700;letter-spacing:-.3px;display:flex;align-items:center;justify-content:space-between}
+  .ctitle .gear{color:var(--muted2);font-size:15px}
+
+  /* hero chart */
+  .tabs{display:inline-flex;background:var(--inset);border-radius:11px;padding:4px;margin:18px 0 8px;gap:2px}
+  .tabs button{border:0;background:transparent;color:var(--muted);font-size:13px;font-weight:600;
+    padding:7px 18px;border-radius:8px;cursor:pointer;font-family:inherit;transition:.15s}
+  .tabs button.on{background:#3a3a3f;color:var(--ink)}
+  .chartbox{margin-top:6px}
+  svg{display:block;width:100%;height:auto}
+  .ksum{display:flex;align-items:flex-end;justify-content:space-between;margin-top:18px;flex-wrap:wrap;gap:8px}
+  .ksum .l{font-size:13px;color:var(--muted)}
+  .ksum .big{font-size:42px;font-weight:700;letter-spacing:-1.5px;line-height:1}
+  .ksum .big .u{font-size:17px;color:var(--muted);font-weight:600;margin-left:4px;letter-spacing:0}
+  .ksum .big .plus{font-size:16px;color:var(--green);font-weight:700;margin-left:8px;letter-spacing:0;vertical-align:super}
+  .ksum .pc{font-size:22px;font-weight:700;color:var(--green);display:flex;align-items:center;gap:5px}
+
+  /* ranking bars */
+  .a-rank{background:var(--card);padding-bottom:8px}
+  .rsub{font-size:12px;color:var(--muted);margin-top:4px}
+  /* 定義說明 tooltip */
+  .info{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;
+    border:1px solid var(--muted2);color:var(--muted);font-size:10px;font-weight:700;cursor:help;margin-left:6px;
+    position:relative;vertical-align:middle}
+  .info:hover{color:var(--cyan);border-color:var(--cyan)}
+  .info:hover::after{content:attr(data-tip);position:absolute;left:0;top:150%;width:270px;
+    background:#0b0b12;border:1px solid var(--line);border-radius:12px;padding:11px 13px;
+    font-size:12px;font-weight:500;color:var(--ink);line-height:1.65;text-align:left;white-space:normal;
+    z-index:100;box-shadow:0 10px 30px rgba(0,0,0,.55)}
+  .a-rank{overflow:visible}
+  .prow{margin-top:17px}
+  .prow .pl{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;font-weight:600;margin-bottom:8px}
+  .prow .pl .pv{font-size:13px;color:var(--muted);font-weight:600;font-variant-numeric:tabular-nums}
+  .ptrack{height:6px;border-radius:5px;background:#323237;overflow:hidden}
+  .ptrack > i{display:block;height:100%;border-radius:5px;background:linear-gradient(90deg,var(--indigo),var(--cyan))}
+  .prow.us .pl{color:var(--purple)}
+  .prow.us .ptrack > i{background:linear-gradient(90deg,#6366f1,#a5b4fc)}
+
+  /* small stat / kpi tiles */
+  .stat .value{font-size:34px;font-weight:700;letter-spacing:-1px;margin-top:14px;line-height:1}
+  .stat .value .u{font-size:15px;color:var(--muted);font-weight:600;margin-left:4px;letter-spacing:0}
+  .stat .d{font-size:13px;font-weight:600;margin-top:8px;color:var(--green)}
+  .stat .d.muted{color:var(--muted)}
+
+  /* 全年成交值 置頂橫幅 */
+  .a-turn{flex-direction:row;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;
+    background:linear-gradient(120deg,#1c2540,#15161f 60%)}
+  .turn-spark{position:absolute;inset:0;width:100%;height:100%;opacity:.9;z-index:0;pointer-events:none}
+  .turn-spark svg{width:100%;height:100%;display:block}
+  .a-turn .turn-left,.a-turn .turn-right{position:relative;z-index:1}
+  .a-turn .label{font-size:15px}
+  .turn-val{font-size:62px;font-weight:800;letter-spacing:-2.5px;line-height:1;margin-top:8px}
+  .turn-val .u{font-size:22px;font-weight:600;color:var(--muted);margin-left:8px;letter-spacing:0}
+  .turn-right{text-align:right}
+  .turn-pct{font-size:56px;font-weight:800;letter-spacing:-2px;line-height:1;
+    display:flex;align-items:flex-end;justify-content:flex-end;gap:8px}
+  .turn-pct .tri{font-size:.5em;line-height:1;padding-bottom:.12em}
+  .turn-pct .pctnum{-webkit-text-fill-color:transparent;-webkit-background-clip:text;background-clip:text}
+  .turn-pct.up .tri{color:#34e08a}
+  .turn-pct.up .pctnum{background:linear-gradient(90deg,#34e08a,#38bdf8);-webkit-background-clip:text;background-clip:text}
+  .turn-pct.down .tri{color:#ff6b78}
+  .turn-pct.down .pctnum{background:linear-gradient(90deg,#ff6b78,#ff9a8b);-webkit-background-clip:text;background-clip:text}
+  .turn-yoy{font-size:13px;color:var(--muted);margin-top:7px}
+  .turn-month{font-size:13px;color:var(--muted);margin-top:6px}
+  @media(max-width:560px){.turn-val{font-size:46px}.turn-right{text-align:left}}
+
+  /* grow + us tiles */
+  .grow,.usco{color:#fff}
+  .grow{background:linear-gradient(140deg,#2747a8,#16235c);min-height:100%}
+  .grow .tag{font-size:12.5px;font-weight:700;color:var(--green-l)}
+  .grow .name{font-size:22px;font-weight:800;letter-spacing:-.4px;margin-top:10px}
+  .grow .pct{font-size:40px;font-weight:800;letter-spacing:-1.5px;margin-top:14px;line-height:1;color:var(--green-l)}
+  .grow .pct .c{font-size:13px;font-weight:600;color:#bfe9cf;margin-left:6px;letter-spacing:0}
+  .grow .flow{font-size:12px;color:#9fb4e0;margin-top:6px}
+  .usco{background:linear-gradient(150deg,#1c1f3a,#151624);border:1px solid rgba(129,140,248,.5);box-shadow:0 10px 34px rgba(129,140,248,.12)}
+  .usco .tag{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;color:#c7ccff;background:rgba(129,140,248,.22);padding:3px 9px;border-radius:999px}
+  .usco .name{font-size:20px;font-weight:800;letter-spacing:-.3px;margin-top:12px;
+    background:linear-gradient(90deg,#6ea8ff,#b07cff);-webkit-background-clip:text;background-clip:text;color:transparent;width:fit-content}
+  .usco .stats{display:flex;gap:16px;margin-top:16px;flex-wrap:wrap}
+  .usco .stats .n{font-size:21px;font-weight:800;letter-spacing:-.4px;
+    background:linear-gradient(90deg,#6ea8ff,#b07cff);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .usco .stats .k{font-size:11px;color:#aab0d8;margin-top:1px}
+
+  /* table */
+  .a-table{padding:8px 10px 12px}
+  .a-table .ctitle{padding:14px 14px 6px}
+  .a-table .pill{font-size:12px;font-weight:600;color:var(--muted);background:var(--soft);padding:4px 11px;border-radius:999px}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{padding:12px 14px;text-align:right;white-space:nowrap}
+  thead th{font-size:11.5px;color:var(--muted);font-weight:600;border-bottom:1px solid var(--line)}
+  thead th[data-sort]{cursor:pointer;user-select:none;white-space:nowrap}
+  thead th[data-sort]:hover{color:var(--ink)}
+  thead th.sorted{color:var(--cyan)}
+  .sarr{font-size:11px}
+  th:first-child,td:first-child{text-align:left}
+  tbody td{border-bottom:1px solid #2a2a2e}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:hover td{background:rgba(255,255,255,.025)}
+  .rank{display:inline-flex;width:24px;height:24px;border-radius:7px;align-items:center;justify-content:center;font-size:12px;font-weight:700;background:#323237;color:var(--muted);margin-right:10px}
+  .rank.rklead{background:linear-gradient(135deg,#3b82f6,#38bdf8);color:#06182b}
+  .rank.usrank{background:var(--purple);color:#0e0e16}
+  .name{font-weight:600;letter-spacing:-.2px}
+  .num{font-variant-numeric:tabular-nums}
+  .qline{font-size:11px;color:var(--muted2);font-weight:500;margin-top:3px}
+  .yoy{font-weight:700}.yoy.up{color:var(--green)}.yoy.down{color:var(--red)}.yoy.flat{color:var(--muted)}
+  .dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-left:7px;vertical-align:middle}
+  .dot.y{background:var(--green)} .dot.e{background:var(--amber)}
+  tr.fast td{background:rgba(56,189,248,.10)}
+  tr.usrow td{background:rgba(129,140,248,.08)}
+  tr.usrow td:first-child{box-shadow:inset 3px 0 0 var(--purple)}
+  tr.usrow .name{background:linear-gradient(90deg,#6ea8ff,#b07cff);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .badge{font-size:10px;font-weight:800;color:#06182b;background:var(--cyan);border-radius:6px;padding:2px 7px;margin-left:8px;vertical-align:middle}
+  .tag-us{font-size:10px;font-weight:800;color:var(--purple);border:1px solid var(--purple);border-radius:6px;padding:1px 6px;margin-left:8px;vertical-align:middle}
+  .legend{display:flex;gap:18px;font-size:12px;color:var(--muted);padding:12px 14px 4px}
+  .legend .dot{margin:0 5px 0 0}
+  .a-note{background:transparent;padding:0 8px;font-size:12px;color:var(--muted2);line-height:1.7}
+  .a-note b{color:var(--muted)}
+
+  @media(max-width:920px){
+    .bento{grid-template-columns:repeat(2,1fr);grid-template-areas:
+      "turn turn" "chart chart" "rank rank" "mcap idx" "grow usco"
+      "table table" "note note";}
+  }
+  @media(max-width:560px){
+    .bento{grid-template-columns:1fr;grid-template-areas:
+      "turn" "chart" "rank" "mcap" "idx" "grow" "usco" "table" "note";}
+    .a-table{overflow-x:auto}table{min-width:560px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <h1>證券市場儀表板</h1>
+    <div style="text-align:right">
+      <div class="as" id="updTop" style="color:var(--cyan);font-weight:600"></div>
+      <div class="as" id="asLabel" style="margin-top:3px"></div>
+    </div>
+  </div>
+
+  <div class="bento">
+
+    <!-- Hero 折線圖：客戶人數 -->
+    <div class="card a-chart">
+      <div class="ctitle">客戶人數趨勢 <span class="gear">⚙</span></div>
+      <div class="label" style="margin-top:6px">全台證券開戶人數（年底累計）</div>
+      <div class="tabs" id="tabs">
+        <button data-n="3">近 3 年</button>
+        <button data-n="5">近 5 年</button>
+        <button data-n="0" class="on">全部</button>
+      </div>
+      <div class="chartbox" id="chartbox"></div>
+      <div class="ksum">
+        <div>
+          <div class="l">累計開戶人數</div>
+          <div class="big"><span class="num" id="kTotal"></span><span class="u">萬人</span><span class="plus" id="kPlus"></span></div>
+        </div>
+        <div class="pc">↗ <span id="kPct"></span></div>
+      </div>
+    </div>
+
+    <!-- 市佔排行（藍色長條） -->
+    <div class="card a-rank">
+      <div class="ctitle">券商市佔排行</div>
+      <div class="rsub">經紀成交金額市佔・2025/11<span class="info" data-tip="市佔率＝券商「經紀（受託買賣）成交金額」占全市場比重。集中市場・純國內券商口徑・2025/11。依『成交金額』計算，非客戶人數或營收——大戶／法人下單金額大、權重就高。">i</span></div>
+      <div id="ranking"></div>
+    </div>
+
+    <!-- 全年成交值（主視覺，置頂） -->
+    <div class="card a-turn">
+      <div class="turn-spark" id="turnSpark"></div>
+      <div class="turn-left">
+        <div class="label">全台股市・近 12 個月成交值</div>
+        <div class="turn-val"><span class="num" id="turnYear"></span><span class="u">兆元</span></div>
+      </div>
+      <div class="turn-right">
+        <div class="turn-pct" id="turnPct"></div>
+        <div class="turn-yoy" id="turnYoY"></div>
+        <div class="turn-month" id="turnMonth"></div>
+      </div>
+    </div>
+
+    <!-- 成長最快 -->
+    <div class="card grow a-grow" id="growTile"></div>
+
+    <!-- 美好證券 -->
+    <div class="card usco a-usco" id="usTile"></div>
+
+    <!-- 市值 -->
+    <div class="card stat a-mcap">
+      <div class="label">全市場市值</div>
+      <div class="value"><span class="num" id="mcapVal"></span><span class="u">兆</span></div>
+      <div class="d muted">2025 年底</div>
+    </div>
+
+    <!-- 加權指數（最新，自動） -->
+    <div class="card stat a-idx">
+      <div class="label">加權指數（最新）</div>
+      <div class="value"><span class="num" id="idxVal">—</span></div>
+      <div class="d" id="idxDelta"></div>
+      <div class="sub" id="idxYear" style="font-size:12px;color:var(--muted);margin-top:6px"></div>
+    </div>
+
+    <!-- 券商明細表 -->
+    <div class="card a-table">
+      <div class="ctitle">上市券商：市佔・營收・淨利・YoY
+        <span class="pill">前 10 名 ＋ 美好證券</span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th data-sort="rank">券商</th><th data-sort="share" title="券商經紀（受託買賣）成交金額占全市場比重・集中市場純國內券商・2025/11（依成交金額計，非客戶數）">市佔率</th><th data-sort="mRev">當月營收（億・證券）</th>
+            <th data-sort="p25">稅後淨利（億）</th><th data-sort="yoy">YoY 成長</th><th data-sort="margin">淨利率</th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+      <div class="legend">
+        <span><span class="dot y"></span>官方開放資料（TWSE 損益表）流入</span>
+        <span><span class="dot e"></span>估算／年報手動值</span>
+      </div>
+    </div>
+
+    <p class="a-note">
+      <b>※ 數據說明：</b>「成交值／開戶數」取自證交所・集保；「市佔率」為證交所經紀成交金額市佔（2025/11）。
+      「稅後淨利／YoY」比較 2025 vs 2024 全年（綠點＝法說會／年報已確認；橘點＝估算待校正）。
+      <b>國泰證券 2025 淨利約 45 億、年增約 +109%，為前 10 大成長最快。</b>
+      「當月營收」為<b>證券子公司本身</b>（非金控母公司）之月營收，來源 TWSE 公發/上市每月營收彙總（t187ap05）；旁註為資料月份與 YoY。「美好證券」數字為示意，請填入內部實際數據。
+    </p>
+
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script>
+/* ====================================================================
+   資料來自 data.js（window.DASH_DATA），由 update.py 自動更新
+   ==================================================================== */
+const D = window.DASH_DATA;
+const ACCOUNTS = D.accounts;
+const TOTAL_ACCOUNTS = D.totalAccounts;
+const BROKERS = D.brokers;
+
+// 頂部市場數字 + 日期（成交值 / 指數為 update.py 自動更新）
+(function fillMarket(){
+  const m = D.market;
+  document.getElementById("asLabel").textContent = "資料截至 "+D.meta.asLabel;
+  const ttm = (m.turnoverTTM!=null) ? m.turnoverTTM : m.turnoverYear;
+  const prev = (m.turnoverTTMPrev!=null) ? m.turnoverTTMPrev : m.turnoverPrev;
+  document.getElementById("turnYear").textContent = ttm;
+  if(prev){
+    const tdiff = ttm - prev, tpct = tdiff / prev * 100, up = tdiff>=0;
+    const tEl = document.getElementById("turnPct");
+    tEl.className = "turn-pct " + (up ? "up" : "down");
+    tEl.innerHTML = `<span class="tri">${up?'▲':'▼'}</span><span class="pctnum">${up?'+':''}${tpct.toFixed(0)}%</span>`;
+    document.getElementById("turnYoY").textContent =
+      `vs 前 12 個月（${tdiff>=0?'+':''}${tdiff.toFixed(0)} 兆元）`;
+  }
+  renderTurnSpark();  // 背景折線：月成交值序列（含 x 軸月份）
+  document.getElementById("turnMonth").textContent =
+    (m.turnoverMonth!=null) ? `${m.turnoverMonthLabel}　${m.turnoverMonth} 兆元` : "";
+  document.getElementById("mcapVal").textContent = m.mcap;
+  document.getElementById("idxYear").textContent = "今年全年 +"+m.taiexYearPct+"%";
+  document.getElementById("updTop").textContent =
+    `⚙ 最後更新 ${D.meta.updated}　財報期別 ${D.meta.finPeriod||"—"}`;
+  if(m.taiex!=null){
+    document.getElementById("idxVal").textContent = Number(m.taiex).toLocaleString();
+    const idxD = document.getElementById("idxDelta");
+    const up = (m.taiexChg>=0);
+    const base = m.taiex - m.taiexChg;
+    const cpct = base ? (m.taiexChg/base*100) : 0;
+    idxD.textContent = (up?"▲ +":"▼ ")+m.taiexChg+`（${cpct>=0?'+':''}${cpct.toFixed(2)}%）　`+m.taiexDate;
+    idxD.style.color = up ? "var(--green)" : "var(--red)";
+  }
+})();
+
+/* ====================================================================
+   折線圖（SVG）— viewBox 寬度＝實際像素寬，1:1 對應，數字不會被拉扁
+   ==================================================================== */
+const H=210, padL=12, padR=18, padT=18, padB=32;
+function buildChart(data, W){
+  const n=data.length;
+  const vmin=Math.min(...data.map(d=>d.v)), vmax=Math.max(...data.map(d=>d.v));
+  const span=(vmax-vmin)||1, lo=vmin-span*0.18, hi=vmax+span*0.18;
+  const X=i=> padL + i*(W-padL-padR)/(n-1);
+  const Y=v=> padT + (hi-v)/(hi-lo)*(H-padT-padB);
+  const pts=data.map((d,i)=>[X(i),Y(d.v)]);
+  const line=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
+  const area=`M${X(0).toFixed(1)} ${(H-padB)} `+pts.map(p=>'L'+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ')+` L${X(n-1).toFixed(1)} ${(H-padB)} Z`;
+  const grid=[0,.25,.5,.75,1].map(t=>{const yy=padT+t*(H-padT-padB);
+    return `<line x1="${padL}" x2="${W-padR}" y1="${yy}" y2="${yy}" stroke="#2e2e33" stroke-width="1" stroke-dasharray="2 5"/>`}).join('');
+  const xlab=data.map((d,i)=>`<text x="${X(i).toFixed(1)}" y="${H-11}" fill="#8ec5ff" fill-opacity="0.5" font-size="12" text-anchor="${i===0?'start':i===n-1?'end':'middle'}">${d.y}</text>`).join('')
+    +`<text x="${(W-2)}" y="14" fill="#8ec5ff" fill-opacity="0.5" font-size="11" text-anchor="end">單位：萬人</text>`;
+  const last=pts[n-1];
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="width:100%;height:${H}px">
+    <defs>
+      <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#3b82f6" stop-opacity="0.38"/>
+        <stop offset="1" stop-color="#3b82f6" stop-opacity="0"/></linearGradient>
+      <linearGradient id="gline" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#6366f1"/>
+        <stop offset="1" stop-color="#38bdf8"/></linearGradient>
+    </defs>
+    ${grid}
+    <path d="${area}" fill="url(#g)"/>
+    <path d="${line}" fill="none" stroke="url(#gline)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="4.5" fill="#0e0e16" stroke="#38bdf8" stroke-width="2.4" vector-effect="non-scaling-stroke"/>
+    ${xlab}
+  </svg>`;
+}
+let curN = 0;
+function renderChart(nYears){
+  curN = nYears;
+  const box = document.getElementById("chartbox");
+  const W = Math.max(320, Math.round(box.clientWidth || 560));
+  const data = nYears ? ACCOUNTS.slice(-nYears) : ACCOUNTS;
+  box.innerHTML = buildChart(data, W);
+  const first=data[0].v, last=data[data.length-1].v;
+  const diff=last-first, pct=(last/first-1)*100;
+  document.getElementById("kTotal").textContent = last.toLocaleString();
+  document.getElementById("kPlus").textContent = "+"+diff.toFixed(0)+"萬";
+  document.getElementById("kPct").textContent = "+"+pct.toFixed(1)+"%";
+}
+
+/* 成交值背景折線（含 x 軸月份），同樣用實際像素寬避免變形 */
+function renderTurnSpark(){
+  const s = (D.market.turnoverSeries || []);
+  const box = document.getElementById("turnSpark");
+  if(!box || s.length < 2) return;
+  const W = Math.max(320, Math.round(box.clientWidth || 600));
+  const Hs = Math.max(90, Math.round(box.clientHeight || 150));
+  const pt=12, pb=22, n=s.length;
+  const vals=s.map(d=>d.v), lo=Math.min(...vals), hi=Math.max(...vals), sp=(hi-lo)||1;
+  const X=i=> i*W/(n-1);
+  const Y=v=> pt + (hi-v)/sp*(Hs-pt-pb);
+  const pts=s.map((d,i)=>[X(i),Y(d.v)]);
+  const line=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
+  const area=`M0 ${Hs-pb} `+pts.map(p=>'L'+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ')+` L${W} ${Hs-pb} Z`;
+  const step=Math.max(1, Math.round(n/6));
+  const xlab=s.map((d,i)=> (i%step===0||i===n-1)
+    ? `<text x="${X(i).toFixed(1)}" y="${Hs-6}" fill="#8ec5ff" fill-opacity="0.5" font-size="11" text-anchor="${i===0?'start':i===n-1?'end':'middle'}">${d.ym.slice(2).replace('-','/')}</text>` : "").join('');
+  box.innerHTML = `<svg viewBox="0 0 ${W} ${Hs}" preserveAspectRatio="none" style="width:100%;height:100%">
+    <defs>
+      <linearGradient id="sg" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#34e08a" stop-opacity="0.38"/>
+        <stop offset="1" stop-color="#38bdf8" stop-opacity="0"/></linearGradient>
+      <linearGradient id="spline" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#34e08a"/><stop offset="1" stop-color="#38bdf8"/></linearGradient>
+    </defs>
+    <path d="${area}" fill="url(#sg)"/>
+    <path d="${line}" fill="none" stroke="url(#spline)" stroke-width="2.2" stroke-linejoin="round"/>
+    ${xlab}
+  </svg>`;
+}
+
+document.getElementById("tabs").addEventListener("click", e=>{
+  const b=e.target.closest("button"); if(!b) return;
+  document.querySelectorAll("#tabs button").forEach(x=>x.classList.remove("on"));
+  b.classList.add("on");
+  renderChart(+b.dataset.n);
+});
+let _rz; window.addEventListener("resize", ()=>{ clearTimeout(_rz); _rz=setTimeout(()=>{ renderChart(curN); renderTurnSpark(); }, 150); });
+renderChart(0);
+
+/* ====================================================================
+   排行、tiles、表格
+   ==================================================================== */
+BROKERS.forEach(b => b.yoy = (b.p25 / b.p24 - 1) * 100);
+const fastest = BROKERS.filter(b => !b.us).reduce((a, b) => b.yoy > a.yoy ? b : a);
+const us = BROKERS.find(b => b.us);
+
+// 市佔排行 bars
+const maxShare = Math.max(...BROKERS.map(b => b.share));
+document.getElementById("ranking").innerHTML = BROKERS.map(b => `
+  <div class="prow ${b.us?'us':''}">
+    <div class="pl"><span>${b.name}</span><span class="pv">${b.share.toFixed(2)}%</span></div>
+    <div class="ptrack"><i style="width:${(b.share/maxShare*100).toFixed(1)}%"></i></div>
+  </div>`).join('');
+
+// 成長最快 tile
+document.getElementById("growTile").innerHTML = `
+  <div class="tag">🚀 2025 成長最快</div>
+  <div class="name">${fastest.name}</div>
+  <div class="pct">+${fastest.yoy.toFixed(0)}<span class="c">% 淨利 YoY</span></div>
+  <div class="flow">${fastest.p24} 億 → ${fastest.p25} 億</div>`;
+
+// 美好證券 tile（含市場排名）
+const usRank = us.rank;            // 全市場名次（純國內口徑）
+const usRankStr = us.rank ? ((us.rankApprox?"≈#":"#")+us.rank) : "—";
+document.getElementById("usTile").innerHTML = `
+  <div class="tag">★ 本公司</div>
+  <div class="name">${us.name}</div>
+  <div class="stats">
+    <div><div class="n">${us.mRev!=null?us.mRev:'—'}</div><div class="k">當月營收（億）${us.mRevYM?'・'+us.mRevYM:''}</div></div>
+    <div><div class="n">${us.share.toFixed(2)}%</div><div class="k">市佔率</div></div>
+    <div><div class="n">${us.p25}</div><div class="k">淨利（億）</div></div>
+  </div>`;
+
+// 明細表（可點欄位排序）
+const rowsEl = document.getElementById("rows");
+BROKERS.forEach((b,i)=>{ b._rank = b.us ? (b.rank || 999) : (i+1); b._margin = b.p25/b.rev*100; });
+const SORTVAL = { rank:b=>b._rank, share:b=>b.share, mRev:b=>(b.mRev!=null?b.mRev:-1), p25:b=>b.p25, yoy:b=>b.yoy, margin:b=>b._margin };
+let sortKey="share", sortDir="desc";
+
+function renderTable(){
+  const f = SORTVAL[sortKey];
+  const arr = BROKERS.slice().sort((a,b)=> sortDir==="desc" ? f(b)-f(a) : f(a)-f(b));
+  rowsEl.innerHTML = arr.map(b=>{
+    const isUs=!!b.us, isFast=b===fastest;
+    const yCls=b.yoy>0.5?"up":(b.yoy<-0.5?"down":"flat");
+    const yArr=b.yoy>0.5?"▲":(b.yoy<-0.5?"▼":"—");
+    const conf=(b.qProfit!=null)?"y":"e";
+    const qPf =(b.qProfit!=null)?`<div class="qline">${b.qPeriod} 累計 ${b.qProfit}${b.qEps!=null?`・EPS ${b.qEps}`:""}</div>`:"";
+    const mSub=(b.mRev!=null && (b.mRevYM||b.mRevYoY!=null))
+      ? `<div class="qline">${b.mRevYM||''}${b.mRevYoY!=null?`・YoY ${b.mRevYoY>=0?'+':''}${b.mRevYoY}%`:''}</div>` : "";
+    const mCell=(b.mRev!=null) ? `${b.mRev.toLocaleString()}<span class="dot y"></span>${mSub}` : `<span style="color:var(--muted2)">—</span>`;
+    const rk = isUs ? (b.rank?(b.rankApprox?'≈'+b.rank:b.rank):'—') : b._rank;
+    return `<tr class="${isUs?'usrow':''} ${isFast?'fast':''}">
+      <td><span class="rank ${(!isUs&&b._rank<=3)?'rklead':''} ${isUs?'usrank':''}">${rk}</span>
+        <span class="name">${b.name}</span>${isUs?'<span class="tag-us">本公司</span>':''}${isFast?'<span class="badge">🚀 成長最快</span>':''}</td>
+      <td class="num">${b.share.toFixed(2)}%</td>
+      <td class="num">${mCell}</td>
+      <td class="num">${b.p25.toLocaleString()}<span class="dot ${conf}"></span>${qPf}</td>
+      <td class="num"><span class="yoy ${yCls}">${yArr} ${b.yoy>=0?'+':''}${b.yoy.toFixed(1)}%</span></td>
+      <td class="num">${b._margin.toFixed(1)}%</td>
+    </tr>`;
+  }).join('');
+  document.querySelectorAll('thead th[data-sort]').forEach(th=>{
+    const k=th.dataset.sort, on=(k===sortKey);
+    th.classList.toggle('sorted', on);
+    const a=th.querySelector('.sarr'); if(a) a.textContent = on ? (sortDir==="desc"?" ↓":" ↑") : "";
+  });
+}
+
+document.querySelectorAll('thead th[data-sort]').forEach(th=>{
+  th.insertAdjacentHTML('beforeend','<span class="sarr"></span>');
+  th.addEventListener('click', ()=>{
+    const k=th.dataset.sort;
+    if(k===sortKey) sortDir = (sortDir==="desc"?"asc":"desc");
+    else { sortKey=k; sortDir = (k==="rank") ? "asc" : "desc"; }
+    renderTable();
+  });
+});
+renderTable();
+</script>
+</body>
+</html>
