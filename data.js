@@ -2,7 +2,7 @@
 window.DASH_DATA = {
   "_readme": "真實資料來源。手動欄位(市佔share/開戶數/p24/美好證券)直接改這裡；auto欄位由 update.py 從 TWSE OpenAPI 覆寫。改完跑 python3 update.py 會重新產生 data.js 供網頁讀取。",
   "meta": {
-    "updated": "2026-06-11",
+    "updated": "2026-06-12",
     "asLabel": "2025 全年・市佔 2025/11",
     "finPeriod": "2026Q1"
   },
@@ -40,7 +40,7 @@ window.DASH_DATA = {
   "market": {
     "turnoverYear": 101.08,
     "turnoverPrev": 99.81,
-    "turnoverMonth": 12.67,
+    "turnoverMonth": 13.84,
     "turnoverMonthLabel": "2026/06 本月累計",
     "turnoverSeries": [
       {
@@ -92,9 +92,9 @@ window.DASH_DATA = {
         "v": 26.34
       }
     ],
-    "taiex": 43149.46,
-    "taiexChg": -76.08,
-    "taiexDate": "2026-06-11",
+    "taiex": 44169.04,
+    "taiexChg": 1019.58,
+    "taiexDate": "2026-06-12",
     "taiexYearPct": 25,
     "mcap": 94,
     "turnoverTTM": 155.1,
@@ -113,10 +113,10 @@ window.DASH_DATA = {
       "qProfit": 93.3,
       "qEps": 1.33,
       "qPeriod": "2026Q1",
-      "mRev": 159.1,
-      "mRevMoM": 40.2,
-      "mRevYoY": 148.4,
-      "mRevYM": "2026/04"
+      "mRev": 177.2,
+      "mRevMoM": 11.4,
+      "mRevYoY": 201.1,
+      "mRevYM": "2026/05"
     },
     {
       "name": "凱基證券",
@@ -129,10 +129,10 @@ window.DASH_DATA = {
       "qProfit": 59.1,
       "qEps": 3.25,
       "qPeriod": "2026Q1",
-      "mRev": 81.3,
-      "mRevMoM": 86.4,
-      "mRevYoY": 251.1,
-      "mRevYM": "2026/04"
+      "mRev": 75.1,
+      "mRevMoM": -7.7,
+      "mRevYoY": 178.1,
+      "mRevYM": "2026/05"
     },
     {
       "name": "富邦證券",
@@ -145,10 +145,10 @@ window.DASH_DATA = {
       "qProfit": 42.3,
       "qEps": 2.6,
       "qPeriod": "2026Q1",
-      "mRev": 50.5,
-      "mRevMoM": 36.8,
-      "mRevYoY": 238.4,
-      "mRevYM": "2026/04"
+      "mRev": 50.4,
+      "mRevMoM": -0.2,
+      "mRevYoY": 174.5,
+      "mRevYM": "2026/05"
     },
     {
       "name": "永豐金證券",
@@ -161,10 +161,10 @@ window.DASH_DATA = {
       "qProfit": 23.6,
       "qEps": 1.4,
       "qPeriod": "2026Q1",
-      "mRev": 34.9,
-      "mRevMoM": 27.4,
-      "mRevYoY": 240.6,
-      "mRevYM": "2026/04"
+      "mRev": 39.5,
+      "mRevMoM": 13.2,
+      "mRevYoY": 193.1,
+      "mRevYM": "2026/05"
     },
     {
       "name": "國泰證券",
@@ -177,10 +177,10 @@ window.DASH_DATA = {
       "qProfit": 15.4,
       "qEps": 2.0,
       "qPeriod": "2026Q1",
-      "mRev": 22.2,
-      "mRevMoM": 30.9,
-      "mRevYoY": 211.3,
-      "mRevYM": "2026/04"
+      "mRev": 21.9,
+      "mRevMoM": -1.6,
+      "mRevYoY": 135.7,
+      "mRevYM": "2026/05"
     },
     {
       "name": "群益金鼎證券",
@@ -193,10 +193,10 @@ window.DASH_DATA = {
       "qProfit": 31.0,
       "qEps": 1.34,
       "qPeriod": "2026Q1",
-      "mRev": 46.5,
-      "mRevMoM": 145.3,
-      "mRevYoY": 301.6,
-      "mRevYM": "2026/04"
+      "mRev": 38.0,
+      "mRevMoM": -18.3,
+      "mRevYoY": 155.5,
+      "mRevYM": "2026/05"
     },
     {
       "name": "元富證券",
@@ -221,10 +221,10 @@ window.DASH_DATA = {
       "qProfit": 23.0,
       "qEps": 1.43,
       "qPeriod": "2026Q1",
-      "mRev": 44.4,
-      "mRevMoM": 3286.6,
-      "mRevYoY": 1002.1,
-      "mRevYM": "2026/04"
+      "mRev": 43.9,
+      "mRevMoM": -1.2,
+      "mRevYoY": 428.4,
+      "mRevYM": "2026/05"
     },
     {
       "name": "華南永昌證券",
@@ -237,10 +237,10 @@ window.DASH_DATA = {
       "qProfit": 11.3,
       "qEps": 1.73,
       "qPeriod": "2026Q1",
-      "mRev": 15.4,
-      "mRevMoM": 48.4,
-      "mRevYoY": 249.9,
-      "mRevYM": "2026/04"
+      "mRev": 16.7,
+      "mRevMoM": 8.3,
+      "mRevYoY": 230.3,
+      "mRevYM": "2026/05"
     },
     {
       "name": "兆豐證券",
@@ -253,10 +253,10 @@ window.DASH_DATA = {
       "qProfit": 13.5,
       "qEps": 1.15,
       "qPeriod": "2026Q1",
-      "mRev": 19.6,
-      "mRevMoM": 63.7,
-      "mRevYoY": 960.3,
-      "mRevYM": "2026/04"
+      "mRev": 16.2,
+      "mRevMoM": -17.3,
+      "mRevYoY": 193.8,
+      "mRevYM": "2026/05"
     },
     {
       "name": "美好證券",
