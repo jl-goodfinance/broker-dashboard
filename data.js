@@ -2,7 +2,7 @@
 window.DASH_DATA = {
   "_readme": "真實資料來源。手動欄位(市佔share/開戶數/p24/美好證券)直接改這裡；auto欄位由 update.py 從 TWSE OpenAPI 覆寫。改完跑 python3 update.py 會重新產生 data.js 供網頁讀取。",
   "meta": {
-    "updated": "2026-06-25",
+    "updated": "2026-06-26",
     "asLabel": "2025 全年・市佔 2025/11",
     "finPeriod": "2026Q1"
   },
@@ -40,7 +40,7 @@ window.DASH_DATA = {
   "market": {
     "turnoverYear": 101.08,
     "turnoverPrev": 99.81,
-    "turnoverMonth": 25.08,
+    "turnoverMonth": 26.75,
     "turnoverMonthLabel": "2026/06 本月累計",
     "turnoverSeries": [
       {
@@ -92,9 +92,9 @@ window.DASH_DATA = {
         "v": 26.34
       }
     ],
-    "taiex": 46255.26,
-    "taiexChg": 211.66,
-    "taiexDate": "2026-06-25",
+    "taiex": 44571.76,
+    "taiexChg": -1683.5,
+    "taiexDate": "2026-06-26",
     "taiexYearPct": 25,
     "mcap": 94,
     "turnoverTTM": 155.1,
