@@ -2,7 +2,7 @@
 window.DASH_DATA = {
   "_readme": "真實資料來源。手動欄位(市佔share/開戶數/p24/美好證券)直接改這裡；auto欄位由 update.py 從 TWSE OpenAPI 覆寫。改完跑 python3 update.py 會重新產生 data.js 供網頁讀取。",
   "meta": {
-    "updated": "2026-07-03",
+    "updated": "2026-07-04",
     "asLabel": "2025 全年・市佔 2025/11",
     "finPeriod": "2026Q1"
   },
