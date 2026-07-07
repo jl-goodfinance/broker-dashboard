@@ -203,7 +203,7 @@
     <!-- 市佔排行（藍色長條） -->
     <div class="card a-rank">
       <div class="ctitle">券商市佔排行</div>
-      <div class="rsub">經紀成交金額市佔・2025/11<span class="info" data-tip="市佔率＝券商「經紀（受託買賣）成交金額」占全市場比重。集中市場・純國內券商口徑・2025/11。依『成交金額』計算，非客戶人數或營收——大戶／法人下單金額大、權重就高。">i</span></div>
+      <div class="rsub"><span id="rsubTxt">經紀手續費收入市佔</span><span class="info" data-tip="市佔率＝券商「經紀手續費收入」占全市場（65 家、含外資券商）比重。來源：證交所各券商收支概況表（t187ap21），每月自動更新。以手續費計、非成交金額——折扣較深的券商佔比會略低於其成交量佔比。排名徽章＝全市場真實名次。">i</span></div>
       <div id="ranking"></div>
     </div>
 
@@ -227,11 +227,11 @@
     <!-- 美好證券 -->
     <div class="card usco a-usco" id="usTile"></div>
 
-    <!-- 市值 -->
+    <!-- 全市場經紀手續費（月，自動） -->
     <div class="card stat a-mcap">
-      <div class="label">全市場市值</div>
-      <div class="value"><span class="num" id="mcapVal"></span><span class="u">兆</span></div>
-      <div class="d muted">2025 年底</div>
+      <div class="label">全市場經紀手續費收入（月）</div>
+      <div class="value"><span class="num" id="feeTotal">—</span><span class="u">億</span></div>
+      <div class="d muted" id="feeYM"></div>
     </div>
 
     <!-- 加權指數（最新，自動） -->
@@ -250,7 +250,7 @@
       <table>
         <thead>
           <tr>
-            <th data-sort="rank">券商</th><th data-sort="share" title="券商經紀（受託買賣）成交金額占全市場比重・集中市場純國內券商・2025/11（依成交金額計，非客戶數）">市佔率</th><th data-sort="mRev">當月營收（億・證券）</th>
+            <th data-sort="rank">券商</th><th data-sort="share" title="經紀手續費收入占全市場（65家含外資）比重・證交所收支概況表・每月自動更新">市佔率</th><th data-sort="mRev">當月營收（億・證券）</th>
             <th data-sort="yRev">今年累計營收（億）</th>
             <th data-sort="p25">稅後淨利（億）</th><th data-sort="yoy">YoY 成長</th><th data-sort="margin">淨利率</th>
           </tr>
@@ -264,7 +264,8 @@
     </div>
 
     <p class="a-note">
-      <b>※ 數據說明：</b>「成交值／開戶數」取自證交所・集保；「市佔率」為證交所經紀成交金額市佔（2025/11）。
+      <b>※ 數據說明：</b>「成交值／指數」來自 FinMind（原始：證交所），每日自動更新；「開戶數」為集保年度統計（無公開 API，數列至最新公布年度）。
+      「市佔率／排名」＝<b>經紀手續費收入</b>占全市場（65 家、含外資）比重（證交所收支概況表 t187ap21，每月自動更新；排名為全市場真實名次，跳號代表其間為未列出的券商如外資）。
       「稅後淨利／YoY」比較 2025 vs 2024 全年（綠點＝法說會／年報已確認；橘點＝估算待校正）。
       <b>🚀「成長最快」為全表（前 10 大＋美好）稅後淨利 YoY 最高者，自動判定。</b>
       「當月營收」為<b>證券子公司本身</b>（非金控母公司）之月營收，來源 TWSE/TPEX 每月營收彙總（t187ap05）；旁註為資料月份與 YoY。「美好證券」（6021・上櫃）之財報與月營收同樣來自官方公開申報，自動更新。
@@ -301,8 +302,12 @@ const BROKERS = D.brokers;
   renderTurnSpark();  // 背景折線：月成交值序列（含 x 軸月份）
   document.getElementById("turnMonth").textContent =
     (m.turnoverMonth!=null) ? `${m.turnoverMonthLabel}　${m.turnoverMonth} 兆元` : "";
-  document.getElementById("mcapVal").textContent = m.mcap;
-  document.getElementById("idxYear").textContent = "今年全年 +"+m.taiexYearPct+"%";
+  const rsub=document.getElementById("rsubTxt");
+  if(rsub && m.shareYM) rsub.textContent = "經紀手續費收入市佔・"+m.shareYM;
+  document.getElementById("feeTotal").textContent = (m.feeTotal!=null)? m.feeTotal.toLocaleString() : "—";
+  document.getElementById("feeYM").textContent = (m.shareYM||"")+"・全市場券商合計";
+  document.getElementById("idxYear").textContent =
+    (m.taiexYearPct!=null? "今年以來 "+(m.taiexYearPct>=0?"+":"")+m.taiexYearPct+"%" : "");
   document.getElementById("updTop").textContent =
     `⚙ 最後更新 ${D.meta.updated}　財報期別 ${D.meta.finPeriod||"—"}`;
   if(m.taiex!=null){
@@ -427,8 +432,7 @@ document.getElementById("growTile").innerHTML = `
   <div class="flow">${fastest.p24} 億 → ${fastest.p25} 億</div>`;
 
 // 美好證券 tile（含市場排名）
-const usRank = us.rank;            // 全市場名次（純國內口徑）
-const usRankStr = us.rank ? ((us.rankApprox?"≈#":"#")+us.rank) : "—";
+const usRankStr = us.rank ? ("#"+us.rank) : "—";   // 全市場真實名次（手續費口徑，自動）
 document.getElementById("usTile").innerHTML = `
   <div class="tag">★ 本公司</div>
   <div class="name">${us.name}</div>
@@ -440,7 +444,7 @@ document.getElementById("usTile").innerHTML = `
 
 // 明細表（可點欄位排序）
 const rowsEl = document.getElementById("rows");
-BROKERS.forEach((b,i)=>{ b._rank = b.us ? (b.rank || 999) : (i+1); b._margin = b.p25/b.rev*100; });
+BROKERS.forEach((b,i)=>{ b._rank = b.rank || (i+1); b._margin = b.p25/b.rev*100; });  // rank=全市場真實名次（手續費口徑，自動）
 const SORTVAL = { rank:b=>b._rank, share:b=>b.share, mRev:b=>(b.mRev!=null?b.mRev:-1), yRev:b=>(b.yRev!=null?b.yRev:-1), p25:b=>b.p25, yoy:b=>b.yoy, margin:b=>b._margin };
 let sortKey="share", sortDir="desc";
 
@@ -458,7 +462,7 @@ function renderTable(){
     const mCell=(b.mRev!=null) ? `${b.mRev.toLocaleString()}<span class="dot y"></span>${mSub}` : `<span style="color:var(--muted2)">—</span>`;
     const ySub=(b.yRev!=null && b.yRevYoY!=null)?`<div class="qline">YoY ${b.yRevYoY>=0?'+':''}${b.yRevYoY}%</div>`:"";
     const yCell=(b.yRev!=null) ? `${b.yRev.toLocaleString()}<span class="dot y"></span>${ySub}` : `<span style="color:var(--muted2)">—</span>`;
-    const rk = isUs ? (b.rank?(b.rankApprox?'≈'+b.rank:b.rank):'—') : b._rank;
+    const rk = b.rank || '—';   // 全市場真實名次（含外資，會跳號屬正常）
     return `<tr class="${isUs?'usrow':''} ${isFast?'fast':''}">
       <td><span class="rank ${(!isUs&&b._rank<=3)?'rklead':''} ${isUs?'usrank':''}">${rk}</span>
         <span class="name">${b.name}</span>${isUs?'<span class="tag-us">本公司</span>':''}${isFast?'<span class="badge">🚀 成長最快</span>':''}</td>

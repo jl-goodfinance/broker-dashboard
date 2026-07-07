@@ -1,9 +1,9 @@
 /* 由 update.py 自動產生，請勿手改；要改手動值請改 data.json */
 window.DASH_DATA = {
-  "_readme": "真實資料來源。手動欄位(市佔share/開戶數/p24/美好證券)直接改這裡；auto欄位由 update.py 從 TWSE OpenAPI 覆寫。改完跑 python3 update.py 會重新產生 data.js 供網頁讀取。",
+  "_readme": "真實資料來源。幾乎全欄位由 update.py 自動更新（TWSE/TPEX/FinMind 官方API）。僅 accounts（開戶數，集保年度統計，無API）為靜態歷史數列。改完跑 python3 update.py 產生 data.js。",
   "meta": {
     "updated": "2026-07-07",
-    "asLabel": "2025 全年・市佔 2025/11",
+    "asLabel": "財報 2026Q1・市佔 2026/05（手續費口徑）",
     "finPeriod": "2026Q1"
   },
   "totalAccounts": 1376.78,
@@ -95,17 +95,18 @@ window.DASH_DATA = {
     "taiex": 45479.11,
     "taiexChg": -1077.28,
     "taiexDate": "2026-07-07",
-    "taiexYearPct": 25,
-    "mcap": 94,
+    "taiexYearPct": 57.0,
     "turnoverTTM": 177.4,
     "turnoverTTMPrev": 91.8,
-    "turnoverTTMLabel": "2025/06–2026/06"
+    "turnoverTTMLabel": "2025/06–2026/06",
+    "feeTotal": 319.7,
+    "shareYM": "2026/05"
   },
   "brokers": [
     {
       "name": "元大證券",
       "code": "000980",
-      "share": 14.51,
+      "share": 17.75,
       "rev": 640,
       "p25": 244.2,
       "p24": 211.5,
@@ -118,12 +119,13 @@ window.DASH_DATA = {
       "mRevYoY": 201.1,
       "mRevYM": "2026/05",
       "yRev": 655.8,
-      "yRevYoY": 116.1
+      "yRevYoY": 116.1,
+      "rank": 1
     },
     {
       "name": "凱基證券",
       "code": "6008",
-      "share": 10.67,
+      "share": 8.59,
       "rev": 340,
       "p25": 118,
       "p24": 101.38,
@@ -136,12 +138,13 @@ window.DASH_DATA = {
       "mRevYoY": 178.1,
       "mRevYM": "2026/05",
       "yRev": 307.4,
-      "yRevYoY": 129.8
+      "yRevYoY": 129.8,
+      "rank": 3
     },
     {
       "name": "富邦證券",
       "code": "000960",
-      "share": 6.95,
+      "share": 9.22,
       "rev": 280,
       "p25": 105.9,
       "p24": 100.2,
@@ -154,12 +157,13 @@ window.DASH_DATA = {
       "mRevYoY": 174.5,
       "mRevYM": "2026/05",
       "yRev": 201.4,
-      "yRevYoY": 122.5
+      "yRevYoY": 122.5,
+      "rank": 2
     },
     {
       "name": "永豐金證券",
       "code": "0009A0",
-      "share": 5.04,
+      "share": 7.08,
       "rev": 165,
       "p25": 70,
       "p24": 58.28,
@@ -172,12 +176,13 @@ window.DASH_DATA = {
       "mRevYoY": 193.1,
       "mRevYM": "2026/05",
       "yRev": 149.2,
-      "yRevYoY": 118.0
+      "yRevYoY": 118.0,
+      "rank": 4
     },
     {
       "name": "國泰證券",
       "code": "000888",
-      "share": 4.5,
+      "share": 6.3,
       "rev": 130,
       "p25": 45,
       "p24": 21.5,
@@ -190,12 +195,13 @@ window.DASH_DATA = {
       "mRevYoY": 135.7,
       "mRevYM": "2026/05",
       "yRev": 89.1,
-      "yRevYoY": 105.6
+      "yRevYoY": 105.6,
+      "rank": 5
     },
     {
       "name": "群益金鼎證券",
       "code": "6005",
-      "share": 3.85,
+      "share": 3.78,
       "rev": 165,
       "p25": 57.4,
       "p24": 49.1,
@@ -208,24 +214,13 @@ window.DASH_DATA = {
       "mRevYoY": 155.5,
       "mRevYM": "2026/05",
       "yRev": 155.8,
-      "yRevYoY": 134.8
-    },
-    {
-      "name": "元富證券",
-      "code": "2856",
-      "share": 3.52,
-      "rev": 110,
-      "p25": 36,
-      "p24": 31,
-      "qRev": null,
-      "qProfit": null,
-      "qEps": null,
-      "qPeriod": null
+      "yRevYoY": 134.8,
+      "rank": 8
     },
     {
       "name": "統一證券",
       "code": "2855",
-      "share": 3.31,
+      "share": 2.98,
       "rev": 120,
       "p25": 40,
       "p24": 33,
@@ -238,12 +233,13 @@ window.DASH_DATA = {
       "mRevYoY": 428.4,
       "mRevYM": "2026/05",
       "yRev": 143.2,
-      "yRevYoY": 383.3
+      "yRevYoY": 383.3,
+      "rank": 13
     },
     {
       "name": "華南永昌證券",
       "code": "000930",
-      "share": 3.02,
+      "share": 3.13,
       "rev": 85,
       "p25": 28,
       "p24": 24,
@@ -256,12 +252,13 @@ window.DASH_DATA = {
       "mRevYoY": 230.3,
       "mRevYM": "2026/05",
       "yRev": 61.4,
-      "yRevYoY": 159.7
+      "yRevYoY": 159.7,
+      "rank": 10
     },
     {
       "name": "兆豐證券",
       "code": "000700",
-      "share": 2.81,
+      "share": 2.73,
       "rev": 73,
       "p25": 24,
       "p24": 21,
@@ -274,17 +271,17 @@ window.DASH_DATA = {
       "mRevYoY": 193.8,
       "mRevYM": "2026/05",
       "yRev": 68.3,
-      "yRevYoY": 182.9
+      "yRevYoY": 182.9,
+      "rank": 14
     },
     {
       "name": "美好證券",
-      "share": 0.85,
+      "share": 0.45,
       "rev": 7.31,
       "p25": 4.05,
       "p24": 1.09,
       "us": true,
-      "rank": 20,
-      "rankApprox": true,
+      "rank": 28,
       "cust": 6.8,
       "mRev": 10.2,
       "mRevYM": "2026/05",

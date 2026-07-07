@@ -48,7 +48,7 @@ def main():
     # ---- 1. 成交值（月序列）+ 指數：FinMind 大盤 TAIEX ----
     try:
         import collections
-        start = (datetime.date.today() - datetime.timedelta(days=800)).isoformat()
+        start = datetime.date(datetime.date.today().year - 2, 1, 1).isoformat()  # 覆蓋兩個完整年度
         fu = ("https://api.finmindtrade.com/api/v4/data"
               f"?dataset=TaiwanStockPrice&data_id=TAIEX&start_date={start}")
         req = urllib.request.Request(fu, headers={"User-Agent": "dash-updater/1.0"})
@@ -73,6 +73,19 @@ def main():
         m["taiex"] = round(float(last["close"]), 2)
         m["taiexChg"] = round(float(last.get("spread") or 0), 2)
         m["taiexDate"] = last["date"]
+        # 指數今年以來漲跌幅（去年最後收盤 vs 最新）
+        cy = last["date"][:4]
+        prev_rows = [r for r in rows if r["date"][:4] < cy]
+        if prev_rows:
+            m["taiexYearPct"] = round((last["close"] / prev_rows[-1]["close"] - 1) * 100, 1)
+        # 年度成交值（兆）：最近完整年 vs 前一年
+        byyear = {}
+        for r in rows:
+            byyear[r["date"][:4]] = byyear.get(r["date"][:4], 0) + (r.get("Trading_money") or 0)
+        y1, y2 = str(int(cy) - 1), str(int(cy) - 2)
+        if y1 in byyear and y2 in byyear:
+            m["turnoverYear"] = round(byyear[y1] / 1e12, 2)
+            m["turnoverPrev"] = round(byyear[y2] / 1e12, 2)
         log.append(f"FinMind 月序列 {len(m['turnoverSeries'])} 點；近12月(TTM) {m['turnoverTTM']} 兆"
                    f"（前12月 {m['turnoverTTMPrev']}）；本月 {m['turnoverMonth']} 兆；"
                    f"指數 {m['taiex']} ({m['taiexChg']:+}) @ {m['taiexDate']}")
@@ -155,7 +168,39 @@ def main():
         mhit.append(b["name"])
     log.append(f"當月營收({mym}) 證券層級更新 {len(mhit)} 家：{'、'.join(mhit)}")
 
+    # ---- 4. 全券商市佔率＋真實排名（經紀手續費收入口徑，t187ap21，月更）----
+    try:
+        fee = [r for r in fetch("/opendata/t187ap21") if r.get("會計科目名稱") == "經紀手續費收入"]
+        total = sum(_f(r["本月金額"]) for r in fee)
+        ranked = sorted(fee, key=lambda r: -_f(r["本月金額"]))
+        pos = {}
+        for i, r in enumerate(ranked, 1):
+            pos[r["券商名稱"].replace(" ", "").replace("　", "")] = (i, _f(r["本月金額"]) / total * 100)
+        NAME_MAP = {"元大證券": "元大", "凱基證券": "凱基", "富邦證券": "富邦", "永豐金證券": "永豐金",
+                    "國泰證券": "國泰綜合", "群益金鼎證券": "群益金鼎", "統一證券": "統一",
+                    "華南永昌證券": "華南永昌", "兆豐證券": "兆豐", "美好證券": "美好"}
+        od = str(fee[0]["出表日期"])                       # 民國 1150625 → 資料月＝前一月
+        yy, mo = int(od[:3]) + 1911, int(od[3:5]) - 1
+        if mo == 0: yy, mo = yy - 1, 12
+        share_ym = f"{yy}/{mo:02d}"
+        shit = []
+        for b in data["brokers"]:
+            key = NAME_MAP.get(b["name"])
+            if key and key in pos:
+                b["rank"] = pos[key][0]
+                b["share"] = round(pos[key][1], 2)
+                b.pop("rankApprox", None)
+                shit.append(b["name"])
+        data["market"]["feeTotal"] = round(total / 1e8, 1)   # 全市場月手續費（億）
+        data["market"]["shareYM"] = share_ym
+        log.append(f"市佔/排名（手續費口徑 {share_ym}・全 {len(fee)} 家含外資）更新 {len(shit)} 家；"
+                   f"全市場月手續費 {data['market']['feeTotal']} 億")
+    except Exception as e:
+        log.append(f"[警告] 市佔(t187ap21) 失敗：{e}")
+
     data["meta"]["updated"] = datetime.date.today().isoformat()
+    data["meta"]["asLabel"] = (f"財報 {data['meta'].get('finPeriod','—')}・"
+                               f"市佔 {data['market'].get('shareYM','—')}（手續費口徑）")
 
     # ---- 寫回 data.json + 產生 data.js ----
     with open(os.path.join(BASE, "data.json"), "w", encoding="utf-8") as f:
