@@ -12,17 +12,25 @@
   • 全台開戶數、券商市佔率share、p24 去年基準、美好證券、元富(無API)
 用法：  python3 update.py
 """
-import json, os, sys, datetime, urllib.request
+import json, os, sys, ssl, datetime, urllib.request, urllib.error
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 API = "https://openapi.twse.com.tw/v1"
 TIMEOUT = 40
 
 def fetch(path):
-    url = f"{API}{path}"
+    url = path if path.startswith("http") else f"{API}{path}"
     req = urllib.request.Request(url, headers={"User-Agent": "dash-updater/1.0", "Accept": "application/json"})
-    with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
-        return json.loads(r.read().decode("utf-8"))
+    try:
+        with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
+            return json.loads(r.read().decode("utf-8"))
+    except urllib.error.URLError as e:
+        # macOS python 可能缺 TPEX 憑證鏈；公開資料改用未驗證 context 重試
+        if "CERTIFICATE" in str(e):
+            ctx = ssl._create_unverified_context()
+            with urllib.request.urlopen(req, timeout=TIMEOUT, context=ctx) as r:
+                return json.loads(r.read().decode("utf-8"))
+        raise
 
 def to_yi(thousand):           # 千元 → 億元
     return round(float(thousand) / 1e5, 1)
@@ -73,7 +81,8 @@ def main():
 
     # ---- 2. 各券商 最新季 收益/淨利/EPS ----
     fin = {}   # code -> record
-    for ds in ("/opendata/t187ap06_X_bd", "/opendata/t187ap06_L_bd"):
+    for ds in ("/opendata/t187ap06_X_bd", "/opendata/t187ap06_L_bd",
+               "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap06_O_bd"):  # 上櫃（美好6021）
         try:
             for r in fetch(ds):
                 fin[str(r["公司代號"])] = r
@@ -114,7 +123,8 @@ def main():
 
     # ---- 3. 各券商「當月營收」(證券層級)：t187ap05_P 公發 + _L 上市 ----
     rev_m = {}
-    for ds in ("/opendata/t187ap05_P", "/opendata/t187ap05_L"):
+    for ds in ("/opendata/t187ap05_P", "/opendata/t187ap05_L",
+               "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap05_O"):  # 上櫃（美好6021）
         try:
             for r in fetch(ds):
                 rev_m[str(r["公司代號"])] = r

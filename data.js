@@ -2,7 +2,7 @@
 window.DASH_DATA = {
   "_readme": "真實資料來源。手動欄位(市佔share/開戶數/p24/美好證券)直接改這裡；auto欄位由 update.py 從 TWSE OpenAPI 覆寫。改完跑 python3 update.py 會重新產生 data.js 供網頁讀取。",
   "meta": {
-    "updated": "2026-07-06",
+    "updated": "2026-07-07",
     "asLabel": "2025 全年・市佔 2025/11",
     "finPeriod": "2026Q1"
   },
@@ -40,7 +40,7 @@ window.DASH_DATA = {
   "market": {
     "turnoverYear": 101.08,
     "turnoverPrev": 99.81,
-    "turnoverMonth": 4.59,
+    "turnoverMonth": 5.82,
     "turnoverMonthLabel": "2026/07 本月累計",
     "turnoverSeries": [
       {
@@ -92,9 +92,9 @@ window.DASH_DATA = {
         "v": 29.06
       }
     ],
-    "taiex": 46556.39,
-    "taiexChg": -224.23,
-    "taiexDate": "2026-07-06",
+    "taiex": 45479.11,
+    "taiexChg": -1077.28,
+    "taiexDate": "2026-07-07",
     "taiexYearPct": 25,
     "mcap": 94,
     "turnoverTTM": 177.4,
@@ -261,21 +261,22 @@ window.DASH_DATA = {
     {
       "name": "美好證券",
       "share": 0.85,
-      "rev": 18,
-      "p25": 3.6,
-      "p24": 3.0,
+      "rev": 7.31,
+      "p25": 4.05,
+      "p24": 1.09,
       "us": true,
       "rank": 20,
       "rankApprox": true,
       "cust": 6.8,
-      "mRev": 11.4,
-      "mRevYM": "2026/04",
-      "mRevYoY": null,
-      "mRevMoM": null,
-      "qRev": null,
-      "qProfit": null,
-      "qEps": null,
-      "qPeriod": null
+      "mRev": 10.2,
+      "mRevYM": "2026/05",
+      "mRevYoY": 830.6,
+      "mRevMoM": -10.5,
+      "qRev": 6.0,
+      "qProfit": 2.6,
+      "qEps": 0.83,
+      "qPeriod": "2026Q1",
+      "code": "6021"
     }
   ]
 };
