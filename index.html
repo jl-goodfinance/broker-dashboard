@@ -164,7 +164,7 @@
   @media(max-width:560px){
     .bento{grid-template-columns:1fr;grid-template-areas:
       "turn" "chart" "rank" "mcap" "idx" "grow" "usco" "table" "note";}
-    .a-table{overflow-x:auto}table{min-width:560px}
+    .a-table{overflow-x:auto}table{min-width:720px}
   }
 </style>
 </head>
@@ -251,6 +251,7 @@
         <thead>
           <tr>
             <th data-sort="rank">券商</th><th data-sort="share" title="券商經紀（受託買賣）成交金額占全市場比重・集中市場純國內券商・2025/11（依成交金額計，非客戶數）">市佔率</th><th data-sort="mRev">當月營收（億・證券）</th>
+            <th data-sort="yRev">今年累計營收（億）</th>
             <th data-sort="p25">稅後淨利（億）</th><th data-sort="yoy">YoY 成長</th><th data-sort="margin">淨利率</th>
           </tr>
         </thead>
@@ -440,7 +441,7 @@ document.getElementById("usTile").innerHTML = `
 // 明細表（可點欄位排序）
 const rowsEl = document.getElementById("rows");
 BROKERS.forEach((b,i)=>{ b._rank = b.us ? (b.rank || 999) : (i+1); b._margin = b.p25/b.rev*100; });
-const SORTVAL = { rank:b=>b._rank, share:b=>b.share, mRev:b=>(b.mRev!=null?b.mRev:-1), p25:b=>b.p25, yoy:b=>b.yoy, margin:b=>b._margin };
+const SORTVAL = { rank:b=>b._rank, share:b=>b.share, mRev:b=>(b.mRev!=null?b.mRev:-1), yRev:b=>(b.yRev!=null?b.yRev:-1), p25:b=>b.p25, yoy:b=>b.yoy, margin:b=>b._margin };
 let sortKey="share", sortDir="desc";
 
 function renderTable(){
@@ -455,12 +456,15 @@ function renderTable(){
     const mSub=(b.mRev!=null && (b.mRevYM||b.mRevYoY!=null))
       ? `<div class="qline">${b.mRevYM||''}${b.mRevYoY!=null?`・YoY ${b.mRevYoY>=0?'+':''}${b.mRevYoY}%`:''}</div>` : "";
     const mCell=(b.mRev!=null) ? `${b.mRev.toLocaleString()}<span class="dot y"></span>${mSub}` : `<span style="color:var(--muted2)">—</span>`;
+    const ySub=(b.yRev!=null && b.yRevYoY!=null)?`<div class="qline">YoY ${b.yRevYoY>=0?'+':''}${b.yRevYoY}%</div>`:"";
+    const yCell=(b.yRev!=null) ? `${b.yRev.toLocaleString()}<span class="dot y"></span>${ySub}` : `<span style="color:var(--muted2)">—</span>`;
     const rk = isUs ? (b.rank?(b.rankApprox?'≈'+b.rank:b.rank):'—') : b._rank;
     return `<tr class="${isUs?'usrow':''} ${isFast?'fast':''}">
       <td><span class="rank ${(!isUs&&b._rank<=3)?'rklead':''} ${isUs?'usrank':''}">${rk}</span>
         <span class="name">${b.name}</span>${isUs?'<span class="tag-us">本公司</span>':''}${isFast?'<span class="badge">🚀 成長最快</span>':''}</td>
       <td class="num">${b.share.toFixed(2)}%</td>
       <td class="num">${mCell}</td>
+      <td class="num">${yCell}</td>
       <td class="num">${b.p25.toLocaleString()}<span class="dot ${conf}"></span>${qPf}</td>
       <td class="num"><span class="yoy ${yCls}">${yArr} ${b.yoy>=0?'+':''}${b.yoy.toFixed(1)}%</span></td>
       <td class="num">${b._margin.toFixed(1)}%</td>

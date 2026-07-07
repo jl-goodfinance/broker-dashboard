@@ -116,7 +116,9 @@ window.DASH_DATA = {
       "mRev": 177.2,
       "mRevMoM": 11.4,
       "mRevYoY": 201.1,
-      "mRevYM": "2026/05"
+      "mRevYM": "2026/05",
+      "yRev": 655.8,
+      "yRevYoY": 116.1
     },
     {
       "name": "凱基證券",
@@ -132,7 +134,9 @@ window.DASH_DATA = {
       "mRev": 75.1,
       "mRevMoM": -7.7,
       "mRevYoY": 178.1,
-      "mRevYM": "2026/05"
+      "mRevYM": "2026/05",
+      "yRev": 307.4,
+      "yRevYoY": 129.8
     },
     {
       "name": "富邦證券",
@@ -148,7 +152,9 @@ window.DASH_DATA = {
       "mRev": 50.4,
       "mRevMoM": -0.2,
       "mRevYoY": 174.5,
-      "mRevYM": "2026/05"
+      "mRevYM": "2026/05",
+      "yRev": 201.4,
+      "yRevYoY": 122.5
     },
     {
       "name": "永豐金證券",
@@ -164,7 +170,9 @@ window.DASH_DATA = {
       "mRev": 39.5,
       "mRevMoM": 13.2,
       "mRevYoY": 193.1,
-      "mRevYM": "2026/05"
+      "mRevYM": "2026/05",
+      "yRev": 149.2,
+      "yRevYoY": 118.0
     },
     {
       "name": "國泰證券",
@@ -180,7 +188,9 @@ window.DASH_DATA = {
       "mRev": 21.9,
       "mRevMoM": -1.6,
       "mRevYoY": 135.7,
-      "mRevYM": "2026/05"
+      "mRevYM": "2026/05",
+      "yRev": 89.1,
+      "yRevYoY": 105.6
     },
     {
       "name": "群益金鼎證券",
@@ -196,7 +206,9 @@ window.DASH_DATA = {
       "mRev": 38.0,
       "mRevMoM": -18.3,
       "mRevYoY": 155.5,
-      "mRevYM": "2026/05"
+      "mRevYM": "2026/05",
+      "yRev": 155.8,
+      "yRevYoY": 134.8
     },
     {
       "name": "元富證券",
@@ -224,7 +236,9 @@ window.DASH_DATA = {
       "mRev": 43.9,
       "mRevMoM": -1.2,
       "mRevYoY": 428.4,
-      "mRevYM": "2026/05"
+      "mRevYM": "2026/05",
+      "yRev": 143.2,
+      "yRevYoY": 383.3
     },
     {
       "name": "華南永昌證券",
@@ -240,7 +254,9 @@ window.DASH_DATA = {
       "mRev": 16.7,
       "mRevMoM": 8.3,
       "mRevYoY": 230.3,
-      "mRevYM": "2026/05"
+      "mRevYM": "2026/05",
+      "yRev": 61.4,
+      "yRevYoY": 159.7
     },
     {
       "name": "兆豐證券",
@@ -256,7 +272,9 @@ window.DASH_DATA = {
       "mRev": 16.2,
       "mRevMoM": -17.3,
       "mRevYoY": 193.8,
-      "mRevYM": "2026/05"
+      "mRevYM": "2026/05",
+      "yRev": 68.3,
+      "yRevYoY": 182.9
     },
     {
       "name": "美好證券",
@@ -276,7 +294,9 @@ window.DASH_DATA = {
       "qProfit": 2.6,
       "qEps": 0.83,
       "qPeriod": "2026Q1",
-      "code": "6021"
+      "code": "6021",
+      "yRev": 27.6,
+      "yRevYoY": null
     }
   ]
 };
