@@ -2,7 +2,8 @@ name: 每日自動更新數據
 
 on:
   schedule:
-    - cron: "45 10 * * *"   # UTC 10:45 = 台北 18:45（收盤後）
+    - cron: "45 10 * * *"   # UTC 10:45 = 台北 18:45（收盤後，主要執行）
+    - cron: "15 0 * * *"    # UTC 00:15 = 台北 08:15（早上備援，防前晚失敗/資料遲到）
   workflow_dispatch:          # 也可在 GitHub 頁面手動觸發
 
 permissions:

@@ -438,6 +438,7 @@ document.getElementById("usTile").innerHTML = `
   <div class="name">${us.name}</div>
   <div class="stats">
     <div><div class="n">${us.mRev!=null?us.mRev:'—'}</div><div class="k">當月營收（億）${us.mRevYM?'・'+us.mRevYM:''}</div></div>
+    <div><div class="n">${us.yRev!=null?us.yRev:'—'}</div><div class="k">今年累計營收（億）</div></div>
     <div><div class="n">${us.share.toFixed(2)}%</div><div class="k">市佔率</div></div>
     <div><div class="n">${us.p25}</div><div class="k">淨利（億）</div></div>
   </div>`;
