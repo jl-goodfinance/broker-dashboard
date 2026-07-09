@@ -375,7 +375,10 @@ function renderChart(nYears){
 
 /* 成交值背景折線（含 x 軸月份），同樣用實際像素寬避免變形 */
 function renderTurnSpark(){
-  const s = (D.market.turnoverSeries || []);
+  const all = (D.market.turnoverSeries || []);
+  // 只顯示今年（以資料最後一筆的年份為準，跨年自動切換）
+  const curY = all.length ? all[all.length-1].ym.slice(0,4) : "";
+  const s = all.filter(d => d.ym.startsWith(curY));
   const box = document.getElementById("turnSpark");
   if(!box || s.length < 2) return;
   const W = Math.max(320, Math.round(box.clientWidth || 600));
