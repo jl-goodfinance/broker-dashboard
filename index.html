@@ -275,7 +275,10 @@
   </div>
 </div>
 
-<script src="data.js"></script>
+<script>
+/* 以時間戳載入 data.js，繞過瀏覽器/CDN 快取，確保每次打開都是最新數據 */
+document.write('<script src="data.js?v=' + Date.now() + '"><\/script>');
+</script>
 <script>
 /* ====================================================================
    資料來自 data.js（window.DASH_DATA），由 update.py 自動更新
