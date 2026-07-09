@@ -82,27 +82,25 @@
   .stat .d{font-size:13px;font-weight:600;margin-top:8px;color:var(--green)}
   .stat .d.muted{color:var(--muted)}
 
-  /* 全年成交值 置頂橫幅 */
-  .a-turn{flex-direction:row;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;
-    background:linear-gradient(120deg,#1c2540,#15161f 60%)}
-  .turn-spark{position:absolute;inset:0;width:100%;height:100%;opacity:.9;z-index:0;pointer-events:none}
-  .turn-spark svg{width:100%;height:100%;display:block}
-  .a-turn .turn-left,.a-turn .turn-right{position:relative;z-index:1}
-  .a-turn .label{font-size:15px}
-  .turn-val{font-size:62px;font-weight:800;letter-spacing:-2.5px;line-height:1;margin-top:8px}
-  .turn-val .u{font-size:22px;font-weight:600;color:var(--muted);margin-left:8px;letter-spacing:0}
-  .turn-right{text-align:right}
-  .turn-pct{font-size:56px;font-weight:800;letter-spacing:-2px;line-height:1;
-    display:flex;align-items:flex-end;justify-content:flex-end;gap:8px}
-  .turn-pct .tri{font-size:.5em;line-height:1;padding-bottom:.12em}
-  .turn-pct .pctnum{-webkit-text-fill-color:transparent;-webkit-background-clip:text;background-clip:text}
-  .turn-pct.up .tri{color:#34e08a}
-  .turn-pct.up .pctnum{background:linear-gradient(90deg,#34e08a,#38bdf8);-webkit-background-clip:text;background-clip:text}
-  .turn-pct.down .tri{color:#ff6b78}
-  .turn-pct.down .pctnum{background:linear-gradient(90deg,#ff6b78,#ff9a8b);-webkit-background-clip:text;background-clip:text}
-  .turn-yoy{font-size:13px;color:var(--muted);margin-top:7px}
-  .turn-month{font-size:13px;color:var(--muted);margin-top:6px}
-  @media(max-width:560px){.turn-val{font-size:46px}.turn-right{text-align:left}}
+  /* 台股加權指數 置頂 hero */
+  .a-turn{background:linear-gradient(120deg,#1c2540,#15161f 60%)}
+  .ihead{display:flex;align-items:center;gap:10px}
+  .ititle{font-size:15px;font-weight:700}
+  .ibadge{font-size:11px;color:var(--muted);background:var(--inset);padding:3px 10px;border-radius:8px}
+  .irow{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-top:12px}
+  .ibig{font-size:54px;font-weight:800;letter-spacing:-2px;line-height:1}
+  .ichg{font-size:16px;font-weight:700;margin-left:12px}
+  .ichg.up{color:var(--green)} .ichg.down{color:var(--red)}
+  .istats{display:flex;gap:30px;flex-wrap:wrap;align-items:flex-start}
+  .istats .k{font-size:12px;color:var(--muted);white-space:nowrap}
+  .istats .n{font-size:19px;font-weight:700;margin-top:5px;letter-spacing:-.3px;font-variant-numeric:tabular-nums}
+  .istats .n.up{color:var(--green)} .istats .n.down{color:var(--red)}
+  .ichart{margin-top:14px}
+  .ichart svg{display:block;width:100%}
+  @media(max-width:720px){.ibig{font-size:42px}.istats{gap:18px}}
+  /* 成交值小卡的月線背景 */
+  .mini-spark{position:absolute;left:0;right:0;bottom:0;height:58px;opacity:.45;z-index:0;pointer-events:none}
+  .mini-spark svg{width:100%;height:100%;display:block}
 
   /* grow + us tiles */
   .grow,.usco{color:#fff}
@@ -207,18 +205,20 @@
       <div id="ranking"></div>
     </div>
 
-    <!-- 全年成交值（主視覺，置頂） -->
+    <!-- 台股加權指數（主視覺，置頂） -->
     <div class="card a-turn">
-      <div class="turn-spark" id="turnSpark"></div>
-      <div class="turn-left">
-        <div class="label">全台股市・近 12 個月成交值</div>
-        <div class="turn-val"><span class="num" id="turnYear"></span><span class="u">兆元</span></div>
+      <div class="ihead">
+        <span class="ititle">台股加權指數</span>
+        <span class="ibadge" id="idxBadge"></span>
       </div>
-      <div class="turn-right">
-        <div class="turn-pct" id="turnPct"></div>
-        <div class="turn-yoy" id="turnYoY"></div>
-        <div class="turn-month" id="turnMonth"></div>
+      <div class="irow">
+        <div>
+          <span class="ibig num" id="idxBig"></span>
+          <span class="ichg" id="idxChg"></span>
+        </div>
+        <div class="istats" id="idxStats"></div>
       </div>
+      <div class="ichart" id="idxChart"></div>
     </div>
 
     <!-- 成長最快 -->
@@ -234,12 +234,13 @@
       <div class="d muted" id="feeYM"></div>
     </div>
 
-    <!-- 加權指數（最新，自動） -->
+    <!-- 近12個月成交值（原 hero 內容縮為小卡，含月線背景） -->
     <div class="card stat a-idx">
-      <div class="label">加權指數（最新）</div>
-      <div class="value"><span class="num" id="idxVal">—</span></div>
-      <div class="d" id="idxDelta"></div>
-      <div class="sub" id="idxYear" style="font-size:12px;color:var(--muted);margin-top:6px"></div>
+      <div class="mini-spark" id="turnMini"></div>
+      <div class="label" style="position:relative;z-index:1">近 12 個月成交值</div>
+      <div class="value" style="position:relative;z-index:1"><span class="num" id="ttmVal">—</span><span class="u">兆元</span></div>
+      <div class="d" id="ttmDelta" style="position:relative;z-index:1"></div>
+      <div class="sub" id="ttmMonth" style="font-size:12px;color:var(--muted);margin-top:6px;position:relative;z-index:1"></div>
     </div>
 
     <!-- 券商明細表 -->
@@ -292,37 +293,53 @@ const BROKERS = D.brokers;
 (function fillMarket(){
   const m = D.market;
   document.getElementById("asLabel").textContent = "資料截至 "+D.meta.asLabel;
+
+  // ---- 指數 hero ----
+  const s = m.taiexSeries || [];
+  document.getElementById("idxBadge").textContent = (m.taiexDate||"")+"・收盤";
+  document.getElementById("idxBig").textContent = Number(m.taiex).toLocaleString();
+  const up = (m.taiexChg>=0), base = m.taiex - m.taiexChg;
+  const cpct = base ? (m.taiexChg/base*100) : 0;
+  const chgEl = document.getElementById("idxChg");
+  chgEl.className = "ichg " + (up?"up":"down");
+  chgEl.textContent = `${up?'▲ +':'▼ '}${m.taiexChg.toLocaleString()}（${cpct>=0?'+':''}${cpct.toFixed(2)}%）`;
+  if(s.length){
+    const closes = s.map(d=>d.c), vols = s.map(d=>d.v);
+    const yhi = Math.max(...closes), ylo = Math.min(...closes);
+    const lastV = vols[vols.length-1];
+    const prev5 = vols.slice(-6,-1);
+    const vratio = prev5.length ? lastV/(prev5.reduce((a,b)=>a+b,0)/prev5.length) : null;
+    const pos = (m.taiex-ylo)/((yhi-ylo)||1)*100;
+    const ypct = m.taiexYearPct;
+    document.getElementById("idxStats").innerHTML = `
+      <div><div class="k">成交金額</div><div class="n">${(lastV/1e4).toFixed(2)} 兆</div></div>
+      <div><div class="k">量能（vs 近5日均）</div><div class="n">${vratio!=null?vratio.toFixed(2)+'×':'—'}</div></div>
+      <div><div class="k">今年以來</div><div class="n ${ypct>=0?'up':'down'}">${ypct>=0?'+':''}${ypct}%</div></div>
+      <div><div class="k">年內區間位置</div><div class="n">${pos.toFixed(0)}%</div></div>
+      <div><div class="k">年內高 / 低</div><div class="n">${yhi.toLocaleString(undefined,{maximumFractionDigits:0})} / ${ylo.toLocaleString(undefined,{maximumFractionDigits:0})}</div></div>`;
+  }
+  renderIdxHero();
+
+  // ---- 成交值小卡（近12個月 TTM）----
   const ttm = (m.turnoverTTM!=null) ? m.turnoverTTM : m.turnoverYear;
   const prev = (m.turnoverTTMPrev!=null) ? m.turnoverTTMPrev : m.turnoverPrev;
-  document.getElementById("turnYear").textContent = ttm;
+  document.getElementById("ttmVal").textContent = ttm;
   if(prev){
-    const tdiff = ttm - prev, tpct = tdiff / prev * 100, up = tdiff>=0;
-    const tEl = document.getElementById("turnPct");
-    tEl.className = "turn-pct " + (up ? "up" : "down");
-    tEl.innerHTML = `<span class="tri">${up?'▲':'▼'}</span><span class="pctnum">${up?'+':''}${tpct.toFixed(0)}%</span>`;
-    document.getElementById("turnYoY").textContent =
-      `vs 前 12 個月（${tdiff>=0?'+':''}${tdiff.toFixed(0)} 兆元）`;
+    const tdiff = ttm - prev, tpct = tdiff/prev*100, tu = tdiff>=0;
+    const dEl = document.getElementById("ttmDelta");
+    dEl.textContent = `${tu?'▲ +':'▼ '}${tpct.toFixed(0)}%（${tu?'+':''}${tdiff.toFixed(0)} 兆）vs 前 12 個月`;
+    dEl.style.color = tu ? "var(--green)" : "var(--red)";
   }
-  renderTurnSpark();  // 背景折線：月成交值序列（含 x 軸月份）
-  document.getElementById("turnMonth").textContent =
+  document.getElementById("ttmMonth").textContent =
     (m.turnoverMonth!=null) ? `${m.turnoverMonthLabel}　${m.turnoverMonth} 兆元` : "";
+  renderTurnMini();
+
   const rsub=document.getElementById("rsubTxt");
   if(rsub && m.shareYM) rsub.textContent = "經紀手續費收入市佔・"+m.shareYM;
   document.getElementById("feeTotal").textContent = (m.feeTotal!=null)? m.feeTotal.toLocaleString() : "—";
   document.getElementById("feeYM").textContent = (m.shareYM||"")+"・全市場券商合計";
-  document.getElementById("idxYear").textContent =
-    (m.taiexYearPct!=null? "今年以來 "+(m.taiexYearPct>=0?"+":"")+m.taiexYearPct+"%" : "");
   document.getElementById("updTop").textContent =
     `⚙ 最後更新 ${D.meta.updated}　財報期別 ${D.meta.finPeriod||"—"}`;
-  if(m.taiex!=null){
-    document.getElementById("idxVal").textContent = Number(m.taiex).toLocaleString();
-    const idxD = document.getElementById("idxDelta");
-    const up = (m.taiexChg>=0);
-    const base = m.taiex - m.taiexChg;
-    const cpct = base ? (m.taiexChg/base*100) : 0;
-    idxD.textContent = (up?"▲ +":"▼ ")+m.taiexChg+`（${cpct>=0?'+':''}${cpct.toFixed(2)}%）　`+m.taiexDate;
-    idxD.style.color = up ? "var(--green)" : "var(--red)";
-  }
 })();
 
 /* ====================================================================
@@ -373,54 +390,80 @@ function renderChart(nYears){
   document.getElementById("kPct").textContent = "+"+pct.toFixed(1)+"%";
 }
 
-/* 成交值背景折線（含 x 軸月份），同樣用實際像素寬避免變形 */
-function renderTurnSpark(){
-  const all = (D.market.turnoverSeries || []);
-  // 只顯示今年（以資料最後一筆的年份為準，跨年自動切換）
-  const curY = all.length ? all[all.length-1].ym.slice(0,4) : "";
-  const s = all.filter(d => d.ym.startsWith(curY));
-  const box = document.getElementById("turnSpark");
-  if(!box || s.length < 2) return;
-  const W = Math.max(320, Math.round(box.clientWidth || 600));
-  const Hs = Math.max(90, Math.round(box.clientHeight || 150));
-  const pt=16, pb=22, n=s.length;
-  const vals=s.map(d=>d.v), lo=Math.min(...vals), hi=Math.max(...vals), sp=(hi-lo)||1;
-  const X=i=> i*W/(n-1);
-  const Y=v=> pt + (hi-v)/sp*(Hs-pt-pb);
-  const pts=s.map((d,i)=>[X(i),Y(d.v)]);
+/* 指數 hero：今年每日收盤折線＋成交金額量能柱（參考設計） */
+function renderIdxHero(){
+  const s = (D.market.taiexSeries || []);
+  const box = document.getElementById("idxChart");
+  if(!box || s.length < 2){ if(box) box.innerHTML=""; return; }
+  const W = Math.max(320, Math.round(box.clientWidth || 1000)), H = 210;
+  const padL=76, padR=14, padT=12, padB=26, n=s.length;
+  const closes=s.map(d=>d.c), lo=Math.min(...closes), hi=Math.max(...closes), sp=(hi-lo)||1;
+  const X=i=> padL + i*(W-padL-padR)/(n-1);
+  const Y=c=> padT + (hi-c)/sp*(H-padT-padB);
+  const pts=s.map((d,i)=>[X(i),Y(d.c)]);
   const line=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
-  const area=`M0 ${Hs-pb} `+pts.map(p=>'L'+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ')+` L${W} ${Hs-pb} Z`;
-  // Y 軸：虛線格線＋刻度（兆元）
-  const ystep = sp>25?10 : sp>12?5 : 2;
+  const area=`M${X(0).toFixed(1)} ${H-padB} `+pts.map(p=>'L'+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ')+` L${X(n-1).toFixed(1)} ${H-padB} Z`;
+  // Y 軸：三條虛線＋點位刻度（首條加「點」）
   let ygrid="";
-  for(let t=Math.ceil(lo/ystep)*ystep; t<=hi; t+=ystep){
-    const yy=Y(t).toFixed(1);
-    ygrid += `<line x1="0" x2="${W}" y1="${yy}" y2="${yy}" stroke="#8ec5ff" stroke-opacity="0.32" stroke-dasharray="4 5"/>
-      <text x="${W-6}" y="${(Y(t)-4).toFixed(1)}" fill="#8ec5ff" fill-opacity="0.65" font-size="10" text-anchor="end">${t} 兆</text>`;
-  }
-  // X 軸：虛線格線＋月份刻度
-  const step=Math.max(1, Math.round(n/6));
-  let xgrid="", xlab="";
+  [0.22,0.5,0.78].forEach((t,k)=>{
+    const val = hi - t*sp, yy = Y(val).toFixed(1);
+    ygrid += `<line x1="${padL}" x2="${W-padR}" y1="${yy}" y2="${yy}" stroke="#8ec5ff" stroke-opacity="0.28" stroke-dasharray="4 5"/>
+      <text x="${padL-8}" y="${(+yy+4).toFixed(1)}" fill="#8ec5ff" fill-opacity="0.65" font-size="11" text-anchor="end">${Math.round(val).toLocaleString()}${k===0?' 點':''}</text>`;
+  });
+  // X 軸：每月首個交易日 → 垂直虛線＋「N月」
+  let xgrid="", xlab="", lastM="";
   s.forEach((d,i)=>{
-    if(i%step===0 || i===n-1){
+    const mo=d.d.slice(0,2);
+    if(mo!==lastM){
+      lastM=mo;
       const xx=X(i).toFixed(1);
-      xgrid += `<line x1="${xx}" x2="${xx}" y1="${pt}" y2="${Hs-pb}" stroke="#8ec5ff" stroke-opacity="0.28" stroke-dasharray="4 5"/>`;
-      xlab  += `<text x="${xx}" y="${Hs-6}" fill="#8ec5ff" fill-opacity="0.5" font-size="11" text-anchor="${i===0?'start':i===n-1?'end':'middle'}">${d.ym.slice(2).replace('-','/')}</text>`;
+      xgrid += `<line x1="${xx}" x2="${xx}" y1="${padT}" y2="${H-padB}" stroke="#8ec5ff" stroke-opacity="0.22" stroke-dasharray="4 5"/>`;
+      xlab  += `<text x="${xx}" y="${H-8}" fill="#8ec5ff" fill-opacity="0.65" font-size="11" text-anchor="${i===0?'start':'middle'}">${parseInt(mo)}月</text>`;
     }
   });
-  box.innerHTML = `<svg viewBox="0 0 ${W} ${Hs}" preserveAspectRatio="none" style="width:100%;height:100%">
+  // 成交金額柱（底部，佔高 ~22%）
+  const vmax=Math.max(...s.map(d=>d.v))||1;
+  const bw=Math.max(1,(W-padL-padR)/n*0.55);
+  const bars=s.map((d,i)=>{
+    const bh=(d.v/vmax)*(H-padT-padB)*0.22;
+    return `<rect x="${(X(i)-bw/2).toFixed(1)}" y="${(H-padB-bh).toFixed(1)}" width="${bw.toFixed(1)}" height="${bh.toFixed(1)}" fill="#38bdf8" fill-opacity="0.28"/>`;
+  }).join('');
+  const last=pts[n-1];
+  box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" style="height:${H}px">
     <defs>
-      <linearGradient id="sg" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#34e08a" stop-opacity="0.38"/>
-        <stop offset="1" stop-color="#38bdf8" stop-opacity="0"/></linearGradient>
-      <linearGradient id="spline" x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0" stop-color="#34e08a"/><stop offset="1" stop-color="#38bdf8"/></linearGradient>
+      <linearGradient id="ig" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#6366f1" stop-opacity="0.30"/>
+        <stop offset="1" stop-color="#6366f1" stop-opacity="0"/></linearGradient>
+      <linearGradient id="iline" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#6366f1"/><stop offset="1" stop-color="#38bdf8"/></linearGradient>
     </defs>
-    ${ygrid}${xgrid}
-    <path d="${area}" fill="url(#sg)"/>
-    <path d="${line}" fill="none" stroke="url(#spline)" stroke-width="2.2" stroke-linejoin="round"/>
-    <text x="${W-6}" y="12" fill="#8ec5ff" fill-opacity="0.5" font-size="10" text-anchor="end">單位：兆元／月</text>
+    ${ygrid}${xgrid}${bars}
+    <path d="${area}" fill="url(#ig)"/>
+    <path d="${line}" fill="none" stroke="url(#iline)" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="4" fill="#0e0e16" stroke="#38bdf8" stroke-width="2.2"/>
+    <text x="${W-padR}" y="${H-padB-8}" fill="#8ec5ff" fill-opacity="0.55" font-size="10" text-anchor="end">成交金額（億）・峰值 ${vmax.toLocaleString()}</text>
     ${xlab}
+  </svg>`;
+}
+
+/* 成交值小卡背景：月成交值 mini 線 */
+function renderTurnMini(){
+  const s = (D.market.turnoverSeries || []);
+  const box = document.getElementById("turnMini");
+  if(!box || s.length < 2) return;
+  const W = Math.max(200, Math.round(box.clientWidth || 300)), Hs = Math.max(40, Math.round(box.clientHeight || 58));
+  const vals=s.map(d=>d.v), lo=Math.min(...vals), hi=Math.max(...vals), sp=(hi-lo)||1;
+  const X=i=> i*W/(s.length-1);
+  const Y=v=> 4 + (hi-v)/sp*(Hs-8);
+  const pts=s.map((d,i)=>[X(i),Y(d.v)]);
+  const line=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
+  const area=`M0 ${Hs} `+pts.map(p=>'L'+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ')+` L${W} ${Hs} Z`;
+  box.innerHTML = `<svg viewBox="0 0 ${W} ${Hs}" preserveAspectRatio="none" style="width:100%;height:100%">
+    <defs><linearGradient id="mg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#34e08a" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#38bdf8" stop-opacity="0"/></linearGradient></defs>
+    <path d="${area}" fill="url(#mg)"/>
+    <path d="${line}" fill="none" stroke="#34e08a" stroke-opacity="0.8" stroke-width="1.6"/>
   </svg>`;
 }
 
@@ -430,7 +473,7 @@ document.getElementById("tabs").addEventListener("click", e=>{
   b.classList.add("on");
   renderChart(+b.dataset.n);
 });
-let _rz; window.addEventListener("resize", ()=>{ clearTimeout(_rz); _rz=setTimeout(()=>{ renderChart(curN); renderTurnSpark(); }, 150); });
+let _rz; window.addEventListener("resize", ()=>{ clearTimeout(_rz); _rz=setTimeout(()=>{ renderChart(curN); renderIdxHero(); renderTurnMini(); }, 150); });
 renderChart(0);
 
 /* ====================================================================

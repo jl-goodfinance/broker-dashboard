@@ -78,6 +78,12 @@ def main():
         prev_rows = [r for r in rows if r["date"][:4] < cy]
         if prev_rows:
             m["taiexYearPct"] = round((last["close"] / prev_rows[-1]["close"] - 1) * 100, 1)
+        # 今年每日指數序列（收盤/成交金額億）→ 指數 hero 圖
+        m["taiexSeries"] = [
+            {"d": r["date"][5:], "c": round(float(r["close"]), 2),
+             "v": round((r.get("Trading_money") or 0) / 1e8)}
+            for r in rows if r["date"][:4] == cy
+        ]
         # 年度成交值（兆）：最近完整年 vs 前一年
         byyear = {}
         for r in rows:
