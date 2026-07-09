@@ -11,6 +11,7 @@
     --green:#38bdf8; --green-l:#5fd0ff; /* 正向/上漲色，改為青藍 */
     --blue:#3b82f6; --blue-l:#60a5fa; --cyan:#38bdf8; --indigo:#6366f1;
     --purple:#818cf8; /* 美好證券 highlight：柔和淡靛藍 periwinkle */ --red:#ff5d6c; --amber:#ffb340;
+    --up:#ff4d5e; --dn:#2fd67a; /* 台股慣例：紅漲綠跌 */
     --r:24px;
   }
   *{box-sizing:border-box;margin:0;padding:0}
@@ -52,8 +53,8 @@
   .ksum .l{font-size:13px;color:var(--muted)}
   .ksum .big{font-size:42px;font-weight:700;letter-spacing:-1.5px;line-height:1}
   .ksum .big .u{font-size:17px;color:var(--muted);font-weight:600;margin-left:4px;letter-spacing:0}
-  .ksum .big .plus{font-size:16px;color:var(--green);font-weight:700;margin-left:8px;letter-spacing:0;vertical-align:super}
-  .ksum .pc{font-size:22px;font-weight:700;color:var(--green);display:flex;align-items:center;gap:5px}
+  .ksum .big .plus{font-size:16px;color:var(--up);font-weight:700;margin-left:8px;letter-spacing:0;vertical-align:super}
+  .ksum .pc{font-size:22px;font-weight:700;color:var(--up);display:flex;align-items:center;gap:5px}
 
   /* ranking bars */
   .a-rank{background:var(--card);padding-bottom:8px}
@@ -79,7 +80,7 @@
   /* small stat / kpi tiles */
   .stat .value{font-size:34px;font-weight:700;letter-spacing:-1px;margin-top:14px;line-height:1}
   .stat .value .u{font-size:15px;color:var(--muted);font-weight:600;margin-left:4px;letter-spacing:0}
-  .stat .d{font-size:13px;font-weight:600;margin-top:8px;color:var(--green)}
+  .stat .d{font-size:13px;font-weight:600;margin-top:8px;color:var(--up)}
   .stat .d.muted{color:var(--muted)}
 
   /* 台股加權指數 置頂 hero */
@@ -90,11 +91,11 @@
   .irow{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-top:12px}
   .ibig{font-size:54px;font-weight:800;letter-spacing:-2px;line-height:1}
   .ichg{font-size:16px;font-weight:700;margin-left:12px}
-  .ichg.up{color:var(--green)} .ichg.down{color:var(--red)}
+  .ichg.up{color:var(--up)} .ichg.down{color:var(--dn)}
   .istats{display:flex;gap:30px;flex-wrap:wrap;align-items:flex-start}
   .istats .k{font-size:12px;color:var(--muted);white-space:nowrap}
   .istats .n{font-size:19px;font-weight:700;margin-top:5px;letter-spacing:-.3px;font-variant-numeric:tabular-nums}
-  .istats .n.up{color:var(--green)} .istats .n.down{color:var(--red)}
+  .istats .n.up{color:var(--up)} .istats .n.down{color:var(--dn)}
   .ichart{margin-top:14px}
   .ichart svg{display:block;width:100%}
   @media(max-width:720px){.ibig{font-size:42px}.istats{gap:18px}}
@@ -107,7 +108,7 @@
   .grow{background:linear-gradient(140deg,#2747a8,#16235c);min-height:100%}
   .grow .tag{font-size:12.5px;font-weight:700;color:var(--green-l)}
   .grow .name{font-size:22px;font-weight:800;letter-spacing:-.4px;margin-top:10px}
-  .grow .pct{font-size:40px;font-weight:800;letter-spacing:-1.5px;margin-top:14px;line-height:1;color:var(--green-l)}
+  .grow .pct{font-size:40px;font-weight:800;letter-spacing:-1.5px;margin-top:14px;line-height:1;color:var(--up)}
   .grow .pct .c{font-size:13px;font-weight:600;color:#bfe9cf;margin-left:6px;letter-spacing:0}
   .grow .flow{font-size:12px;color:#9fb4e0;margin-top:6px}
   .usco{background:linear-gradient(150deg,#1c1f3a,#151624);border:1px solid rgba(129,140,248,.5);box-shadow:0 10px 34px rgba(129,140,248,.12)}
@@ -140,7 +141,7 @@
   .name{font-weight:600;letter-spacing:-.2px}
   .num{font-variant-numeric:tabular-nums}
   .qline{font-size:11px;color:var(--muted2);font-weight:500;margin-top:3px}
-  .yoy{font-weight:700}.yoy.up{color:var(--green)}.yoy.down{color:var(--red)}.yoy.flat{color:var(--muted)}
+  .yoy{font-weight:700}.yoy.up{color:var(--up)}.yoy.down{color:var(--dn)}.yoy.flat{color:var(--muted)}
   .dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-left:7px;vertical-align:middle}
   .dot.y{background:var(--green)} .dot.e{background:var(--amber)}
   tr.fast td{background:rgba(56,189,248,.10)}
@@ -328,7 +329,7 @@ const BROKERS = D.brokers;
     const tdiff = ttm - prev, tpct = tdiff/prev*100, tu = tdiff>=0;
     const dEl = document.getElementById("ttmDelta");
     dEl.textContent = `${tu?'▲ +':'▼ '}${tpct.toFixed(0)}%（${tu?'+':''}${tdiff.toFixed(0)} 兆）vs 前 12 個月`;
-    dEl.style.color = tu ? "var(--green)" : "var(--red)";
+    dEl.style.color = tu ? "var(--up)" : "var(--dn)";
   }
   document.getElementById("ttmMonth").textContent =
     (m.turnoverMonth!=null) ? `${m.turnoverMonthLabel}　${m.turnoverMonth} 兆元` : "";
