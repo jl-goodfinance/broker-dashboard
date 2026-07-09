@@ -380,16 +380,31 @@ function renderTurnSpark(){
   if(!box || s.length < 2) return;
   const W = Math.max(320, Math.round(box.clientWidth || 600));
   const Hs = Math.max(90, Math.round(box.clientHeight || 150));
-  const pt=12, pb=22, n=s.length;
+  const pt=16, pb=22, n=s.length;
   const vals=s.map(d=>d.v), lo=Math.min(...vals), hi=Math.max(...vals), sp=(hi-lo)||1;
   const X=i=> i*W/(n-1);
   const Y=v=> pt + (hi-v)/sp*(Hs-pt-pb);
   const pts=s.map((d,i)=>[X(i),Y(d.v)]);
   const line=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
   const area=`M0 ${Hs-pb} `+pts.map(p=>'L'+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ')+` L${W} ${Hs-pb} Z`;
+  // Y 軸：虛線格線＋刻度（兆元）
+  const ystep = sp>25?10 : sp>12?5 : 2;
+  let ygrid="";
+  for(let t=Math.ceil(lo/ystep)*ystep; t<=hi; t+=ystep){
+    const yy=Y(t).toFixed(1);
+    ygrid += `<line x1="0" x2="${W}" y1="${yy}" y2="${yy}" stroke="#8ec5ff" stroke-opacity="0.14" stroke-dasharray="3 6"/>
+      <text x="${W-6}" y="${(Y(t)-4).toFixed(1)}" fill="#8ec5ff" fill-opacity="0.5" font-size="10" text-anchor="end">${t} 兆</text>`;
+  }
+  // X 軸：虛線格線＋月份刻度
   const step=Math.max(1, Math.round(n/6));
-  const xlab=s.map((d,i)=> (i%step===0||i===n-1)
-    ? `<text x="${X(i).toFixed(1)}" y="${Hs-6}" fill="#8ec5ff" fill-opacity="0.5" font-size="11" text-anchor="${i===0?'start':i===n-1?'end':'middle'}">${d.ym.slice(2).replace('-','/')}</text>` : "").join('');
+  let xgrid="", xlab="";
+  s.forEach((d,i)=>{
+    if(i%step===0 || i===n-1){
+      const xx=X(i).toFixed(1);
+      xgrid += `<line x1="${xx}" x2="${xx}" y1="${pt}" y2="${Hs-pb}" stroke="#8ec5ff" stroke-opacity="0.10" stroke-dasharray="3 6"/>`;
+      xlab  += `<text x="${xx}" y="${Hs-6}" fill="#8ec5ff" fill-opacity="0.5" font-size="11" text-anchor="${i===0?'start':i===n-1?'end':'middle'}">${d.ym.slice(2).replace('-','/')}</text>`;
+    }
+  });
   box.innerHTML = `<svg viewBox="0 0 ${W} ${Hs}" preserveAspectRatio="none" style="width:100%;height:100%">
     <defs>
       <linearGradient id="sg" x1="0" y1="0" x2="0" y2="1">
@@ -398,8 +413,10 @@ function renderTurnSpark(){
       <linearGradient id="spline" x1="0" y1="0" x2="1" y2="0">
         <stop offset="0" stop-color="#34e08a"/><stop offset="1" stop-color="#38bdf8"/></linearGradient>
     </defs>
+    ${ygrid}${xgrid}
     <path d="${area}" fill="url(#sg)"/>
     <path d="${line}" fill="none" stroke="url(#spline)" stroke-width="2.2" stroke-linejoin="round"/>
+    <text x="${W-6}" y="12" fill="#8ec5ff" fill-opacity="0.5" font-size="10" text-anchor="end">單位：兆元／月</text>
     ${xlab}
   </svg>`;
 }

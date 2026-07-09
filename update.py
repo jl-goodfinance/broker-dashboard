@@ -62,7 +62,7 @@ def main():
         m = data["market"]
         # 完整月（剔除 0 與當前未完月）
         complete = [(ym, v) for ym, v in bymon.items() if v > 0 and ym != cur_ym]
-        m["turnoverSeries"] = [{"ym": ym, "v": round(v / 1e12, 2)} for ym, v in complete[-12:]]
+        m["turnoverSeries"] = [{"ym": ym, "v": round(v / 1e12, 2)} for ym, v in complete]  # 全部完整月（跨年度）
         m["turnoverMonth"] = round(bymon.get(cur_ym, 0) / 1e12, 2)   # 本月累計（含未完月）
         m["turnoverMonthLabel"] = cur_ym.replace("-", "/") + " 本月累計"
         # 近12個月(TTM) 與 前12個月，給頭條 + YoY
