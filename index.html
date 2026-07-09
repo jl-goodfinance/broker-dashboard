@@ -266,7 +266,7 @@
     <p class="a-note">
       <b>※ 數據說明：</b>「成交值／指數」來自 FinMind（原始：證交所），每日自動更新；「開戶數」為集保年度統計（無公開 API，數列至最新公布年度）。
       「市佔率／排名」＝<b>經紀手續費收入</b>占全市場（65 家、含外資）比重（證交所收支概況表 t187ap21，每月自動更新；排名為全市場真實名次，跳號代表其間為未列出的券商如外資）。
-      「稅後淨利／YoY」比較 2025 vs 2024 全年（綠點＝法說會／年報已確認；橘點＝估算待校正）。
+      「稅後淨利」大字為<b>最近完整年度</b>之全年稅後淨利（下方標示年份），「YoY 成長」為其對前一年度之成長率；小字依序為正式季報累計與月自結累計（綠點＝官方 API 流入；橘點＝估算）。
       <b>🚀「成長最快」為全表（前 10 大＋美好）稅後淨利 YoY 最高者，自動判定。</b>
       「當月營收」為<b>證券子公司本身</b>（非金控母公司）之月營收，來源 TWSE/TPEX 每月營收彙總（t187ap05）；旁註為資料月份與 YoY。「美好證券」（6021・上櫃）之財報與月營收同樣來自官方公開申報，自動更新。
       淨利欄的「<b>自結累計</b>」為公司每月公告之<b>自結損益</b>（MOPS 重大訊息，未經會計師核閱、比季報快 1–2 個月）；「XXXXQn 累計」則為會計師核閱之正式季報，兩者期間與性質不同。
@@ -447,6 +447,8 @@ document.getElementById("usTile").innerHTML = `
 // 明細表（可點欄位排序）
 const rowsEl = document.getElementById("rows");
 BROKERS.forEach((b,i)=>{ b._rank = b.rank || (i+1); b._margin = b.p25/b.rev*100; });  // rank=全市場真實名次（手續費口徑，自動）
+// p25 對應的「完整年度」：財報若已到 Q4 即當年，否則為前一年（隨自動滾動換年）
+const annualYear = (()=>{ const m=/(\d{4})Q(\d)/.exec(D.meta.finPeriod||""); return m ? (m[2]==="4"?m[1]:String(+m[1]-1)) : ""; })();
 const SORTVAL = { rank:b=>b._rank, share:b=>b.share, mRev:b=>(b.mRev!=null?b.mRev:-1), yRev:b=>(b.yRev!=null?b.yRev:-1), p25:b=>b.p25, yoy:b=>b.yoy, margin:b=>b._margin };
 let sortKey="share", sortDir="desc";
 
@@ -459,7 +461,7 @@ function renderTable(){
     const yArr=b.yoy>0.5?"▲":(b.yoy<-0.5?"▼":"—");
     const conf=(b.qProfit!=null)?"y":"e";
     const qPf =(b.qProfit!=null)?`<div class="qline">${b.qPeriod} 累計 ${b.qProfit}${b.qEps!=null?`・EPS ${b.qEps}`:""}</div>`:"";
-    const sPf =(b.sProfit!=null)?`<div class="qline">自結累計 ${b.sProfit}・至${b.sYM}</div>`:"";
+    const sPf =(b.sProfit!=null)?`<div class="qline">自結累計 ${b.sProfit}${b.sProfitM!=null?`・單月 ${b.sProfitM}`:""}（至${b.sYM}）</div>`:"";
     const mSub=(b.mRev!=null && (b.mRevYM||b.mRevYoY!=null))
       ? `<div class="qline">${b.mRevYM||''}${b.mRevYoY!=null?`・YoY ${b.mRevYoY>=0?'+':''}${b.mRevYoY}%`:''}</div>` : "";
     const mCell=(b.mRev!=null) ? `${b.mRev.toLocaleString()}<span class="dot y"></span>${mSub}` : `<span style="color:var(--muted2)">—</span>`;
@@ -472,7 +474,7 @@ function renderTable(){
       <td class="num">${b.share.toFixed(2)}%</td>
       <td class="num">${mCell}</td>
       <td class="num">${yCell}</td>
-      <td class="num">${b.p25.toLocaleString()}<span class="dot ${conf}"></span>${qPf}${sPf}</td>
+      <td class="num">${b.p25.toLocaleString()}<span class="dot ${conf}"></span><div class="qline">${annualYear} 全年</div>${qPf}${sPf}</td>
       <td class="num"><span class="yoy ${yCls}">${yArr} ${b.yoy>=0?'+':''}${b.yoy.toFixed(1)}%</span></td>
       <td class="num">${b._margin.toFixed(1)}%</td>
     </tr>`;
