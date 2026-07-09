@@ -198,6 +198,39 @@ def main():
     except Exception as e:
         log.append(f"[警告] 市佔(t187ap21) 失敗：{e}")
 
+    # ---- 5. 月自結損益（重大訊息 t187ap04；公告只在當日 API 出現，抓到即長存）----
+    import re
+    try:
+        ann = []
+        for ds in ("/opendata/t187ap04_L",
+                   "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap04_O"):
+            try:
+                ann += fetch(ds)
+            except Exception as e:
+                log.append(f"[警告] {ds} 失敗：{e}")
+        by_code = {b.get("code"): b for b in data["brokers"] if b.get("code")}
+        nhit = []
+        for r in ann:
+            code = str(r.get("公司代號") or r.get("SecuritiesCompanyCode") or "")
+            subj = str(r.get("主旨") or "")
+            body = str(r.get("說明") or "").replace("\n", " ")
+            if code not in by_code or "自結" not in (subj + body):
+                continue
+            mm = re.search(r"(\d{4})年\s*(\d{1,2})\s*月", subj + body)
+            nums = re.findall(r"稅後淨利[^\d\-]*(-?[\d,]+)\s*仟元[^\d\-]*(-?[\d,]+)\s*仟元", body)
+            if not nums:
+                continue
+            b = by_code[code]
+            single, cum = (float(x.replace(",", "")) for x in nums[0])
+            b["sProfitM"] = round(single / 1e5, 2)   # 單月自結稅後（億）
+            b["sProfit"] = round(cum / 1e5, 2)       # 今年累計自結稅後（億）
+            b["sYM"] = f"{mm.group(1)}/{int(mm.group(2)):02d}" if mm else ""
+            nhit.append(f'{b["name"]}(至{b["sYM"]})')
+        if nhit:
+            log.append(f"月自結稅後淨利更新：{'、'.join(nhit)}")
+    except Exception as e:
+        log.append(f"[警告] 自結損益解析失敗：{e}")
+
     data["meta"]["updated"] = datetime.date.today().isoformat()
     data["meta"]["asLabel"] = (f"財報 {data['meta'].get('finPeriod','—')}・"
                                f"市佔 {data['market'].get('shareYM','—')}（手續費口徑）")

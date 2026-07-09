@@ -269,6 +269,7 @@
       「稅後淨利／YoY」比較 2025 vs 2024 全年（綠點＝法說會／年報已確認；橘點＝估算待校正）。
       <b>🚀「成長最快」為全表（前 10 大＋美好）稅後淨利 YoY 最高者，自動判定。</b>
       「當月營收」為<b>證券子公司本身</b>（非金控母公司）之月營收，來源 TWSE/TPEX 每月營收彙總（t187ap05）；旁註為資料月份與 YoY。「美好證券」（6021・上櫃）之財報與月營收同樣來自官方公開申報，自動更新。
+      淨利欄的「<b>自結累計</b>」為公司每月公告之<b>自結損益</b>（MOPS 重大訊息，未經會計師核閱、比季報快 1–2 個月）；「XXXXQn 累計」則為會計師核閱之正式季報，兩者期間與性質不同。
     </p>
 
   </div>
@@ -440,7 +441,7 @@ document.getElementById("usTile").innerHTML = `
     <div><div class="n">${us.mRev!=null?us.mRev:'—'}</div><div class="k">當月營收（億）${us.mRevYM?'・'+us.mRevYM:''}</div></div>
     <div><div class="n">${us.yRev!=null?us.yRev:'—'}</div><div class="k">今年累計營收（億）</div></div>
     <div><div class="n">${us.share.toFixed(2)}%</div><div class="k">市佔率</div></div>
-    <div><div class="n">${us.p25}</div><div class="k">淨利（億）</div></div>
+    <div><div class="n">${us.sProfit!=null?us.sProfit:us.p25}</div><div class="k">${us.sProfit!=null?`今年稅後淨利（億・自結至${parseInt(us.sYM.slice(5))}月）`:'淨利（億）'}</div></div>
   </div>`;
 
 // 明細表（可點欄位排序）
@@ -458,6 +459,7 @@ function renderTable(){
     const yArr=b.yoy>0.5?"▲":(b.yoy<-0.5?"▼":"—");
     const conf=(b.qProfit!=null)?"y":"e";
     const qPf =(b.qProfit!=null)?`<div class="qline">${b.qPeriod} 累計 ${b.qProfit}${b.qEps!=null?`・EPS ${b.qEps}`:""}</div>`:"";
+    const sPf =(b.sProfit!=null)?`<div class="qline">自結累計 ${b.sProfit}・至${b.sYM}</div>`:"";
     const mSub=(b.mRev!=null && (b.mRevYM||b.mRevYoY!=null))
       ? `<div class="qline">${b.mRevYM||''}${b.mRevYoY!=null?`・YoY ${b.mRevYoY>=0?'+':''}${b.mRevYoY}%`:''}</div>` : "";
     const mCell=(b.mRev!=null) ? `${b.mRev.toLocaleString()}<span class="dot y"></span>${mSub}` : `<span style="color:var(--muted2)">—</span>`;
@@ -470,7 +472,7 @@ function renderTable(){
       <td class="num">${b.share.toFixed(2)}%</td>
       <td class="num">${mCell}</td>
       <td class="num">${yCell}</td>
-      <td class="num">${b.p25.toLocaleString()}<span class="dot ${conf}"></span>${qPf}</td>
+      <td class="num">${b.p25.toLocaleString()}<span class="dot ${conf}"></span>${qPf}${sPf}</td>
       <td class="num"><span class="yoy ${yCls}">${yArr} ${b.yoy>=0?'+':''}${b.yoy.toFixed(1)}%</span></td>
       <td class="num">${b._margin.toFixed(1)}%</td>
     </tr>`;
