@@ -253,7 +253,7 @@
         <thead>
           <tr>
             <th data-sort="rank">券商</th><th data-sort="share" title="經紀手續費收入占全市場（65家含外資）比重・證交所收支概況表・每月自動更新">市佔率</th><th data-sort="mRev">當月營收（億・證券）</th>
-            <th data-sort="yRev">今年累計營收（億）</th>
+            <th data-sort="qRev" title="綜合損益表之「收益」（會計師核閱，季累計）；小字為月營收申報累計（較新，含自營評價）">累計收益（億・損益表）</th>
             <th data-sort="p25">稅後淨利（億）</th><th data-sort="yoy">YoY 成長</th><th data-sort="margin">淨利率</th>
           </tr>
         </thead>
@@ -270,7 +270,8 @@
       「市佔率／排名」＝<b>經紀手續費收入</b>占全市場（65 家、含外資）比重（證交所收支概況表 t187ap21，每月自動更新；排名為全市場真實名次，跳號代表其間為未列出的券商如外資）。
       「稅後淨利」大字為<b>最近完整年度</b>之全年稅後淨利（下方標示年份），「YoY 成長」為其對前一年度之成長率；小字依序為正式季報累計與月自結累計（綠點＝官方 API 流入；橘點＝估算）。
       <b>🚀「成長最快」為全表（前 10 大＋美好）稅後淨利 YoY 最高者，自動判定。</b>
-      「當月營收」為<b>證券子公司本身</b>（非金控母公司）之月營收，來源 TWSE/TPEX 每月營收彙總（t187ap05）；旁註為資料月份與 YoY。「美好證券」（6021・上櫃）之財報與月營收同樣來自官方公開申報，自動更新。
+      「當月營收」為<b>證券子公司本身</b>（非金控母公司）之月營收申報（t187ap05）；旁註為資料月份與 YoY。
+      「累計收益」主數字取自<b>綜合損益表</b>之「收益」（會計師核閱、季累計，t187ap06）；小字「月報累計」為月營收申報加總（較新但含自營評價波動，可能為負）。「美好證券」（6021・上櫃）同樣全自動更新。
       淨利欄的「<b>自結累計</b>」為公司每月公告之<b>自結損益</b>（MOPS 重大訊息，未經會計師核閱、比季報快 1–2 個月）；「XXXXQn 累計」則為會計師核閱之正式季報，兩者期間與性質不同。
     </p>
 
@@ -506,7 +507,7 @@ document.getElementById("usTile").innerHTML = `
   <div class="name">${us.name}</div>
   <div class="stats">
     <div><div class="n">${us.mRev!=null?us.mRev:'—'}</div><div class="k">當月營收（億）${us.mRevYM?'・'+us.mRevYM:''}</div></div>
-    <div><div class="n">${us.yRev!=null?us.yRev:'—'}</div><div class="k">今年累計營收（億）</div></div>
+    <div><div class="n">${us.qRev!=null?us.qRev:'—'}</div><div class="k">累計收益（億）${us.qPeriod?'・'+us.qPeriod:''}</div></div>
     <div><div class="n">${us.share.toFixed(2)}%</div><div class="k">市佔率</div></div>
     <div><div class="n">${us.sProfit!=null?us.sProfit:us.p25}</div><div class="k">${us.sProfit!=null?`今年稅後淨利（億・自結至${parseInt(us.sYM.slice(5))}月）`:'淨利（億）'}</div></div>
   </div>`;
@@ -516,7 +517,7 @@ const rowsEl = document.getElementById("rows");
 BROKERS.forEach((b,i)=>{ b._rank = b.rank || (i+1); b._margin = b.p25/b.rev*100; });  // rank=全市場真實名次（手續費口徑，自動）
 // p25 對應的「完整年度」：財報若已到 Q4 即當年，否則為前一年（隨自動滾動換年）
 const annualYear = (()=>{ const m=/(\d{4})Q(\d)/.exec(D.meta.finPeriod||""); return m ? (m[2]==="4"?m[1]:String(+m[1]-1)) : ""; })();
-const SORTVAL = { rank:b=>b._rank, share:b=>b.share, mRev:b=>(b.mRev!=null?b.mRev:-1), yRev:b=>(b.yRev!=null?b.yRev:-1), p25:b=>b.p25, yoy:b=>b.yoy, margin:b=>b._margin };
+const SORTVAL = { rank:b=>b._rank, share:b=>b.share, mRev:b=>(b.mRev!=null?b.mRev:-1), qRev:b=>(b.qRev!=null?b.qRev:-1), p25:b=>b.p25, yoy:b=>b.yoy, margin:b=>b._margin };
 let sortKey="share", sortDir="desc";
 
 function renderTable(){
@@ -532,11 +533,10 @@ function renderTable(){
     const mSub=(b.mRev!=null && (b.mRevYM||b.mRevYoY!=null))
       ? `<div class="qline">${b.mRevYM||''}${b.mRevYoY!=null?`・YoY ${b.mRevYoY>=0?'+':''}${b.mRevYoY}%`:''}</div>` : "";
     const mCell=(b.mRev!=null) ? `${b.mRev.toLocaleString()}<span class="dot y"></span>${mSub}` : `<span style="color:var(--muted2)">—</span>`;
-    const ySub=(b.yRev!=null && b.yRevYoY!=null)
-      ? `<div class="qline">YoY ${b.yRevYoY>=0?'+':''}${b.yRevYoY}%</div>`
-      : (b.yRev!=null && b.yRevPrev!=null && b.yRevPrev<=0 && b.yRev>0)
-        ? `<div class="qline">去年同期 ${b.yRevPrev} 億・由負轉正</div>` : "";
-    const yCell=(b.yRev!=null) ? `${b.yRev.toLocaleString()}<span class="dot y"></span>${ySub}` : `<span style="color:var(--muted2)">—</span>`;
+    const mCum=(b.yRev!=null)?`<div class="qline">月報累計 ${b.yRev}・至${b.mRevYM||''}${b.yRevYoY!=null?`・YoY ${b.yRevYoY>=0?'+':''}${b.yRevYoY}%`:(b.yRevPrev!=null&&b.yRevPrev<=0&&b.yRev>0?'・由負轉正':'')}</div>`:"";
+    const yCell=(b.qRev!=null)
+      ? `${b.qRev.toLocaleString()}<span class="dot y"></span><div class="qline">${b.qPeriod} 季報累計</div>${mCum}`
+      : (b.yRev!=null ? `${b.yRev.toLocaleString()}<span class="dot y"></span><div class="qline">月報累計・至${b.mRevYM||''}</div>` : `<span style="color:var(--muted2)">—</span>`);
     const rk = b.rank || '—';   // 全市場真實名次（含外資，會跳號屬正常）
     return `<tr class="${isUs?'usrow':''} ${isFast?'fast':''}">
       <td><span class="rank ${(!isUs&&b._rank<=3)?'rklead':''} ${isUs?'usrank':''}">${rk}</span>
