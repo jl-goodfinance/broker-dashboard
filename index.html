@@ -395,8 +395,8 @@ function renderTurnSpark(){
   let ygrid="";
   for(let t=Math.ceil(lo/ystep)*ystep; t<=hi; t+=ystep){
     const yy=Y(t).toFixed(1);
-    ygrid += `<line x1="0" x2="${W}" y1="${yy}" y2="${yy}" stroke="#8ec5ff" stroke-opacity="0.14" stroke-dasharray="3 6"/>
-      <text x="${W-6}" y="${(Y(t)-4).toFixed(1)}" fill="#8ec5ff" fill-opacity="0.5" font-size="10" text-anchor="end">${t} 兆</text>`;
+    ygrid += `<line x1="0" x2="${W}" y1="${yy}" y2="${yy}" stroke="#8ec5ff" stroke-opacity="0.32" stroke-dasharray="4 5"/>
+      <text x="${W-6}" y="${(Y(t)-4).toFixed(1)}" fill="#8ec5ff" fill-opacity="0.65" font-size="10" text-anchor="end">${t} 兆</text>`;
   }
   // X 軸：虛線格線＋月份刻度
   const step=Math.max(1, Math.round(n/6));
@@ -404,7 +404,7 @@ function renderTurnSpark(){
   s.forEach((d,i)=>{
     if(i%step===0 || i===n-1){
       const xx=X(i).toFixed(1);
-      xgrid += `<line x1="${xx}" x2="${xx}" y1="${pt}" y2="${Hs-pb}" stroke="#8ec5ff" stroke-opacity="0.10" stroke-dasharray="3 6"/>`;
+      xgrid += `<line x1="${xx}" x2="${xx}" y1="${pt}" y2="${Hs-pb}" stroke="#8ec5ff" stroke-opacity="0.28" stroke-dasharray="4 5"/>`;
       xlab  += `<text x="${xx}" y="${Hs-6}" fill="#8ec5ff" fill-opacity="0.5" font-size="11" text-anchor="${i===0?'start':i===n-1?'end':'middle'}">${d.ym.slice(2).replace('-','/')}</text>`;
     }
   });
