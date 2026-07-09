@@ -800,7 +800,8 @@ window.DASH_DATA = {
       "mRevYM": "2026/05",
       "yRev": 655.8,
       "yRevYoY": 116.1,
-      "rank": 1
+      "rank": 1,
+      "yRevPrev": 303.5
     },
     {
       "name": "凱基證券",
@@ -819,7 +820,8 @@ window.DASH_DATA = {
       "mRevYM": "2026/05",
       "yRev": 307.4,
       "yRevYoY": 129.8,
-      "rank": 3
+      "rank": 3,
+      "yRevPrev": 133.7
     },
     {
       "name": "富邦證券",
@@ -838,7 +840,8 @@ window.DASH_DATA = {
       "mRevYM": "2026/05",
       "yRev": 201.4,
       "yRevYoY": 122.5,
-      "rank": 2
+      "rank": 2,
+      "yRevPrev": 90.5
     },
     {
       "name": "永豐金證券",
@@ -857,7 +860,8 @@ window.DASH_DATA = {
       "mRevYM": "2026/05",
       "yRev": 149.2,
       "yRevYoY": 118.0,
-      "rank": 4
+      "rank": 4,
+      "yRevPrev": 68.4
     },
     {
       "name": "國泰證券",
@@ -876,7 +880,8 @@ window.DASH_DATA = {
       "mRevYM": "2026/05",
       "yRev": 89.1,
       "yRevYoY": 105.6,
-      "rank": 5
+      "rank": 5,
+      "yRevPrev": 43.3
     },
     {
       "name": "群益金鼎證券",
@@ -895,7 +900,8 @@ window.DASH_DATA = {
       "mRevYM": "2026/05",
       "yRev": 155.8,
       "yRevYoY": 134.8,
-      "rank": 8
+      "rank": 8,
+      "yRevPrev": 66.3
     },
     {
       "name": "統一證券",
@@ -914,7 +920,8 @@ window.DASH_DATA = {
       "mRevYM": "2026/05",
       "yRev": 143.2,
       "yRevYoY": 383.3,
-      "rank": 13
+      "rank": 13,
+      "yRevPrev": 29.6
     },
     {
       "name": "華南永昌證券",
@@ -933,7 +940,8 @@ window.DASH_DATA = {
       "mRevYM": "2026/05",
       "yRev": 61.4,
       "yRevYoY": 159.7,
-      "rank": 10
+      "rank": 10,
+      "yRevPrev": 23.6
     },
     {
       "name": "兆豐證券",
@@ -952,7 +960,8 @@ window.DASH_DATA = {
       "mRevYM": "2026/05",
       "yRev": 68.3,
       "yRevYoY": 182.9,
-      "rank": 14
+      "rank": 14,
+      "yRevPrev": 24.1
     },
     {
       "name": "美好證券",
@@ -976,7 +985,8 @@ window.DASH_DATA = {
       "yRevYoY": null,
       "sProfitM": 8.59,
       "sProfit": 21.1,
-      "sYM": "2026/05"
+      "sYM": "2026/05",
+      "yRevPrev": -0.2
     }
   ]
 };

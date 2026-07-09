@@ -166,8 +166,9 @@ def main():
         b["mRevYoY"] = round((cur / yago - 1) * 100, 1) if yago else None
         # 今年累計營收（YTD）＋ 對去年同期累計 YoY（去年基期≤0 則不算）
         ycur, yprev = _f(r.get("累計營業收入-當月累計營收")), _f(r.get("累計營業收入-去年累計營收"))
-        b["yRev"]    = round(ycur / 1e5, 1)
-        b["yRevYoY"] = round((ycur / yprev - 1) * 100, 1) if yprev > 0 else None
+        b["yRev"]     = round(ycur / 1e5, 1)
+        b["yRevPrev"] = round(yprev / 1e5, 1)   # 去年同期累計（可為負，供「由負轉正」顯示）
+        b["yRevYoY"]  = round((ycur / yprev - 1) * 100, 1) if yprev > 0 else None
         ym = str(r.get("資料年月", ""))
         b["mRevYM"] = f"{int(ym[:3]) + 1911}/{ym[3:5]}" if len(ym) >= 5 else ""
         mym = b["mRevYM"]

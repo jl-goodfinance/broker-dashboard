@@ -532,7 +532,10 @@ function renderTable(){
     const mSub=(b.mRev!=null && (b.mRevYM||b.mRevYoY!=null))
       ? `<div class="qline">${b.mRevYM||''}${b.mRevYoY!=null?`・YoY ${b.mRevYoY>=0?'+':''}${b.mRevYoY}%`:''}</div>` : "";
     const mCell=(b.mRev!=null) ? `${b.mRev.toLocaleString()}<span class="dot y"></span>${mSub}` : `<span style="color:var(--muted2)">—</span>`;
-    const ySub=(b.yRev!=null && b.yRevYoY!=null)?`<div class="qline">YoY ${b.yRevYoY>=0?'+':''}${b.yRevYoY}%</div>`:"";
+    const ySub=(b.yRev!=null && b.yRevYoY!=null)
+      ? `<div class="qline">YoY ${b.yRevYoY>=0?'+':''}${b.yRevYoY}%</div>`
+      : (b.yRev!=null && b.yRevPrev!=null && b.yRevPrev<=0 && b.yRev>0)
+        ? `<div class="qline">去年同期 ${b.yRevPrev} 億・由負轉正</div>` : "";
     const yCell=(b.yRev!=null) ? `${b.yRev.toLocaleString()}<span class="dot y"></span>${ySub}` : `<span style="color:var(--muted2)">—</span>`;
     const rk = b.rank || '—';   // 全市場真實名次（含外資，會跳號屬正常）
     return `<tr class="${isUs?'usrow':''} ${isFast?'fast':''}">
