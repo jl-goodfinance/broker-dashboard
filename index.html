@@ -533,7 +533,7 @@ function renderTable(){
     const mSub=(b.mRev!=null && (b.mRevYM||b.mRevYoY!=null))
       ? `<div class="qline">${b.mRevYM||''}${b.mRevYoY!=null?`・YoY ${b.mRevYoY>=0?'+':''}${b.mRevYoY}%`:''}</div>` : "";
     const mCell=(b.mRev!=null) ? `${b.mRev.toLocaleString()}<span class="dot y"></span>${mSub}` : `<span style="color:var(--muted2)">—</span>`;
-    const ySub1=(b.yRev!=null)?`<div class="qline">至${b.mRevYM||''}${b.yRevYoY!=null?`・YoY ${b.yRevYoY>=0?'+':''}${b.yRevYoY}%`:''}</div>`:"";
+    const ySub1=(b.yRev!=null)?`<div class="qline">至${b.mRevYM||''}${b.yRevYoY!=null?`・YoY ${b.yRevYoY>=0?'+':''}${b.yRevYoY}%`:(b.yRevPrev!=null?`・去年同期 ${b.yRevPrev} 億`:'')}</div>`:"";
     const ySub2=(b.qRev!=null)?`<div class="qline">季報核閱 ${b.qRev}（${b.qPeriod}）</div>`:"";
     const yCell=(b.yRev!=null)
       ? `${b.yRev.toLocaleString()}<span class="dot y"></span>${ySub1}${ySub2}`
