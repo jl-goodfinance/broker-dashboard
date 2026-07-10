@@ -98,7 +98,6 @@
   .istats .n.up{color:var(--up)} .istats .n.down{color:var(--dn)}
   .ichart{margin-top:14px}
   .ichart svg{display:block;width:100%}
-  @media(max-width:720px){.ibig{font-size:42px}.istats{gap:18px}}
   /* 成交值小卡的月線背景 */
   .mini-spark{position:absolute;left:0;right:0;bottom:0;height:58px;opacity:.45;z-index:0;pointer-events:none}
   .mini-spark svg{width:100%;height:100%;display:block}
@@ -155,15 +154,53 @@
   .a-note{background:transparent;padding:0 8px;font-size:12px;color:var(--muted2);line-height:1.7}
   .a-note b{color:var(--muted)}
 
+  /* 表格：任何寬度都可橫向捲動，不撐破卡片 */
+  .a-table{overflow-x:auto}
+  .a-table table{min-width:720px}
+
   @media(max-width:920px){
     .bento{grid-template-columns:repeat(2,1fr);grid-template-areas:
       "turn turn" "chart chart" "rank rank" "mcap idx" "grow usco"
       "table table" "note note";}
+    .ibig{font-size:44px}
+    .istats{gap:14px 24px}
+    .istats .n{font-size:17px}
   }
   @media(max-width:560px){
-    .bento{grid-template-columns:1fr;grid-template-areas:
+    body{padding:20px 12px 48px}
+    .bento{grid-template-columns:1fr;gap:12px;grid-template-areas:
       "turn" "chart" "rank" "mcap" "idx" "grow" "usco" "table" "note";}
-    .a-table{overflow-x:auto}table{min-width:720px}
+    .card{padding:18px 16px;--r:18px}
+    .top h1{font-size:21px}
+    .top{margin-bottom:14px}
+    /* 指數 hero：直向堆疊、縮字級 */
+    .irow{flex-direction:column;align-items:flex-start;gap:14px}
+    .ibig{font-size:38px;letter-spacing:-1.2px}
+    .ichg{display:block;margin:6px 0 0;font-size:14px}
+    .istats{width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:12px 10px}
+    .istats .n{font-size:15px}
+    .istats .k{font-size:11px;white-space:normal}
+    /* 開戶數 hero 摘要 */
+    .ksum .big{font-size:32px}
+    .ksum .pc{font-size:18px}
+    .tabs button{padding:6px 13px;font-size:12px}
+    /* 小卡數字 */
+    .stat .value{font-size:28px}
+    .grow .pct{font-size:32px}
+    .usco .stats{gap:12px}
+    .usco .stats .n{font-size:18px}
+    /* tooltip 不出界 */
+    .info:hover::after{left:auto;right:-6px;width:min(270px,82vw)}
+    /* 表格：首欄固定，橫捲時券商名永遠可見；緊湊列高 */
+    .a-table{padding:8px 0 12px}
+    th,td{padding:10px 12px}
+    .qline{font-size:10.5px}
+    th:first-child,td:first-child{position:sticky;left:0;z-index:2;background:var(--card);
+      white-space:normal;min-width:118px;max-width:150px}
+    tr.fast td:first-child{background:#1e2c3a}
+    tr.usrow td:first-child{background:#232441}
+    .rank{width:22px;height:22px;font-size:11px;margin-right:7px}
+    .badge,.tag-us{margin:4px 4px 0 0;display:inline-block}
   }
 </style>
 </head>
@@ -397,8 +434,10 @@ function renderIdxHero(){
   const s = (D.market.taiexSeries || []);
   const box = document.getElementById("idxChart");
   if(!box || s.length < 2){ if(box) box.innerHTML=""; return; }
-  const W = Math.max(320, Math.round(box.clientWidth || 1000)), H = 210;
-  const padL=76, padR=14, padT=12, padB=26, n=s.length;
+  const W = Math.max(300, Math.round(box.clientWidth || 1000));
+  const narrow = W < 560;
+  const H = narrow ? 170 : 210;
+  const padL = narrow ? 46 : 76, padR = narrow ? 8 : 14, padT = 12, padB = narrow ? 22 : 26, n = s.length;
   const closes=s.map(d=>d.c), lo=Math.min(...closes), hi=Math.max(...closes), sp=(hi-lo)||1;
   const X=i=> padL + i*(W-padL-padR)/(n-1);
   const Y=c=> padT + (hi-c)/sp*(H-padT-padB);
@@ -409,8 +448,9 @@ function renderIdxHero(){
   let ygrid="";
   [0.22,0.5,0.78].forEach((t,k)=>{
     const val = hi - t*sp, yy = Y(val).toFixed(1);
+    const ylab = narrow ? (Math.round(val/1000)+"k") : (Math.round(val).toLocaleString()+(k===0?' 點':''));
     ygrid += `<line x1="${padL}" x2="${W-padR}" y1="${yy}" y2="${yy}" stroke="#8ec5ff" stroke-opacity="0.28" stroke-dasharray="4 5"/>
-      <text x="${padL-8}" y="${(+yy+4).toFixed(1)}" fill="#8ec5ff" fill-opacity="0.65" font-size="11" text-anchor="end">${Math.round(val).toLocaleString()}${k===0?' 點':''}</text>`;
+      <text x="${padL-8}" y="${(+yy+4).toFixed(1)}" fill="#8ec5ff" fill-opacity="0.65" font-size="${narrow?10:11}" text-anchor="end">${ylab}</text>`;
   });
   // X 軸：每月首個交易日 → 垂直虛線＋「N月」
   let xgrid="", xlab="", lastM="";
@@ -420,7 +460,8 @@ function renderIdxHero(){
       lastM=mo;
       const xx=X(i).toFixed(1);
       xgrid += `<line x1="${xx}" x2="${xx}" y1="${padT}" y2="${H-padB}" stroke="#8ec5ff" stroke-opacity="0.22" stroke-dasharray="4 5"/>`;
-      xlab  += `<text x="${xx}" y="${H-8}" fill="#8ec5ff" fill-opacity="0.65" font-size="11" text-anchor="${i===0?'start':'middle'}">${parseInt(mo)}月</text>`;
+      if(!narrow || parseInt(mo)%2===1)   // 窄螢幕只標奇數月，避免擠字
+        xlab += `<text x="${xx}" y="${H-8}" fill="#8ec5ff" fill-opacity="0.65" font-size="11" text-anchor="${i===0?'start':'middle'}">${parseInt(mo)}月</text>`;
     }
   });
   // 成交金額柱（底部，佔高 ~22%）
@@ -443,7 +484,7 @@ function renderIdxHero(){
     <path d="${area}" fill="url(#ig)"/>
     <path d="${line}" fill="none" stroke="url(#iline)" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
     <circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="4" fill="#0e0e16" stroke="#38bdf8" stroke-width="2.2"/>
-    <text x="${W-padR}" y="${H-padB-8}" fill="#8ec5ff" fill-opacity="0.55" font-size="10" text-anchor="end">成交金額（億）・峰值 ${vmax.toLocaleString()}</text>
+    ${narrow?'':`<text x="${W-padR}" y="${H-padB-8}" fill="#8ec5ff" fill-opacity="0.55" font-size="10" text-anchor="end">成交金額（億）・峰值 ${vmax.toLocaleString()}</text>`}
     ${xlab}
   </svg>`;
 }
