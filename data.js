@@ -2,11 +2,11 @@
 window.DASH_DATA = {
   "_readme": "真實資料來源。幾乎全欄位由 update.py 自動更新（TWSE/TPEX/FinMind 官方API）。僅 accounts（開戶數，集保年度統計，無API）為靜態歷史數列。改完跑 python3 update.py 產生 data.js。",
   "meta": {
-    "updated": "2026-07-11",
+    "updated": "2026-07-12",
     "asLabel": "財報 2026Q1・市佔 2026/05（手續費口徑）",
     "finPeriod": "2026Q1"
   },
-  "totalAccounts": 1376.78,
+  "totalAccounts": 1448.8,
   "accounts": [
     {
       "y": 2019,
@@ -35,6 +35,11 @@ window.DASH_DATA = {
     {
       "y": 2025,
       "v": 1376.78
+    },
+    {
+      "y": 2026,
+      "v": 1448.8,
+      "p": 6
     }
   ],
   "market": {
@@ -785,7 +790,10 @@ window.DASH_DATA = {
         "c": 45354.61,
         "v": 9968
       }
-    ]
+    ],
+    "turnoverYTD": 117.0,
+    "turnoverYTDPrev": 48.5,
+    "turnoverYTDLabel": "2026/01–07"
   },
   "brokers": [
     {
@@ -992,6 +1000,32 @@ window.DASH_DATA = {
       "sProfit": 21.74,
       "sYM": "",
       "yRevPrev": 2.6
+    }
+  ],
+  "accountsMonthly": [
+    {
+      "ym": "2026-01",
+      "v": 1385.9
+    },
+    {
+      "ym": "2026-02",
+      "v": 1394.0
+    },
+    {
+      "ym": "2026-03",
+      "v": 1410.2
+    },
+    {
+      "ym": "2026-04",
+      "v": 1420.1
+    },
+    {
+      "ym": "2026-05",
+      "v": 1433.3
+    },
+    {
+      "ym": "2026-06",
+      "v": 1448.8
     }
   ]
 };

@@ -239,6 +239,7 @@
       <div class="ctitle">客戶人數趨勢 <span class="gear">⚙</span></div>
       <div class="label" style="margin-top:6px">全台證券開戶人數（年底累計）</div>
       <div class="tabs" id="tabs">
+        <button data-n="ytd">今年</button>
         <button data-n="3">近 3 年</button>
         <button data-n="5">近 5 年</button>
         <button data-n="0" class="on">全部</button>
@@ -282,20 +283,20 @@
     <!-- 美好證券 -->
     <div class="card usco a-usco" id="usTile"></div>
 
-    <!-- 全市場經紀手續費（月，自動） -->
+    <!-- 今年累計成交值（1月至今，自動） -->
     <div class="card stat a-mcap">
-      <div class="label">全市場經紀手續費收入（月）</div>
-      <div class="value"><span class="num" id="feeTotal">—</span><span class="u">億</span></div>
-      <div class="d muted" id="feeYM"></div>
-    </div>
-
-    <!-- 近12個月成交值（原 hero 內容縮為小卡，含月線背景） -->
-    <div class="card stat a-idx">
       <div class="mini-spark" id="turnMini"></div>
-      <div class="label" style="position:relative;z-index:1">近 12 個月成交值</div>
+      <div class="label" style="position:relative;z-index:1">今年累計成交值（1 月至今）</div>
       <div class="value" style="position:relative;z-index:1"><span class="num" id="ttmVal">—</span><span class="u">兆元</span></div>
       <div class="d" id="ttmDelta" style="position:relative;z-index:1"></div>
       <div class="sub" id="ttmMonth" style="font-size:12px;color:var(--muted);margin-top:6px;position:relative;z-index:1"></div>
+    </div>
+
+    <!-- 全市場經紀手續費（月，自動） -->
+    <div class="card stat a-idx">
+      <div class="label">全市場經紀手續費收入（月）</div>
+      <div class="value"><span class="num" id="feeTotal">—</span><span class="u">億</span></div>
+      <div class="d muted" id="feeYM"></div>
     </div>
 
     <!-- 券商明細表 -->
@@ -320,7 +321,7 @@
     </div>
 
     <p class="a-note">
-      <b>※ 數據說明：</b>「成交值／指數」來自 FinMind（原始：證交所），每日自動更新；「開戶數」為集保年度統計（無公開 API，數列至最新公布年度）。
+      <b>※ 數據說明：</b>「成交值／指數」來自 FinMind（原始：證交所），每日自動更新；「開戶數」為證交所／集保統計——年度數列＋今年逐月（每月初公布，無 API，公布後補登）。
       「市佔率／排名」＝<b>經紀手續費收入</b>占全市場（65 家、含外資）比重（證交所收支概況表 t187ap21，每月自動更新；排名為全市場真實名次，跳號代表其間為未列出的券商如外資）。
       「稅後淨利」大字為<b>最近完整年度</b>之全年稅後淨利（下方標示年份），「YoY 成長」為其對前一年度之成長率；小字依序為正式季報累計與月自結累計（綠點＝官方 API 流入；橘點＝估算）。
       <b>🚀「成長最快」為全表（前 10 大＋美好）稅後淨利 YoY 最高者，自動判定。</b>
@@ -376,14 +377,14 @@ const BROKERS = D.brokers;
   }
   renderIdxHero();
 
-  // ---- 成交值小卡（近12個月 TTM）----
-  const ttm = (m.turnoverTTM!=null) ? m.turnoverTTM : m.turnoverYear;
-  const prev = (m.turnoverTTMPrev!=null) ? m.turnoverTTMPrev : m.turnoverPrev;
+  // ---- 成交值小卡（今年累計 YTD，1月至今）----
+  const ttm = (m.turnoverYTD!=null) ? m.turnoverYTD : m.turnoverTTM;
+  const prev = (m.turnoverYTD!=null) ? m.turnoverYTDPrev : m.turnoverTTMPrev;
   document.getElementById("ttmVal").textContent = ttm;
   if(prev){
     const tdiff = ttm - prev, tpct = tdiff/prev*100, tu = tdiff>=0;
     const dEl = document.getElementById("ttmDelta");
-    dEl.textContent = `${tu?'▲ +':'▼ '}${tpct.toFixed(0)}%（${tu?'+':''}${tdiff.toFixed(0)} 兆）vs 前 12 個月`;
+    dEl.textContent = `${tu?'▲ +':'▼ '}${tpct.toFixed(0)}%（${tu?'+':''}${tdiff.toFixed(0)} 兆）vs 去年同期`;
     dEl.style.color = tu ? "var(--up)" : "var(--dn)";
   }
   document.getElementById("ttmMonth").textContent =
@@ -401,7 +402,7 @@ const BROKERS = D.brokers;
 /* ====================================================================
    折線圖（SVG）— viewBox 寬度＝實際像素寬，1:1 對應，數字不會被拉扁
    ==================================================================== */
-const H=210, padL=12, padR=18, padT=18, padB=32;
+const H=210, padL=58, padR=18, padT=18, padB=32;
 function buildChart(data, W){
   const n=data.length;
   const vmin=Math.min(...data.map(d=>d.v)), vmax=Math.max(...data.map(d=>d.v));
@@ -411,9 +412,15 @@ function buildChart(data, W){
   const pts=data.map((d,i)=>[X(i),Y(d.v)]);
   const line=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
   const area=`M${X(0).toFixed(1)} ${(H-padB)} `+pts.map(p=>'L'+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ')+` L${X(n-1).toFixed(1)} ${(H-padB)} Z`;
-  const grid=[0,.25,.5,.75,1].map(t=>{const yy=padT+t*(H-padT-padB);
-    return `<line x1="${padL}" x2="${W-padR}" y1="${yy}" y2="${yy}" stroke="#2e2e33" stroke-width="1" stroke-dasharray="2 5"/>`}).join('');
-  const xlab=data.map((d,i)=>`<text x="${X(i).toFixed(1)}" y="${H-11}" fill="#8ec5ff" fill-opacity="0.5" font-size="12" text-anchor="${i===0?'start':i===n-1?'end':'middle'}">${d.y}</text>`).join('')
+  // Y 軸：虛線格線＋數值刻度（萬人）
+  const grid=[0.15,0.5,0.85].map(t=>{
+    const val = hi - t*(hi-lo), yy = (padT+t*(H-padT-padB)).toFixed(1);
+    return `<line x1="${padL}" x2="${W-padR}" y1="${yy}" y2="${yy}" stroke="#8ec5ff" stroke-opacity="0.28" stroke-dasharray="4 5"/>
+      <text x="${padL-8}" y="${(+yy+4).toFixed(1)}" fill="#8ec5ff" fill-opacity="0.65" font-size="11" text-anchor="end">${Math.round(val).toLocaleString()}</text>`;
+  }).join('');
+  // X 軸：每個資料點的垂直虛線＋標籤
+  const xgrid=data.map((d,i)=>`<line x1="${X(i).toFixed(1)}" x2="${X(i).toFixed(1)}" y1="${padT}" y2="${H-padB}" stroke="#8ec5ff" stroke-opacity="0.18" stroke-dasharray="4 5"/>`).join('');
+  const xlab=data.map((d,i)=>`<text x="${X(i).toFixed(1)}" y="${H-11}" fill="#8ec5ff" fill-opacity="0.65" font-size="12" text-anchor="${i===0?'start':i===n-1?'end':'middle'}">${d.y}</text>`).join('')
     +`<text x="${(W-2)}" y="14" fill="#8ec5ff" fill-opacity="0.5" font-size="11" text-anchor="end">單位：萬人</text>`;
   const last=pts[n-1];
   return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="width:100%;height:${H}px">
@@ -425,7 +432,7 @@ function buildChart(data, W){
         <stop offset="0" stop-color="#6366f1"/>
         <stop offset="1" stop-color="#38bdf8"/></linearGradient>
     </defs>
-    ${grid}
+    ${grid}${xgrid}
     <path d="${area}" fill="url(#g)"/>
     <path d="${line}" fill="none" stroke="url(#gline)" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
     <circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="4.5" fill="#0e0e16" stroke="#38bdf8" stroke-width="2.4" vector-effect="non-scaling-stroke"/>
@@ -433,16 +440,28 @@ function buildChart(data, W){
   </svg>`;
 }
 let curN = 0;
-function renderChart(nYears){
-  curN = nYears;
+function renderChart(mode){
+  curN = mode;
   const box = document.getElementById("chartbox");
   const W = Math.max(320, Math.round(box.clientWidth || 560));
-  const data = nYears ? ACCOUNTS.slice(-nYears) : ACCOUNTS;
+  let data, baseLabel;
+  if(mode === "ytd"){
+    // 今年逐月（證交所每月統計）
+    data = (D.accountsMonthly || []).map(d => ({y: parseInt(d.ym.slice(5)) + "月", v: d.v}));
+    baseLabel = "較去年底";
+    var base = ACCOUNTS.filter(a => a.y < ACCOUNTS[ACCOUNTS.length-1].y).slice(-1)[0]?.v ?? data[0].v;
+  }else{
+    const arr = ACCOUNTS.map(a => ({y: a.p ? `${a.y}/${a.p}` : String(a.y), v: a.v}));
+    data = mode ? arr.slice(-mode) : arr;
+    baseLabel = "";
+    var base = data[0].v;
+  }
+  if(!data.length) return;
   box.innerHTML = buildChart(data, W);
-  const first=data[0].v, last=data[data.length-1].v;
-  const diff=last-first, pct=(last/first-1)*100;
+  const last = data[data.length-1].v;
+  const diff = last - base, pct = (last/base - 1) * 100;
   document.getElementById("kTotal").textContent = last.toLocaleString();
-  document.getElementById("kPlus").textContent = "+"+diff.toFixed(0)+"萬";
+  document.getElementById("kPlus").textContent = "+"+diff.toFixed(0)+"萬"+(baseLabel?"・"+baseLabel:"");
   document.getElementById("kPct").textContent = "+"+pct.toFixed(1)+"%";
 }
 
@@ -506,9 +525,11 @@ function renderIdxHero(){
   </svg>`;
 }
 
-/* 成交值小卡背景：月成交值 mini 線 */
+/* 成交值小卡背景：今年月成交值 mini 線 */
 function renderTurnMini(){
-  const s = (D.market.turnoverSeries || []);
+  const all = (D.market.turnoverSeries || []);
+  const cy = all.length ? all[all.length-1].ym.slice(0,4) : "";
+  const s = all.filter(d=>d.ym.startsWith(cy));
   const box = document.getElementById("turnMini");
   if(!box || s.length < 2) return;
   const W = Math.max(200, Math.round(box.clientWidth || 300)), Hs = Math.max(40, Math.round(box.clientHeight || 58));
@@ -531,7 +552,7 @@ document.getElementById("tabs").addEventListener("click", e=>{
   const b=e.target.closest("button"); if(!b) return;
   document.querySelectorAll("#tabs button").forEach(x=>x.classList.remove("on"));
   b.classList.add("on");
-  renderChart(+b.dataset.n);
+  renderChart(b.dataset.n === "ytd" ? "ytd" : +b.dataset.n);
 });
 let _rz; window.addEventListener("resize", ()=>{ clearTimeout(_rz); _rz=setTimeout(()=>{ renderChart(curN); renderIdxHero(); renderTurnMini(); }, 150); });
 renderChart(0);

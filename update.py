@@ -65,11 +65,19 @@ def main():
         m["turnoverSeries"] = [{"ym": ym, "v": round(v / 1e12, 2)} for ym, v in complete]  # 全部完整月（跨年度）
         m["turnoverMonth"] = round(bymon.get(cur_ym, 0) / 1e12, 2)   # 本月累計（含未完月）
         m["turnoverMonthLabel"] = cur_ym.replace("-", "/") + " 本月累計"
-        # 近12個月(TTM) 與 前12個月，給頭條 + YoY
+        # 近12個月(TTM) 與 前12個月（保留備用）
         last12, prev12 = complete[-12:], complete[-24:-12]
         m["turnoverTTM"] = round(sum(v for _, v in last12) / 1e12, 1)
         m["turnoverTTMPrev"] = round(sum(v for _, v in prev12) / 1e12, 1) if len(prev12) >= 12 else None
         m["turnoverTTMLabel"] = (last12[0][0].replace("-", "/") + "–" + last12[-1][0].replace("-", "/")) if last12 else ""
+        # 今年累計 YTD（1月至今，含進行中月份）vs 去年同期
+        cur_y, cur_mo = cur_ym[:4], int(cur_ym[5:7])
+        ytd = sum(v for ym, v in complete if ym[:4] == cur_y) + bymon.get(cur_ym, 0)
+        prev_y = str(int(cur_y) - 1)
+        ytd_prev = sum(v for ym, v in bymon.items() if ym[:4] == prev_y and int(ym[5:7]) <= cur_mo)
+        m["turnoverYTD"] = round(ytd / 1e12, 1)
+        m["turnoverYTDPrev"] = round(ytd_prev / 1e12, 1) if ytd_prev > 0 else None
+        m["turnoverYTDLabel"] = f"{cur_y}/01–{cur_mo:02d}"
         m["taiex"] = round(float(last["close"]), 2)
         m["taiexChg"] = round(float(last.get("spread") or 0), 2)
         m["taiexDate"] = last["date"]
