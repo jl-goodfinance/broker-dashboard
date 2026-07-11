@@ -18,22 +18,27 @@
   body{
     font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",
       "PingFang TC","Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;
-    background:var(--page); color:var(--ink); padding:34px 26px 64px; -webkit-font-smoothing:antialiased;
+    background:
+      radial-gradient(900px 520px at 86% -10%,rgba(59,130,246,.11),transparent 60%),
+      radial-gradient(700px 460px at -8% 34%,rgba(99,102,241,.08),transparent 62%),
+      var(--page); color:var(--ink); padding:34px 26px 64px; -webkit-font-smoothing:antialiased;
   }
   .wrap{max-width:1200px;margin:0 auto}
-  .top{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:10px;margin:0 4px 22px}
-  .top h1{font-size:26px;font-weight:700;letter-spacing:-.4px}
+  .top{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;margin:0 4px 24px}
+  .eyebrow{font-size:11px;color:var(--cyan);font-weight:700;letter-spacing:1.7px;text-transform:uppercase;margin-bottom:7px}
+  .top h1{font-size:28px;font-weight:750;letter-spacing:-.7px}
+  .top .subtitle{font-size:13px;color:var(--muted);margin-top:7px}
   .top .as{font-size:13px;color:var(--muted)}
 
   .bento{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;align-items:stretch;
     grid-template-areas:
       "turn  turn  turn  turn  turn  turn"
+      "usco  usco  usco  usco  grow  grow"
       "chart chart chart chart rank  rank"
       "mcap  mcap  idx   idx   rank  rank"
-      "grow  grow  usco  usco  rank  rank"
       "table table table table table table"
       "note  note  note  note  note  note";}
-  .card{background:var(--card);border-radius:var(--r);padding:22px 24px;position:relative;overflow:hidden}
+  .card{background:linear-gradient(145deg,rgba(29,30,45,.98),rgba(23,24,37,.98));border:1px solid rgba(138,140,166,.10);border-radius:var(--r);padding:22px 24px;position:relative;overflow:hidden;box-shadow:0 14px 38px rgba(0,0,0,.12)}
   .a-chart{grid-area:chart}.a-rank{grid-area:rank}.a-turn{grid-area:turn}
   .a-grow{grid-area:grow}.a-usco{grid-area:usco}.a-mcap{grid-area:mcap}
   .a-idx{grid-area:idx}.a-table{grid-area:table}.a-note{grid-area:note}
@@ -57,7 +62,7 @@
   .ksum .pc{font-size:22px;font-weight:700;color:var(--up);display:flex;align-items:center;gap:5px}
 
   /* ranking bars */
-  .a-rank{background:var(--card);padding-bottom:8px}
+  .a-rank{background:linear-gradient(160deg,rgba(28,30,46,.98),rgba(20,21,34,.98));padding-bottom:8px}
   .rsub{font-size:12px;color:var(--muted);margin-top:4px}
   /* 定義說明 tooltip */
   .info{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;
@@ -71,6 +76,8 @@
   .a-rank{overflow:visible}
   .prow{margin-top:17px}
   .prow .pl{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;font-weight:600;margin-bottom:8px}
+  .prow .pl .pn{display:inline-flex;align-items:center;gap:8px}
+  .prow .pl .ri{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:20px;padding:0 6px;border-radius:6px;background:rgba(255,255,255,.06);color:var(--muted);font-size:10px;font-variant-numeric:tabular-nums}
   .prow .pl .pv{font-size:13px;color:var(--muted);font-weight:600;font-variant-numeric:tabular-nums}
   .ptrack{height:6px;border-radius:5px;background:#323237;overflow:hidden}
   .ptrack > i{display:block;height:100%;border-radius:5px;background:linear-gradient(90deg,var(--indigo),var(--cyan))}
@@ -84,7 +91,9 @@
   .stat .d.muted{color:var(--muted)}
 
   /* 台股加權指數 置頂 hero */
-  .a-turn{background:linear-gradient(120deg,#1c2540,#15161f 60%)}
+  .a-turn{background:
+    radial-gradient(680px 260px at 78% 0%,rgba(56,189,248,.12),transparent 62%),
+    linear-gradient(120deg,#1b2440,#15161f 62%);border-color:rgba(96,165,250,.16)}
   .ihead{display:flex;align-items:center;gap:10px}
   .ititle{font-size:15px;font-weight:700}
   .ibadge{font-size:11px;color:var(--muted);background:var(--inset);padding:3px 10px;border-radius:8px}
@@ -104,23 +113,25 @@
 
   /* grow + us tiles */
   .grow,.usco{color:#fff}
-  .grow{background:linear-gradient(140deg,#2747a8,#16235c);min-height:100%}
+  .grow{background:radial-gradient(420px 220px at 90% 0%,rgba(56,189,248,.18),transparent 65%),linear-gradient(140deg,#243d8f,#18234f);min-height:100%}
   .grow .tag{font-size:12.5px;font-weight:700;color:var(--green-l)}
   .grow .name{font-size:22px;font-weight:800;letter-spacing:-.4px;margin-top:10px}
   .grow .pct{font-size:40px;font-weight:800;letter-spacing:-1.5px;margin-top:14px;line-height:1;color:var(--up)}
   .grow .pct .c{font-size:13px;font-weight:600;color:#bfe9cf;margin-left:6px;letter-spacing:0}
   .grow .flow{font-size:12px;color:#9fb4e0;margin-top:6px}
-  .usco{background:linear-gradient(150deg,#1c1f3a,#151624);border:1px solid rgba(129,140,248,.5);box-shadow:0 10px 34px rgba(129,140,248,.12)}
+  .usco{background:radial-gradient(560px 240px at 85% -8%,rgba(176,124,255,.16),transparent 64%),linear-gradient(150deg,#1c1f3a,#151624);border:1px solid rgba(129,140,248,.42);box-shadow:0 14px 38px rgba(99,102,241,.12)}
   .usco .tag{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;color:#c7ccff;background:rgba(129,140,248,.22);padding:3px 9px;border-radius:999px}
-  .usco .name{font-size:20px;font-weight:800;letter-spacing:-.3px;margin-top:12px;
+  .usco .name{font-size:24px;font-weight:800;letter-spacing:-.5px;margin-top:12px;
     background:linear-gradient(90deg,#6ea8ff,#b07cff);-webkit-background-clip:text;background-clip:text;color:transparent;width:fit-content}
-  .usco .stats{display:flex;gap:16px;margin-top:16px;flex-wrap:wrap;align-items:flex-start}
-  .usco .stats .n{font-size:21px;font-weight:800;letter-spacing:-.4px;
+  .usco .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-top:22px;align-items:flex-start}
+  .usco .stats > div{padding-left:14px;border-left:1px solid rgba(165,180,252,.18)}
+  .usco .stats > div:first-child{padding-left:0;border-left:0}
+  .usco .stats .n{font-size:23px;font-weight:800;letter-spacing:-.5px;
     background:linear-gradient(90deg,#6ea8ff,#b07cff);-webkit-background-clip:text;background-clip:text;color:transparent}
   .usco .stats .k{font-size:11px;color:#aab0d8;margin-top:1px}
 
   /* table */
-  .a-table{padding:8px 10px 12px}
+  .a-table{padding:8px 10px 12px;background:linear-gradient(180deg,rgba(26,27,39,.98),rgba(20,21,33,.98))}
   .a-table .ctitle{padding:14px 14px 6px}
   .a-table .pill{font-size:12px;font-weight:600;color:var(--muted);background:var(--soft);padding:4px 11px;border-radius:999px}
   table{width:100%;border-collapse:collapse;font-size:14px}
@@ -160,16 +171,18 @@
 
   @media(max-width:920px){
     .bento{grid-template-columns:repeat(2,1fr);grid-template-areas:
-      "turn turn" "chart chart" "rank rank" "mcap idx" "grow usco"
+      "turn turn" "usco usco" "grow grow" "chart chart" "rank rank" "mcap idx"
       "table table" "note note";}
     .ibig{font-size:44px}
     .istats{gap:14px 24px}
     .istats .n{font-size:17px}
+    .usco .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .usco .stats > div:nth-child(3){padding-left:0;border-left:0}
   }
   @media(max-width:560px){
     body{padding:20px 12px 48px}
     .bento{grid-template-columns:1fr;gap:12px;grid-template-areas:
-      "turn" "chart" "rank" "mcap" "idx" "grow" "usco" "table" "note";}
+      "turn" "usco" "grow" "chart" "rank" "mcap" "idx" "table" "note";}
     .card{padding:18px 16px;--r:18px}
     .top h1{font-size:21px}
     .top{margin-bottom:14px}
@@ -187,7 +200,7 @@
     /* 小卡數字 */
     .stat .value{font-size:28px}
     .grow .pct{font-size:32px}
-    .usco .stats{gap:12px}
+    .usco .stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 10px}
     .usco .stats .n{font-size:18px}
     /* tooltip 不出界 */
     .info:hover::after{left:auto;right:-6px;width:min(270px,82vw)}
@@ -208,7 +221,11 @@
 <div class="wrap">
 
   <div class="top">
-    <h1>證券市場儀表板</h1>
+    <div>
+      <div class="eyebrow">Taiwan Brokerage Intelligence</div>
+      <h1>證券市場儀表板</h1>
+      <div class="subtitle">市場動能、同業表現與美好證券經營成果</div>
+    </div>
     <div style="text-align:right">
       <div class="as" id="updTop" style="color:var(--cyan);font-weight:600"></div>
       <div class="as" id="asLabel" style="margin-top:3px"></div>
@@ -283,8 +300,8 @@
 
     <!-- 券商明細表 -->
     <div class="card a-table">
-      <div class="ctitle">上市券商：市佔・營收・淨利・YoY
-        <span class="pill">前 10 名 ＋ 美好證券</span>
+      <div class="ctitle">券商同業：市佔・營收・淨利・YoY
+        <span class="pill">主要同業 ＋ 美好證券</span>
       </div>
       <table>
         <thead>
@@ -528,9 +545,9 @@ const us = BROKERS.find(b => b.us);
 
 // 市佔排行 bars
 const maxShare = Math.max(...BROKERS.map(b => b.share));
-document.getElementById("ranking").innerHTML = BROKERS.map(b => `
+document.getElementById("ranking").innerHTML = BROKERS.slice().sort((a,b)=>b.share-a.share).map(b => `
   <div class="prow ${b.us?'us':''}">
-    <div class="pl"><span>${b.name}</span><span class="pv">${b.share.toFixed(2)}%</span></div>
+    <div class="pl"><span class="pn"><span class="ri">#${b.rank||'—'}</span><span>${b.name}</span></span><span class="pv">${b.share.toFixed(2)}%</span></div>
     <div class="ptrack"><i style="width:${(b.share/maxShare*100).toFixed(1)}%"></i></div>
   </div>`).join('');
 
@@ -543,6 +560,7 @@ document.getElementById("growTile").innerHTML = `
 
 // 美好證券 tile（含市場排名）
 const usRankStr = us.rank ? ("#"+us.rank) : "—";   // 全市場真實名次（手續費口徑，自動）
+const usProfitYM = us.sYM || us.mRevYM || "";
 document.getElementById("usTile").innerHTML = `
   <div class="tag">★ 本公司</div>
   <div class="name">${us.name}</div>
@@ -550,7 +568,7 @@ document.getElementById("usTile").innerHTML = `
     <div><div class="n">${us.mRev!=null?us.mRev:'—'}</div><div class="k">當月營收（億）${us.mRevYM?'・'+us.mRevYM:''}</div></div>
     <div><div class="n">${us.yRev!=null?us.yRev:'—'}</div><div class="k">今年累計收益（億）${us.mRevYM?'・至'+parseInt(us.mRevYM.slice(5))+'月':''}</div></div>
     <div><div class="n">${us.share.toFixed(2)}%</div><div class="k">市佔率</div></div>
-    <div><div class="n">${us.sProfit!=null?us.sProfit:us.p25}</div><div class="k">${us.sProfit!=null?`今年稅後淨利（億・自結至${parseInt(us.sYM.slice(5))}月）`:'淨利（億）'}</div></div>
+    <div><div class="n">${us.sProfit!=null?us.sProfit:us.p25}</div><div class="k">${us.sProfit!=null?`今年稅後淨利（億${usProfitYM?`・自結至${parseInt(usProfitYM.slice(5))}月`:"・自結"}）`:'淨利（億）'}</div></div>
   </div>`;
 
 // 明細表（可點欄位排序）
@@ -570,7 +588,8 @@ function renderTable(){
     const yArr=b.yoy>0.5?"▲":(b.yoy<-0.5?"▼":"—");
     const conf=(b.qProfit!=null)?"y":"e";
     const qPf =(b.qProfit!=null)?`<div class="qline">${b.qPeriod} 累計 ${b.qProfit}${b.qEps!=null?`・EPS ${b.qEps}`:""}</div>`:"";
-    const sPf =(b.sProfit!=null)?`<div class="qline">自結累計 ${b.sProfit}${b.sProfitM!=null?`・單月 ${b.sProfitM}`:""}（至${b.sYM}）</div>`:"";
+    const sPeriod=b.sYM||b.mRevYM||"";
+    const sPf =(b.sProfit!=null)?`<div class="qline">自結累計 ${b.sProfit}${b.sProfitM!=null?`・單月 ${b.sProfitM}`:""}${sPeriod?`（至${sPeriod}）`:""}</div>`:"";
     const mSub=(b.mRev!=null && (b.mRevYM||b.mRevYoY!=null))
       ? `<div class="qline">${b.mRevYM||''}${b.mRevYoY!=null?`・YoY ${b.mRevYoY>=0?'+':''}${b.mRevYoY}%`:''}</div>` : "";
     const mCell=(b.mRev!=null) ? `${b.mRev.toLocaleString()}<span class="dot y"></span>${mSub}` : `<span style="color:var(--muted2)">—</span>`;
