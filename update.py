@@ -231,7 +231,7 @@ def main():
             body = str(r.get("說明") or "").replace("\n", " ")
             if code not in by_code or "自結" not in (subj + body):
                 continue
-            mm = re.search(r"(\d{4})年\s*(\d{1,2})\s*月", subj + body)
+            mm = re.search(r"(\d{3,4})\s*年\s*(\d{1,2})\s*月", subj + body)  # 支援西元與民國年
             nums = re.findall(r"稅後淨利[^\d\-]*(-?[\d,]+)\s*仟元[^\d\-]*(-?[\d,]+)\s*仟元", body)
             if not nums:
                 continue
@@ -239,7 +239,12 @@ def main():
             single, cum = (float(x.replace(",", "")) for x in nums[0])
             b["sProfitM"] = round(single / 1e5, 2)   # 單月自結稅後（億）
             b["sProfit"] = round(cum / 1e5, 2)       # 今年累計自結稅後（億）
-            b["sYM"] = f"{mm.group(1)}/{int(mm.group(2)):02d}" if mm else ""
+            if mm:
+                yy4 = int(mm.group(1))
+                if yy4 < 1900: yy4 += 1911          # 民國年轉西元
+                b["sYM"] = f"{yy4}/{int(mm.group(2)):02d}"
+            elif not b.get("sYM"):
+                b["sYM"] = ""
             nhit.append(f'{b["name"]}(至{b["sYM"]})')
         if nhit:
             log.append(f"月自結稅後淨利更新：{'、'.join(nhit)}")

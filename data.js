@@ -1003,7 +1003,7 @@ window.DASH_DATA = {
       "yRevYoY": 1025.9,
       "sProfitM": 0.64,
       "sProfit": 21.74,
-      "sYM": "",
+      "sYM": "2026/06",
       "yRevPrev": 2.6
     }
   ],
