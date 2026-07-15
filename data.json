@@ -1,7 +1,7 @@
 {
   "_readme": "真實資料來源。幾乎全欄位由 update.py 自動更新（TWSE/TPEX/FinMind 官方API）。僅 accounts（開戶數，集保年度統計，無API）為靜態歷史數列。改完跑 python3 update.py 產生 data.js。",
   "meta": {
-    "updated": "2026-07-14",
+    "updated": "2026-07-15",
     "asLabel": "財報 2026Q1・市佔 2026/05（手續費口徑）",
     "finPeriod": "2026Q1"
   },
@@ -816,14 +816,14 @@
       "qProfit": 93.3,
       "qEps": 1.33,
       "qPeriod": "2026Q1",
-      "mRev": 177.2,
-      "mRevMoM": 11.4,
-      "mRevYoY": 201.1,
-      "mRevYM": "2026/05",
-      "yRev": 655.8,
-      "yRevYoY": 116.1,
+      "mRev": 168.5,
+      "mRevMoM": -4.9,
+      "mRevYoY": 119.7,
+      "mRevYM": "2026/06",
+      "yRev": 824.4,
+      "yRevYoY": 116.8,
       "rank": 1,
-      "yRevPrev": 303.5
+      "yRevPrev": 380.2
     },
     {
       "name": "凱基證券",
@@ -836,14 +836,14 @@
       "qProfit": 59.1,
       "qEps": 3.25,
       "qPeriod": "2026Q1",
-      "mRev": 75.1,
-      "mRevMoM": -7.7,
-      "mRevYoY": 178.1,
-      "mRevYM": "2026/05",
-      "yRev": 307.4,
-      "yRevYoY": 129.8,
+      "mRev": 73.4,
+      "mRevMoM": -2.2,
+      "mRevYoY": 129.2,
+      "mRevYM": "2026/06",
+      "yRev": 380.7,
+      "yRevYoY": 129.7,
       "rank": 3,
-      "yRevPrev": 133.7
+      "yRevPrev": 165.8
     },
     {
       "name": "富邦證券",
@@ -856,14 +856,14 @@
       "qProfit": 42.3,
       "qEps": 2.6,
       "qPeriod": "2026Q1",
-      "mRev": 50.4,
-      "mRevMoM": -0.2,
-      "mRevYoY": 174.5,
-      "mRevYM": "2026/05",
-      "yRev": 201.4,
-      "yRevYoY": 122.5,
+      "mRev": 53.9,
+      "mRevMoM": 6.9,
+      "mRevYoY": 108.0,
+      "mRevYM": "2026/06",
+      "yRev": 255.2,
+      "yRevYoY": 119.3,
       "rank": 2,
-      "yRevPrev": 90.5
+      "yRevPrev": 116.4
     },
     {
       "name": "永豐金證券",
@@ -916,14 +916,14 @@
       "qProfit": 31.0,
       "qEps": 1.34,
       "qPeriod": "2026Q1",
-      "mRev": 38.0,
-      "mRevMoM": -18.3,
-      "mRevYoY": 155.5,
-      "mRevYM": "2026/05",
-      "yRev": 155.8,
-      "yRevYoY": 134.8,
+      "mRev": 36.5,
+      "mRevMoM": -4.0,
+      "mRevYoY": 101.2,
+      "mRevYM": "2026/06",
+      "yRev": 192.2,
+      "yRevYoY": 127.6,
       "rank": 8,
-      "yRevPrev": 66.3
+      "yRevPrev": 84.5
     },
     {
       "name": "統一證券",
@@ -936,14 +936,14 @@
       "qProfit": 23.0,
       "qEps": 1.43,
       "qPeriod": "2026Q1",
-      "mRev": 43.9,
-      "mRevMoM": -1.2,
-      "mRevYoY": 428.4,
-      "mRevYM": "2026/05",
-      "yRev": 143.2,
-      "yRevYoY": 383.3,
+      "mRev": 32.2,
+      "mRevMoM": -26.6,
+      "mRevYoY": 199.0,
+      "mRevYM": "2026/06",
+      "yRev": 175.4,
+      "yRevYoY": 334.2,
       "rank": 13,
-      "yRevPrev": 29.6
+      "yRevPrev": 40.4
     },
     {
       "name": "華南永昌證券",
