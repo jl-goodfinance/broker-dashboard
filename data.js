@@ -2,8 +2,8 @@
 window.DASH_DATA = {
   "_readme": "真實資料來源。幾乎全欄位由 update.py 自動更新（TWSE/TPEX/FinMind 官方API）。僅 accounts（開戶數，集保年度統計，無API）為靜態歷史數列。改完跑 python3 update.py 產生 data.js。",
   "meta": {
-    "updated": "2026-07-19",
-    "asLabel": "財報 2026Q1・市佔 2026/05（手續費口徑）",
+    "updated": "2026-07-20",
+    "asLabel": "財報 2026Q1・市佔 2026/06（手續費口徑）",
     "finPeriod": "2026Q1"
   },
   "totalAccounts": 1448.8,
@@ -172,8 +172,8 @@ window.DASH_DATA = {
     "turnoverTTM": 177.4,
     "turnoverTTMPrev": 91.8,
     "turnoverTTMLabel": "2025/06–2026/06",
-    "feeTotal": 319.7,
-    "shareYM": "2026/05",
+    "feeTotal": 336.7,
+    "shareYM": "2026/06",
     "taiexSeries": [
       {
         "d": "01-02",
@@ -824,7 +824,7 @@ window.DASH_DATA = {
     {
       "name": "元大證券",
       "code": "000980",
-      "share": 17.75,
+      "share": 17.95,
       "rev": 640,
       "p25": 244.2,
       "p24": 211.5,
@@ -844,7 +844,7 @@ window.DASH_DATA = {
     {
       "name": "凱基證券",
       "code": "6008",
-      "share": 8.59,
+      "share": 8.41,
       "rev": 340,
       "p25": 118,
       "p24": 101.38,
@@ -864,7 +864,7 @@ window.DASH_DATA = {
     {
       "name": "富邦證券",
       "code": "000960",
-      "share": 9.22,
+      "share": 9.23,
       "rev": 280,
       "p25": 105.9,
       "p24": 100.2,
@@ -884,7 +884,7 @@ window.DASH_DATA = {
     {
       "name": "永豐金證券",
       "code": "0009A0",
-      "share": 7.08,
+      "share": 6.63,
       "rev": 165,
       "p25": 70,
       "p24": 58.28,
@@ -904,7 +904,7 @@ window.DASH_DATA = {
     {
       "name": "國泰證券",
       "code": "000888",
-      "share": 6.3,
+      "share": 6.42,
       "rev": 130,
       "p25": 45,
       "p24": 21.5,
@@ -924,7 +924,7 @@ window.DASH_DATA = {
     {
       "name": "群益金鼎證券",
       "code": "6005",
-      "share": 3.78,
+      "share": 4.15,
       "rev": 165,
       "p25": 57.4,
       "p24": 49.1,
@@ -938,13 +938,13 @@ window.DASH_DATA = {
       "mRevYM": "2026/06",
       "yRev": 192.2,
       "yRevYoY": 127.6,
-      "rank": 8,
+      "rank": 7,
       "yRevPrev": 84.5
     },
     {
       "name": "統一證券",
       "code": "2855",
-      "share": 2.98,
+      "share": 2.95,
       "rev": 120,
       "p25": 40,
       "p24": 33,
@@ -958,7 +958,7 @@ window.DASH_DATA = {
       "mRevYM": "2026/06",
       "yRev": 175.4,
       "yRevYoY": 334.2,
-      "rank": 13,
+      "rank": 12,
       "yRevPrev": 40.4
     },
     {
@@ -984,7 +984,7 @@ window.DASH_DATA = {
     {
       "name": "兆豐證券",
       "code": "000700",
-      "share": 2.73,
+      "share": 2.66,
       "rev": 73,
       "p25": 24,
       "p24": 21,
@@ -1003,7 +1003,7 @@ window.DASH_DATA = {
     },
     {
       "name": "美好證券",
-      "share": 0.45,
+      "share": 0.46,
       "rev": 21.65,
       "p25": 11.58,
       "p24": 4.38,
