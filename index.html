@@ -69,6 +69,8 @@
     border:1px solid var(--muted2);color:var(--muted);font-size:10px;font-weight:700;cursor:help;margin-left:6px;
     position:relative;vertical-align:middle}
   .info:hover{color:var(--cyan);border-color:var(--cyan)}
+  .info.right:hover::after{left:auto;right:0}
+  .card:has(.info:hover){overflow:visible;z-index:50}
   .info:hover::after{content:attr(data-tip);position:absolute;left:0;top:150%;width:270px;
     background:#0b0b12;border:1px solid var(--line);border-radius:12px;padding:11px 13px;
     font-size:12px;font-weight:500;color:var(--ink);line-height:1.65;text-align:left;white-space:normal;
@@ -114,7 +116,9 @@
   /* grow + us tiles */
   .grow,.usco{color:#fff}
   .grow{background:radial-gradient(420px 220px at 90% 0%,rgba(56,189,248,.18),transparent 65%),linear-gradient(140deg,#243d8f,#18234f);min-height:100%}
-  .grow .tag{font-size:12.5px;font-weight:700;color:var(--green-l)}
+  .grow .tag{font-size:12.5px;font-weight:700;color:var(--green-l);display:flex;align-items:center}
+  .grow .tag .info{border-color:rgba(255,255,255,.45);color:rgba(255,255,255,.75)}
+  .usco .tag .info{border-color:rgba(199,204,255,.5);color:#c7ccff}
   .grow .name{font-size:22px;font-weight:800;letter-spacing:-.4px;margin-top:10px}
   .grow .pct{font-size:40px;font-weight:800;letter-spacing:-1.5px;margin-top:14px;line-height:1;color:var(--up)}
   .grow .pct .c{font-size:13px;font-weight:600;color:#bfe9cf;margin-left:6px;letter-spacing:0}
@@ -236,7 +240,7 @@
 
     <!-- Hero 折線圖：客戶人數 -->
     <div class="card a-chart">
-      <div class="ctitle">客戶人數趨勢 <span class="gear">⚙</span></div>
+      <div class="ctitle"><span>客戶人數趨勢<span class="info" data-tip="全台證券累計開戶人數（含法人）。來源：證交所「投資人開戶數統計」，每月月初公布。此為全站唯一無公開 API 的數據——由人工每週查核、公布後補登（2026/05 為由 6 月公告回推之推算值）。年度線為各年底累計，今年線為逐月累計。">i</span></span> <span class="gear">⚙</span></div>
       <div class="label" style="margin-top:6px">全台證券開戶人數（年底累計）</div>
       <div class="tabs" id="tabs">
         <button data-n="ytd">今年</button>
@@ -264,7 +268,7 @@
     <!-- 台股加權指數（主視覺，置頂） -->
     <div class="card a-turn">
       <div class="ihead">
-        <span class="ititle">台股加權指數</span>
+        <span class="ititle">台股加權指數</span><span class="info" data-tip="每日收盤指數、成交金額與量能柱：來源 FinMind（原始資料為證交所），每日自動更新兩次（08:15／18:45）。「今年以來」「年內高／低」「區間位置」由今年每日收盤序列自動計算。">i</span>
         <span class="ibadge" id="idxBadge"></span>
       </div>
       <div class="irow">
@@ -286,7 +290,7 @@
     <!-- 今年累計成交值（1月至今，自動） -->
     <div class="card stat a-mcap">
       <div class="mini-spark" id="turnMini"></div>
-      <div class="label" style="position:relative;z-index:1">今年累計成交值（1 月至今）</div>
+      <div class="label" style="position:relative;z-index:1">今年累計成交值（1 月至今）<span class="info" data-tip="集中市場今年（1 月至今，含進行中月份）成交金額加總，與去年同期比較。來源：FinMind 每日成交金額（原始為證交所），每日自動累加；背景線為今年各月成交值。">i</span></div>
       <div class="value" style="position:relative;z-index:1"><span class="num" id="ttmVal">—</span><span class="u">兆元</span></div>
       <div class="d" id="ttmDelta" style="position:relative;z-index:1"></div>
       <div class="sub" id="ttmMonth" style="font-size:12px;color:var(--muted);margin-top:6px;position:relative;z-index:1"></div>
@@ -294,14 +298,14 @@
 
     <!-- 全市場經紀手續費（月，自動） -->
     <div class="card stat a-idx">
-      <div class="label">全市場經紀手續費收入（月）</div>
+      <div class="label">全市場經紀手續費收入（月）<span class="info right" data-tip="全體券商（65 家、含外資）單月經紀手續費收入合計。來源：證交所「各券商收支概況表」（t187ap21）之『經紀手續費收入』科目，每月自動更新——與右側市佔排行同一份資料。">i</span></div>
       <div class="value"><span class="num" id="feeTotal">—</span><span class="u">億</span></div>
       <div class="d muted" id="feeYM"></div>
     </div>
 
     <!-- 券商明細表 -->
     <div class="card a-table">
-      <div class="ctitle">券商同業：市佔・營收・淨利・YoY
+      <div class="ctitle"><span>券商同業：市佔・營收・淨利・YoY<span class="info" data-tip="各欄資料源：市佔率／排名＝證交所收支概況表 t187ap21（手續費口徑，月更）；當月營收與今年累計收益＝TWSE／TPEX 每月營收申報 t187ap05（證券子公司本身，非金控）；稅後淨利與季報累計＝綜合損益表 t187ap06（會計師核閱，季更）；自結累計＝公司每月自結損益公告（MOPS 重大訊息，未核閱但最快）。全部每日自動抓取。">i</span></span>
         <span class="pill">主要同業 ＋ 美好證券</span>
       </div>
       <table>
@@ -562,6 +566,8 @@ renderChart(0);
    ==================================================================== */
 BROKERS.forEach(b => b.yoy = (b.p25 / b.p24 - 1) * 100);
 const fastest = BROKERS.reduce((a, b) => b.yoy > a.yoy ? b : a);  // 全券商（含本公司）比 YoY
+// p25 對應的「完整年度」：財報已到 Q4 即當年，否則為前一年（隨自動滾動換年）
+const annualYear = (()=>{ const m=/(\d{4})Q(\d)/.exec(D.meta.finPeriod||""); return m ? (m[2]==="4"?m[1]:String(+m[1]-1)) : ""; })();
 const us = BROKERS.find(b => b.us);
 
 // 市佔排行 bars
@@ -574,7 +580,7 @@ document.getElementById("ranking").innerHTML = BROKERS.slice().sort((a,b)=>b.sha
 
 // 成長最快 tile
 document.getElementById("growTile").innerHTML = `
-  <div class="tag">🚀 2025 成長最快</div>
+  <div class="tag">🚀 ${annualYear} 成長最快<span class="info" data-tip="全表（前 10 大＋美好證券）中，最近完整年度稅後淨利 YoY 成長率最高者，程式自動判定。淨利來源：綜合損益表 t187ap06（會計師核閱），每季自動更新；年報公布後自動滾動換年。">i</span></div>
   <div class="name">${fastest.name}</div>
   <div class="pct">+${fastest.yoy.toFixed(0)}<span class="c">% 淨利 YoY</span></div>
   <div class="flow">${fastest.p24} 億 → ${fastest.p25} 億</div>`;
@@ -583,7 +589,7 @@ document.getElementById("growTile").innerHTML = `
 const usRankStr = us.rank ? ("#"+us.rank) : "—";   // 全市場真實名次（手續費口徑，自動）
 const usProfitYM = us.sYM || us.mRevYM || "";
 document.getElementById("usTile").innerHTML = `
-  <div class="tag">★ 本公司</div>
+  <div class="tag">★ 本公司<span class="info right" data-tip="美好證券（6021・上櫃）。當月營收與累計收益＝月營收申報 t187ap05；市佔率＝收支概況表 t187ap21 手續費口徑；今年稅後淨利＝公司每月自結損益公告（MOPS 重大訊息，未經會計師核閱）。全部自官方申報自動抓取。">i</span></div>
   <div class="name">${us.name}</div>
   <div class="stats">
     <div><div class="n">${us.mRev!=null?us.mRev:'—'}</div><div class="k">當月營收（億）${us.mRevYM?'・'+us.mRevYM:''}</div></div>
@@ -595,8 +601,6 @@ document.getElementById("usTile").innerHTML = `
 // 明細表（可點欄位排序）
 const rowsEl = document.getElementById("rows");
 BROKERS.forEach((b,i)=>{ b._rank = b.rank || (i+1); b._margin = b.p25/b.rev*100; });  // rank=全市場真實名次（手續費口徑，自動）
-// p25 對應的「完整年度」：財報若已到 Q4 即當年，否則為前一年（隨自動滾動換年）
-const annualYear = (()=>{ const m=/(\d{4})Q(\d)/.exec(D.meta.finPeriod||""); return m ? (m[2]==="4"?m[1]:String(+m[1]-1)) : ""; })();
 const SORTVAL = { rank:b=>b._rank, share:b=>b.share, mRev:b=>(b.mRev!=null?b.mRev:-1), yRev:b=>(b.yRev!=null?b.yRev:-1), p25:b=>b.p25, yoy:b=>b.yoy, margin:b=>b._margin };
 let sortKey="share", sortDir="desc";
 
