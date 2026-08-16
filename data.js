@@ -6,7 +6,7 @@ window.DASH_DATA = {
     "asLabel": "財報 2026Q1・市佔 2026/06（手續費口徑）",
     "finPeriod": "2026Q1"
   },
-  "totalAccounts": 1448.8,
+  "totalAccounts": 1460.7,
   "accounts": [
     {
       "y": 2019,
@@ -38,8 +38,8 @@ window.DASH_DATA = {
     },
     {
       "y": 2026,
-      "v": 1448.8,
-      "p": 6
+      "v": 1460.7,
+      "p": 7
     }
   ],
   "market": {
@@ -1155,6 +1155,10 @@ window.DASH_DATA = {
     {
       "ym": "2026-06",
       "v": 1448.8
+    },
+    {
+      "ym": "2026-07",
+      "v": 1460.7
     }
   ]
 };

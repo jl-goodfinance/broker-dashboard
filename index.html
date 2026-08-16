@@ -46,6 +46,15 @@
   .label{font-size:13px;color:var(--muted);font-weight:500}
   .ctitle{font-size:17px;font-weight:700;letter-spacing:-.3px;display:flex;align-items:center;justify-content:space-between}
   .ctitle .gear{color:var(--muted2);font-size:15px}
+  /* 各區塊的資料日期徽章 */
+  .dchip{font-size:10.5px;font-weight:600;color:var(--muted);background:var(--inset);
+    border:1px solid rgba(138,140,166,.14);padding:3px 9px;border-radius:7px;white-space:nowrap;
+    font-variant-numeric:tabular-nums;letter-spacing:.2px}
+  .dchip b{color:var(--cyan);font-weight:700}
+  .stat{display:flex;flex-direction:column}
+  .stat .dchip{align-self:flex-start;margin-bottom:9px;position:relative;z-index:2}
+  .stat .label{position:relative;z-index:1}
+  .grow .dchip,.usco .dchip{background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.16);color:rgba(255,255,255,.72)}
 
   /* hero chart */
   .tabs{display:inline-flex;background:var(--inset);border-radius:11px;padding:4px;margin:18px 0 8px;gap:2px}
@@ -240,7 +249,7 @@
 
     <!-- Hero 折線圖：客戶人數 -->
     <div class="card a-chart">
-      <div class="ctitle"><span>客戶人數趨勢<span class="info" data-tip="全台證券累計開戶人數（含法人）。來源：證交所「投資人開戶數統計」，每月月初公布。此為全站唯一無公開 API 的數據——由人工每週查核、公布後補登（2026/05 為由 6 月公告回推之推算值）。年度線為各年底累計，今年線為逐月累計。">i</span></span> <span class="gear">⚙</span></div>
+      <div class="ctitle"><span>客戶人數趨勢<span class="info" data-tip="全台證券累計開戶人數（含法人）。來源：證交所「投資人開戶數統計」，每月月初公布。此為全站唯一無公開 API 的數據——由人工每週查核、公布後補登（2026/05 為由 6 月公告回推之推算值）。年度線為各年底累計，今年線為逐月累計。">i</span></span> <span class="dchip" id="dcAccounts"></span></div>
       <div class="label" style="margin-top:6px">全台證券開戶人數（年底累計）</div>
       <div class="tabs" id="tabs">
         <button data-n="ytd">今年</button>
@@ -260,7 +269,7 @@
 
     <!-- 市佔排行（藍色長條） -->
     <div class="card a-rank">
-      <div class="ctitle">券商市佔排行</div>
+      <div class="ctitle"><span>券商市佔排行</span><span class="dchip" id="dcShare"></span></div>
       <div class="rsub"><span id="rsubTxt">經紀手續費收入市佔</span><span class="info" data-tip="市佔率＝券商「經紀手續費收入」占全市場（65 家、含外資券商）比重。來源：證交所各券商收支概況表（t187ap21），每月自動更新。以手續費計、非成交金額——折扣較深的券商佔比會略低於其成交量佔比。排名徽章＝全市場真實名次。">i</span></div>
       <div id="ranking"></div>
     </div>
@@ -290,6 +299,7 @@
     <!-- 今年累計成交值（1月至今，自動） -->
     <div class="card stat a-mcap">
       <div class="mini-spark" id="turnMini"></div>
+      <span class="dchip" id="dcTurn"></span>
       <div class="label" style="position:relative;z-index:1">今年累計成交值（1 月至今）<span class="info" data-tip="集中市場今年（1 月至今，含進行中月份）成交金額加總，與去年同期比較。來源：FinMind 每日成交金額（原始為證交所），每日自動累加；背景線為今年各月成交值。">i</span></div>
       <div class="value" style="position:relative;z-index:1"><span class="num" id="ttmVal">—</span><span class="u">兆元</span></div>
       <div class="d" id="ttmDelta" style="position:relative;z-index:1"></div>
@@ -298,6 +308,7 @@
 
     <!-- 全市場經紀手續費（月，自動） -->
     <div class="card stat a-idx">
+      <span class="dchip" id="dcFee"></span>
       <div class="label">全市場經紀手續費收入（月）<span class="info right" data-tip="全體券商（65 家、含外資）單月經紀手續費收入合計。來源：證交所「各券商收支概況表」（t187ap21）之『經紀手續費收入』科目，每月自動更新——與右側市佔排行同一份資料。">i</span></div>
       <div class="value"><span class="num" id="feeTotal">—</span><span class="u">億</span></div>
       <div class="d muted" id="feeYM"></div>
@@ -306,7 +317,10 @@
     <!-- 券商明細表 -->
     <div class="card a-table">
       <div class="ctitle"><span>券商同業：市佔・營收・淨利・YoY<span class="info" data-tip="各欄資料源：市佔率／排名＝證交所收支概況表 t187ap21（手續費口徑，月更）；當月營收與今年累計收益＝TWSE／TPEX 每月營收申報 t187ap05（證券子公司本身，非金控）；稅後淨利與季報累計＝綜合損益表 t187ap06（會計師核閱，季更）；自結累計＝公司每月自結損益公告（MOPS 重大訊息，未核閱但最快）。全部每日自動抓取。">i</span></span>
-        <span class="pill">主要同業 ＋ 美好證券</span>
+        <span style="display:flex;align-items:center;gap:8px">
+          <span class="dchip" id="dcTable"></span>
+          <span class="pill">主要同業 ＋ 美好證券</span>
+        </span>
       </div>
       <table>
         <thead>
@@ -401,6 +415,18 @@ const BROKERS = D.brokers;
   document.getElementById("feeYM").textContent = (m.shareYM||"")+"・全市場券商合計";
   document.getElementById("updTop").textContent =
     `⚙ 最後更新 ${D.meta.updated}　財報期別 ${D.meta.finPeriod||"—"}`;
+
+  // ---- 各區塊資料日期徽章（皆由資料自動推導）----
+  const am = D.accountsMonthly || [];
+  const setChip = (id, html) => { const el=document.getElementById(id); if(el) el.innerHTML = html; };
+  setChip("dcAccounts", am.length ? `資料至 <b>${am[am.length-1].ym.replace('-','/')}</b>` : "");
+  setChip("dcShare", m.shareYM ? `資料 <b>${m.shareYM}</b>` : "");
+  setChip("dcFee",   m.shareYM ? `資料 <b>${m.shareYM}</b>` : "");
+  const ts = m.turnoverSeries || [];
+  setChip("dcTurn", ts.length ? `含 <b>${(m.turnoverMonthLabel||"").slice(0,7)}</b> 至今` : "");
+  // 表格：三種資料源期別一次列出
+  const anyB = (D.brokers||[]).find(b=>b.mRevYM) || {};
+  setChip("dcTable", `營收 <b>${anyB.mRevYM||"—"}</b>・市佔 <b>${m.shareYM||"—"}</b>・財報 <b>${D.meta.finPeriod||"—"}</b>`);
 })();
 
 /* ====================================================================
@@ -580,7 +606,10 @@ document.getElementById("ranking").innerHTML = BROKERS.slice().sort((a,b)=>b.sha
 
 // 成長最快 tile
 document.getElementById("growTile").innerHTML = `
-  <div class="tag">🚀 ${annualYear} 成長最快<span class="info" data-tip="全表（前 10 大＋美好證券）中，最近完整年度稅後淨利 YoY 成長率最高者，程式自動判定。淨利來源：綜合損益表 t187ap06（會計師核閱），每季自動更新；年報公布後自動滾動換年。">i</span></div>
+  <div class="tag" style="justify-content:space-between;width:100%">
+    <span style="display:flex;align-items:center">🚀 ${annualYear} 成長最快<span class="info" data-tip="全表（前 10 大＋美好證券）中，最近完整年度稅後淨利 YoY 成長率最高者，程式自動判定。淨利來源：綜合損益表 t187ap06（會計師核閱），每季自動更新；年報公布後自動滾動換年。">i</span></span>
+    <span class="dchip">資料 <b>${annualYear} 年報</b></span>
+  </div>
   <div class="name">${fastest.name}</div>
   <div class="pct">+${fastest.yoy.toFixed(0)}<span class="c">% 淨利 YoY</span></div>
   <div class="flow">${fastest.p24} 億 → ${fastest.p25} 億</div>`;
@@ -589,7 +618,10 @@ document.getElementById("growTile").innerHTML = `
 const usRankStr = us.rank ? ("#"+us.rank) : "—";   // 全市場真實名次（手續費口徑，自動）
 const usProfitYM = us.sYM || us.mRevYM || "";
 document.getElementById("usTile").innerHTML = `
-  <div class="tag">★ 本公司<span class="info right" data-tip="美好證券（6021・上櫃）。當月營收與累計收益＝月營收申報 t187ap05；市佔率＝收支概況表 t187ap21 手續費口徑；今年稅後淨利＝公司每月自結損益公告（MOPS 重大訊息，未經會計師核閱）。全部自官方申報自動抓取。">i</span></div>
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+    <span class="tag">★ 本公司<span class="info" data-tip="美好證券（6021・上櫃）。當月營收與累計收益＝月營收申報 t187ap05；市佔率＝收支概況表 t187ap21 手續費口徑；今年稅後淨利＝公司每月自結損益公告（MOPS 重大訊息，未經會計師核閱）。全部自官方申報自動抓取。">i</span></span>
+    <span class="dchip">營收 <b>${us.mRevYM||'—'}</b>${us.sYM?`・自結 <b>${us.sYM}</b>`:''}</span>
+  </div>
   <div class="name">${us.name}</div>
   <div class="stats">
     <div><div class="n">${us.mRev!=null?us.mRev:'—'}</div><div class="k">當月營收（億）${us.mRevYM?'・'+us.mRevYM:''}</div></div>
