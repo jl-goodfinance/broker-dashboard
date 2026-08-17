@@ -305,7 +305,7 @@
 
     <!-- 每月成交金額（今年逐月 vs 去年同月） -->
     <div class="card a-mturn">
-      <div class="ctitle"><span>每月成交金額<span class="info" data-tip="集中市場每月成交金額（兆元）。今年逐月為實色柱、去年同月為淡色柱供對照；最右側若標「進行中」代表該月尚未結束。來源：FinMind 每日成交金額按月加總（原始為證交所），每日自動更新。">i</span></span><span class="dchip" id="dcMturn"></span></div>
+      <div class="ctitle"><span>每月成交金額<span class="info" data-tip="集中市場每月成交金額（兆元）。柱上數字＝該月合計，柱下「日均」＝合計÷當月交易日數（約 20 日），可看出實際單日量能。今年為實色柱、去年同月為淡色柱；標 * 者為進行中月份。來源：FinMind 每日成交金額按月加總（原始為證交所，已與證交所官方逐日對帳一致），每日自動更新。">i</span></span><span class="dchip" id="dcMturn"></span></div>
       <div class="mtlegend" id="mtLegend"></div>
       <div class="mtchart" id="mtChart"></div>
     </div>
@@ -576,6 +576,7 @@ function renderMonthlyTurnover(){
   const box = document.getElementById("mtChart");
   if(!box || !all.length) return;
   const byYm = Object.fromEntries(all.map(d=>[d.ym, d.v]));
+  const daysYm = Object.fromEntries(all.map(d=>[d.ym, d.d||0]));
   const curYm = (m.turnoverMonthLabel||"").slice(0,7).replace("/","-");   // 進行中月份
   const cy = curYm ? curYm.slice(0,4) : all[all.length-1].ym.slice(0,4);
   const py = String(+cy - 1);
@@ -586,14 +587,16 @@ function renderMonthlyTurnover(){
     const mm = String(i).padStart(2,"0");
     const ym = `${cy}-${mm}`;
     const cur = (ym===curYm) ? m.turnoverMonth : (byYm[ym] ?? null);
-    rows.push({mo:i, cur, prev: byYm[`${py}-${mm}`] ?? null, partial: ym===curYm});
+    const days = (ym===curYm) ? (m.turnoverMonthDays||0) : (daysYm[ym]||0);
+    rows.push({mo:i, cur, prev: byYm[`${py}-${mm}`] ?? null, partial: ym===curYm,
+               days, avg: (cur!=null && days) ? cur/days : null});
   }
   if(rows.length<1) return;
 
   const W = Math.max(320, Math.round(box.clientWidth || 700));
   const narrow = W < 520;
-  const H = narrow ? 190 : 230;
-  const padL = narrow ? 40 : 52, padR = 12, padT = 22, padB = 30, n = rows.length;
+  const H = narrow ? 205 : 245;
+  const padL = narrow ? 40 : 52, padR = 12, padT = 22, padB = 44, n = rows.length;
   const hi = Math.max(...rows.flatMap(r=>[r.cur||0, r.prev||0])) * 1.14 || 1;
   const Y = v => padT + (1 - v/hi) * (H-padT-padB);
   const slot = (W-padL-padR)/n;
@@ -628,7 +631,9 @@ function renderMonthlyTurnover(){
       bars += `<rect x="${xCur.toFixed(1)}" y="${(yb-26).toFixed(1)}" width="${bw.toFixed(1)}" height="26" rx="3" fill="none" stroke="#8a8ca6" stroke-opacity="0.35" stroke-dasharray="3 3"/>`;
       labs += `<text x="${(xCur+bw/2).toFixed(1)}" y="${(yb-32).toFixed(1)}" fill="#8a8ca6" fill-opacity="0.75" font-size="${narrow?8.5:9.5}" text-anchor="middle">無資料</text>`;
     }
-    labs += `<text x="${cx.toFixed(1)}" y="${H-9}" fill="#8ec5ff" fill-opacity="0.65" font-size="11" text-anchor="middle">${r.mo}月${r.partial?'*':''}</text>`;
+    labs += `<text x="${cx.toFixed(1)}" y="${H-19}" fill="#8ec5ff" fill-opacity="0.65" font-size="11" text-anchor="middle">${r.mo}月${r.partial?'*':''}</text>`;
+    if(r.avg!=null)
+      labs += `<text x="${cx.toFixed(1)}" y="${H-6}" fill="#8a8ca6" fill-opacity="0.85" font-size="${narrow?8.5:9.5}" text-anchor="middle">日均 ${r.avg.toFixed(2)}</text>`;
   });
 
   box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" style="height:${H}px">
@@ -642,9 +647,12 @@ function renderMonthlyTurnover(){
   const done = rows.filter(r=>!r.partial && r.prev!=null && r.cur!=null);
   const sumC = done.reduce((a,r)=>a+r.cur,0), sumP = done.reduce((a,r)=>a+r.prev,0);
   const yoy = sumP ? (sumC/sumP-1)*100 : null;
+  const sumD = done.reduce((a,r)=>a+(r.days||0),0);
+  const avgAll = sumD ? sumC/sumD : null;
   document.getElementById("mtLegend").innerHTML =
-    `<span><i style="background:linear-gradient(180deg,#5fd0ff,#3b82f6)"></i>${cy} 年</span>
+    `<span><i style="background:linear-gradient(180deg,#5fd0ff,#3b82f6)"></i>${cy} 年（柱上為月合計、柱下為日均）</span>
      <span><i style="background:rgba(138,140,166,.45)"></i>${py} 年同月</span>
+     ${avgAll!=null?`<span>今年日均 <b style="color:var(--ink)">${avgAll.toFixed(2)} 兆</b>／交易日</span>`:''}
      ${yoy!=null?`<span style="margin-left:auto;color:var(--up);font-weight:700">完整月合計 ▲ +${yoy.toFixed(0)}% vs ${py}</span>`:''}`;
   const dc = document.getElementById("dcMturn");
   if(dc) dc.innerHTML = `資料至 <b>${cy}/${String(lastMo).padStart(2,"0")}</b>${partial?"（進行中）":""}`;

@@ -54,15 +54,21 @@ def main():
         req = urllib.request.Request(fu, headers={"User-Agent": "dash-updater/1.0"})
         rows = json.loads(urllib.request.urlopen(req, timeout=60).read())["data"]
         bymon = collections.OrderedDict()
+        daysmon = collections.OrderedDict()          # 各月「有成交金額」的交易日數 → 供日均計算
         for r in rows:
             ym = r["date"][:7]
-            bymon[ym] = bymon.get(ym, 0) + (r.get("Trading_money") or 0)
+            v = r.get("Trading_money") or 0
+            bymon[ym] = bymon.get(ym, 0) + v
+            if v > 0:
+                daysmon[ym] = daysmon.get(ym, 0) + 1
         last = rows[-1]
         cur_ym = last["date"][:7]
         m = data["market"]
         # 完整月（剔除 0 與當前未完月）
         complete = [(ym, v) for ym, v in bymon.items() if v > 0 and ym != cur_ym]
-        m["turnoverSeries"] = [{"ym": ym, "v": round(v / 1e12, 2)} for ym, v in complete]  # 全部完整月（跨年度）
+        # 全部完整月（跨年度），附交易日數供日均計算
+        m["turnoverSeries"] = [{"ym": ym, "v": round(v / 1e12, 2), "d": daysmon.get(ym, 0)} for ym, v in complete]
+        m["turnoverMonthDays"] = daysmon.get(cur_ym, 0)
         m["turnoverMonth"] = round(bymon.get(cur_ym, 0) / 1e12, 2)   # 本月累計（含未完月）
         m["turnoverMonthLabel"] = cur_ym.replace("-", "/") + " 本月累計"
         # 近12個月(TTM) 與 前12個月（保留備用）
