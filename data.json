@@ -1,9 +1,9 @@
 {
   "_readme": "真實資料來源。幾乎全欄位由 update.py 自動更新（TWSE/TPEX/FinMind 官方API）。僅 accounts（開戶數，集保年度統計，無API）為靜態歷史數列。改完跑 python3 update.py 產生 data.js。",
   "meta": {
-    "updated": "2026-08-20",
-    "asLabel": "財報 2026Q1・市佔 2026/07（手續費口徑）",
-    "finPeriod": "2026Q1"
+    "updated": "2026-08-21",
+    "asLabel": "財報 2026Q2・市佔 2026/07（手續費口徑）",
+    "finPeriod": "2026Q2"
   },
   "totalAccounts": 1460.7,
   "accounts": [
@@ -982,10 +982,10 @@
       "rev": 640,
       "p25": 244.2,
       "p24": 211.5,
-      "qRev": 319.6,
-      "qProfit": 93.3,
-      "qEps": 1.33,
-      "qPeriod": "2026Q1",
+      "qRev": 824.4,
+      "qProfit": 256.6,
+      "qEps": 3.44,
+      "qPeriod": "2026Q2",
       "mRev": 141.0,
       "mRevMoM": -16.4,
       "mRevYoY": 104.3,
@@ -1122,10 +1122,10 @@
       "rev": 85,
       "p25": 28,
       "p24": 24,
-      "qRev": 29.3,
-      "qProfit": 11.3,
-      "qEps": 1.73,
-      "qPeriod": "2026Q1",
+      "qRev": 74.8,
+      "qProfit": 32.3,
+      "qEps": 4.94,
+      "qPeriod": "2026Q2",
       "mRev": 10.7,
       "mRevMoM": -20.5,
       "mRevYoY": 50.0,
