@@ -2,7 +2,7 @@
 window.DASH_DATA = {
   "_readme": "真實資料來源。幾乎全欄位由 update.py 自動更新（TWSE/TPEX/FinMind 官方API）。僅 accounts（開戶數，集保年度統計，無API）為靜態歷史數列。改完跑 python3 update.py 產生 data.js。",
   "meta": {
-    "updated": "2026-08-21",
+    "updated": "2026-08-22",
     "asLabel": "財報 2026Q2・市佔 2026/07（手續費口徑）",
     "finPeriod": "2026Q2"
   },
@@ -1028,10 +1028,10 @@ window.DASH_DATA = {
       "rev": 280,
       "p25": 105.9,
       "p24": 100.2,
-      "qRev": 100.4,
-      "qProfit": 42.3,
-      "qEps": 2.6,
-      "qPeriod": "2026Q1",
+      "qRev": 255.2,
+      "qProfit": 110.2,
+      "qEps": 6.78,
+      "qPeriod": "2026Q2",
       "mRev": 49.9,
       "mRevMoM": -7.4,
       "mRevYoY": 104.8,
