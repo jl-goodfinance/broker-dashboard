@@ -1,7 +1,7 @@
 {
   "_readme": "真實資料來源。幾乎全欄位由 update.py 自動更新（TWSE/TPEX/FinMind 官方API）。僅 accounts（開戶數，集保年度統計，無API）為靜態歷史數列。改完跑 python3 update.py 產生 data.js。",
   "meta": {
-    "updated": "2026-08-26",
+    "updated": "2026-08-27",
     "asLabel": "財報 2026Q2・市佔 2026/07（手續費口徑）",
     "finPeriod": "2026Q2"
   },
@@ -44,7 +44,7 @@
   "market": {
     "turnoverYear": 101.08,
     "turnoverPrev": 99.81,
-    "turnoverMonth": 16.58,
+    "turnoverMonth": 17.55,
     "turnoverMonthLabel": "2026/08 本月累計",
     "turnoverSeries": [
       {
@@ -198,10 +198,10 @@
         "d": 22
       }
     ],
-    "taiex": 45832.62,
-    "taiexChg": 663.16,
-    "taiexDate": "2026-08-26",
-    "taiexYearPct": 58.2,
+    "taiex": 45975.22,
+    "taiexChg": 142.6,
+    "taiexDate": "2026-08-27",
+    "taiexYearPct": 58.7,
     "turnoverTTM": 192.6,
     "turnoverTTMPrev": 90.2,
     "turnoverTTMLabel": "2025/07–2026/07",
@@ -987,12 +987,17 @@
         "d": "08-26",
         "c": 45832.62,
         "v": 8431
+      },
+      {
+        "d": "08-27",
+        "c": 45975.22,
+        "v": 9675
       }
     ],
-    "turnoverYTD": 148.6,
+    "turnoverYTD": 149.6,
     "turnoverYTDPrev": 57.9,
     "turnoverYTDLabel": "2026/01–08",
-    "turnoverMonthDays": 18
+    "turnoverMonthDays": 19
   },
   "brokers": [
     {
@@ -1022,10 +1027,10 @@
       "rev": 340,
       "p25": 118,
       "p24": 101.38,
-      "qRev": 150.9,
-      "qProfit": 59.1,
-      "qEps": 3.25,
-      "qPeriod": "2026Q1",
+      "qRev": 380.7,
+      "qProfit": 179.4,
+      "qEps": 9.87,
+      "qPeriod": "2026Q2",
       "mRev": 42.0,
       "mRevMoM": -42.8,
       "mRevYoY": 14.6,
