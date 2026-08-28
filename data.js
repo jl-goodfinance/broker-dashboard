@@ -2,7 +2,7 @@
 window.DASH_DATA = {
   "_readme": "真實資料來源。幾乎全欄位由 update.py 自動更新（TWSE/TPEX/FinMind 官方API）。僅 accounts（開戶數，集保年度統計，無API）為靜態歷史數列。改完跑 python3 update.py 產生 data.js。",
   "meta": {
-    "updated": "2026-08-27",
+    "updated": "2026-08-28",
     "asLabel": "財報 2026Q2・市佔 2026/07（手續費口徑）",
     "finPeriod": "2026Q2"
   },
@@ -45,7 +45,7 @@ window.DASH_DATA = {
   "market": {
     "turnoverYear": 101.08,
     "turnoverPrev": 99.81,
-    "turnoverMonth": 17.55,
+    "turnoverMonth": 18.62,
     "turnoverMonthLabel": "2026/08 本月累計",
     "turnoverSeries": [
       {
@@ -199,10 +199,10 @@ window.DASH_DATA = {
         "d": 22
       }
     ],
-    "taiex": 45975.22,
-    "taiexChg": 142.6,
-    "taiexDate": "2026-08-27",
-    "taiexYearPct": 58.7,
+    "taiex": 46331.45,
+    "taiexChg": 356.23,
+    "taiexDate": "2026-08-28",
+    "taiexYearPct": 60.0,
     "turnoverTTM": 192.6,
     "turnoverTTMPrev": 90.2,
     "turnoverTTMLabel": "2025/07–2026/07",
@@ -993,12 +993,17 @@ window.DASH_DATA = {
         "d": "08-27",
         "c": 45975.22,
         "v": 9675
+      },
+      {
+        "d": "08-28",
+        "c": 46331.45,
+        "v": 10690
       }
     ],
-    "turnoverYTD": 149.6,
+    "turnoverYTD": 150.7,
     "turnoverYTDPrev": 57.9,
     "turnoverYTDLabel": "2026/01–08",
-    "turnoverMonthDays": 19
+    "turnoverMonthDays": 20
   },
   "brokers": [
     {
@@ -1088,10 +1093,10 @@ window.DASH_DATA = {
       "rev": 130,
       "p25": 45,
       "p24": 21.5,
-      "qRev": 45.0,
-      "qProfit": 15.4,
-      "qEps": 2.0,
-      "qPeriod": "2026Q1",
+      "qRev": 117.8,
+      "qProfit": 44.1,
+      "qEps": 5.73,
+      "qPeriod": "2026Q2",
       "mRev": 24.1,
       "mRevMoM": -16.4,
       "mRevYoY": 127.2,
