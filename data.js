@@ -6,7 +6,7 @@ window.DASH_DATA = {
     "asLabel": "財報 2026Q2・市佔 2026/07（手續費口徑）",
     "finPeriod": "2026Q2"
   },
-  "totalAccounts": 1460.7,
+  "totalAccounts": 1469.8,
   "accounts": [
     {
       "y": 2019,
@@ -38,14 +38,14 @@ window.DASH_DATA = {
     },
     {
       "y": 2026,
-      "v": 1460.7,
-      "p": 7
+      "v": 1469.8,
+      "p": 8
     }
   ],
   "market": {
     "turnoverYear": 101.08,
     "turnoverPrev": 99.81,
-    "turnoverMonth": 1.19,
+    "turnoverMonth": 2.16,
     "turnoverMonthLabel": "2026/09 本月累計",
     "turnoverSeries": [
       {
@@ -204,10 +204,10 @@ window.DASH_DATA = {
         "d": 21
       }
     ],
-    "taiex": 46948.72,
-    "taiexChg": 820.25,
-    "taiexDate": "2026-09-01",
-    "taiexYearPct": 62.1,
+    "taiex": 46164.72,
+    "taiexChg": -784.0,
+    "taiexDate": "2026-09-02",
+    "taiexYearPct": 59.4,
     "turnoverTTM": 204.6,
     "turnoverTTMPrev": 87.5,
     "turnoverTTMLabel": "2025/08–2026/08",
@@ -1013,12 +1013,17 @@ window.DASH_DATA = {
         "d": "09-01",
         "c": 46948.72,
         "v": 11876
+      },
+      {
+        "d": "09-02",
+        "c": 46164.72,
+        "v": 9765
       }
     ],
-    "turnoverYTD": 153.2,
+    "turnoverYTD": 154.1,
     "turnoverYTDPrev": 68.1,
     "turnoverYTDLabel": "2026/01–09",
-    "turnoverMonthDays": 1
+    "turnoverMonthDays": 2
   },
   "brokers": [
     {
@@ -1255,6 +1260,10 @@ window.DASH_DATA = {
     {
       "ym": "2026-07",
       "v": 1460.7
+    },
+    {
+      "ym": "2026-08",
+      "v": 1469.8
     }
   ]
 };
