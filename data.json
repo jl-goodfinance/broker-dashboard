@@ -44,7 +44,7 @@
   "market": {
     "turnoverYear": 101.08,
     "turnoverPrev": 99.81,
-    "turnoverMonth": 2.16,
+    "turnoverMonth": 3.16,
     "turnoverMonthLabel": "2026/09 本月累計",
     "turnoverSeries": [
       {
@@ -203,10 +203,10 @@
         "d": 21
       }
     ],
-    "taiex": 46164.72,
-    "taiexChg": -784.0,
-    "taiexDate": "2026-09-02",
-    "taiexYearPct": 59.4,
+    "taiex": 45857.66,
+    "taiexChg": -307.06,
+    "taiexDate": "2026-09-03",
+    "taiexYearPct": 58.3,
     "turnoverTTM": 204.6,
     "turnoverTTMPrev": 87.5,
     "turnoverTTMLabel": "2025/08–2026/08",
@@ -1017,12 +1017,17 @@
         "d": "09-02",
         "c": 46164.72,
         "v": 9765
+      },
+      {
+        "d": "09-03",
+        "c": 45857.66,
+        "v": 9933
       }
     ],
-    "turnoverYTD": 154.1,
+    "turnoverYTD": 155.1,
     "turnoverYTDPrev": 68.1,
     "turnoverYTDLabel": "2026/01–09",
-    "turnoverMonthDays": 2
+    "turnoverMonthDays": 3
   },
   "brokers": [
     {
