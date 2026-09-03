@@ -3,3 +3,4 @@ serve.py
 .claude/
 美好證券_同業儀表板.html
 .DS_Store
+__pycache__/
