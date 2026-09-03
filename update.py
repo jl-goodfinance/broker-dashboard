@@ -350,18 +350,6 @@ def main():
     with open(os.path.join(BASE, "data.js"), "w", encoding="utf-8") as f:
         f.write(js)
 
-    # ---- 產生單檔版到 Dropbox 共享資料夾（同事打開即最新） ----
-    try:
-        html = open(os.path.join(BASE, "index.html"), encoding="utf-8").read()
-        bundle = html.replace('<script src="data.js"></script>', "<script>\n" + js + "\n</script>")
-        drop_dir = os.path.expanduser("~/Dropbox/證券Dashboard")
-        os.makedirs(drop_dir, exist_ok=True)
-        with open(os.path.join(drop_dir, "美好證券_同業儀表板.html"), "w", encoding="utf-8") as f:
-            f.write(bundle)
-        log.append(f"單檔已輸出至 Dropbox：{drop_dir}/美好證券_同業儀表板.html")
-    except Exception as e:
-        log.append(f"[警告] Dropbox 單檔輸出失敗：{e}")
-
     print("=== 更新完成 " + datetime.datetime.now().strftime("%Y-%m-%d %H:%M") + " ===")
     for l in log:
         print(" -", l)
