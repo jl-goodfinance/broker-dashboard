@@ -8,8 +8,9 @@
   • 加權指數最新點數/漲跌      ← exchangeReport/FMTQIK
   • 本月累計成交值（兆元）      ← exchangeReport/FMTQIK
   • 各券商 最新季 收益/淨利/EPS ← opendata/t187ap06_X_bd + _L_bd（季更）
+  • 全台開戶數（逐月累計/年度）   ← 證交所「投資人開戶人數變動統計表」月報 xlsx（次月首個營業日上架）
 維持手動（腳本不動）：
-  • 全台開戶數、券商市佔率share、p24 去年基準、美好證券、元富(無API)
+  • 券商市佔率share、p24 去年基準、美好證券、元富(無API)
 用法：  python3 update.py
 """
 import json, os, sys, ssl, datetime, urllib.request, urllib.error
@@ -256,6 +257,85 @@ def main():
             log.append(f"月自結稅後淨利更新：{'、'.join(nhit)}")
     except Exception as e:
         log.append(f"[警告] 自結損益解析失敗：{e}")
+
+    # ---- 6. 全台開戶數：證交所「投資人開戶人數變動統計表」月報 xlsx ----
+    #   URL 規律：/staticFiles/inspection/inspection/02/012/YYYYMM_C02012.xlsx，次月首個營業日上架。
+    #   每份檔案含 2022/01 起完整逐月序列（期末累計開戶人數），只用標準庫解 xlsx，不需 openpyxl。
+    try:
+        import zipfile, io
+        import xml.etree.ElementTree as ET
+        NS = "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}"
+
+        def _acct_xlsx(ym):
+            u = f"https://www.twse.com.tw/staticFiles/inspection/inspection/02/012/{ym}_C02012.xlsx"
+            req = urllib.request.Request(u, headers={"User-Agent": "Mozilla/5.0 dash-updater/1.0"})
+            try:
+                with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
+                    return r.read()
+            except urllib.error.HTTPError as e:
+                if e.code == 404:
+                    return None
+                raise
+
+        ay, am = datetime.date.today().year, datetime.date.today().month
+        blob = None
+        for _ in range(4):                       # 從上月起往回最多找 4 個月
+            am -= 1
+            if am == 0:
+                ay, am = ay - 1, 12
+            blob = _acct_xlsx(f"{ay}{am:02d}")
+            if blob:
+                break
+
+        if not blob:
+            log.append("[警告] 開戶數：近 4 個月證交所月報皆不存在，維持既有值")
+        else:
+            z = zipfile.ZipFile(io.BytesIO(blob))
+            ss = ["".join(t.text or "" for t in si.iter(NS + "t"))
+                  for si in ET.fromstring(z.read("xl/sharedStrings.xml")).iter(NS + "si")]
+            monthly = {}                          # (西元年, 月) -> 期末累計開戶人數
+            cur_y = None
+            for row in ET.fromstring(z.read("xl/worksheets/sheet1.xml")).iter(NS + "row"):
+                vals = []
+                for c in row.iter(NS + "c"):
+                    v = c.find(NS + "v")
+                    if v is None:
+                        continue
+                    vals.append(ss[int(v.text)] if c.get("t") == "s" else v.text)
+                if len(vals) < 5:
+                    continue
+                lab = vals[0].replace(" ", "").replace("　", "")
+                my = re.fullmatch(r"(\d{3})年", lab)                 # 年度小計列 → 記住年份
+                mm = re.fullmatch(r"(?:(\d{3})年)?(\d{1,2})月", lab)   # 月列（可能省略年）
+                if my:
+                    cur_y = int(my.group(1)) + 1911
+                elif mm and vals[4].lstrip("-").isdigit():
+                    if mm.group(1):
+                        cur_y = int(mm.group(1)) + 1911
+                    if cur_y:
+                        monthly[(cur_y, int(mm.group(2)))] = int(vals[4])
+
+            if not monthly:
+                raise ValueError("xlsx 解析不到月資料")
+            ly, lm = max(monthly)
+            wan = lambda n: round(n / 1e4, 1)
+            data["accountsMonthly"] = [{"ym": f"{ly}-{m:02d}", "v": wan(monthly[(ly, m)])}
+                                       for (yy, m) in sorted(monthly) if yy == ly]
+            acc = {a["y"]: a for a in data.get("accounts", [])}
+            for (yy, m), n in monthly.items():
+                if yy == ly or m != 12:
+                    continue
+                if yy not in acc:                 # 補缺的完整年度
+                    acc[yy] = {"y": yy, "v": wan(n)}
+                elif "p" in acc[yy]:              # 去年還掛著「進行中」→ 改成年底定值
+                    acc[yy] = {"y": yy, "v": wan(n)}
+            acc[ly] = {"y": ly, "v": wan(monthly[(ly, lm)]), "p": lm}
+            data["accounts"] = [acc[k] for k in sorted(acc)]
+            data["totalAccounts"] = acc[ly]["v"]
+            log.append(f"開戶數（證交所月報 {ly}/{lm:02d}）：累計 {acc[ly]['v']} 萬人；"
+                       f"{ly} 年逐月 {len(data['accountsMonthly'])} 點")
+    except Exception as e:
+        log.append(f"[警告] 開戶數更新失敗：{e}")
 
     data["meta"]["updated"] = datetime.date.today().isoformat()
     data["meta"]["asLabel"] = (f"財報 {data['meta'].get('finPeriod','—')}・"
