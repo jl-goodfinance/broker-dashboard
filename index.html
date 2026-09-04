@@ -36,17 +36,34 @@
       "usco  usco  usco  usco  grow  grow"
       "chart chart chart chart rank  rank"
       "mturn mturn mturn mturn rank  rank"
+      "save  save  save  save  save  save"
       "mcap  mcap  mcap  idx   idx   idx"
       "table table table table table table"
       "note  note  note  note  note  note";}
   .card{background:linear-gradient(145deg,rgba(29,30,45,.98),rgba(23,24,37,.98));border:1px solid rgba(138,140,166,.10);border-radius:var(--r);padding:22px 24px;position:relative;overflow:hidden;box-shadow:0 14px 38px rgba(0,0,0,.12)}
   .a-chart{grid-area:chart}.a-rank{grid-area:rank}.a-turn{grid-area:turn}
   .a-grow{grid-area:grow}.a-usco{grid-area:usco}.a-mcap{grid-area:mcap}
-  .a-idx{grid-area:idx}.a-table{grid-area:table}.a-note{grid-area:note}.a-mturn{grid-area:mturn}
+  .a-idx{grid-area:idx}.a-table{grid-area:table}.a-note{grid-area:note}.a-mturn{grid-area:mturn}.a-save{grid-area:save}
   /* 每月成交金額 */
   .mtlegend{display:flex;gap:14px;align-items:center;font-size:11.5px;color:var(--muted);margin-top:8px}
   .mtlegend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
   .mtchart{margin-top:10px}
+  /* 超額儲蓄（主計總處） */
+  .sv{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:10px 26px;margin-top:6px;align-items:start}
+  .svkpi{display:flex;flex-direction:column;gap:13px;padding-left:22px;border-left:1px solid var(--line);margin-top:12px}
+  .svkpi .k{font-size:11.5px;color:var(--muted)}
+  .svkpi .n{font-size:30px;font-weight:800;letter-spacing:-1px;line-height:1.05;margin-top:4px;font-variant-numeric:tabular-nums}
+  .svkpi .n .u{font-size:14px;color:var(--muted);font-weight:600;margin-left:4px;letter-spacing:0}
+  .svkpi .s{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.5}
+  .svkpi .s b{color:var(--amber);font-weight:700}
+  .svkpi .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .svkpi .row .n,.svkpi .n.sm{font-size:19px}
+  .svkpi .tag{display:inline-block;font-size:10px;font-weight:800;color:#0e0e16;background:var(--amber);border-radius:5px;padding:1px 6px;margin-left:6px;vertical-align:middle}
+  @media(max-width:920px){
+    .sv{grid-template-columns:1fr}
+    .svkpi{padding-left:0;border-left:0;border-top:1px solid var(--line);padding-top:14px;flex-direction:row;flex-wrap:wrap;gap:14px 28px}
+    .svkpi .row{gap:28px}
+  }
 
   .label{font-size:13px;color:var(--muted);font-weight:500}
   .ctitle{font-size:17px;font-weight:700;letter-spacing:-.3px;display:flex;align-items:center;justify-content:space-between}
@@ -189,7 +206,7 @@
 
   @media(max-width:920px){
     .bento{grid-template-columns:repeat(2,1fr);grid-template-areas:
-      "turn turn" "usco usco" "grow grow" "chart chart" "mturn mturn" "rank rank" "mcap idx"
+      "turn turn" "usco usco" "grow grow" "chart chart" "mturn mturn" "rank rank" "save save" "mcap idx"
       "table table" "note note";}
     .ibig{font-size:44px}
     .istats{gap:14px 24px}
@@ -200,7 +217,7 @@
   @media(max-width:560px){
     body{padding:20px 12px 48px}
     .bento{grid-template-columns:1fr;gap:12px;grid-template-areas:
-      "turn" "usco" "grow" "chart" "mturn" "rank" "mcap" "idx" "table" "note";}
+      "turn" "usco" "grow" "chart" "mturn" "rank" "save" "mcap" "idx" "table" "note";}
     .mtlegend{flex-wrap:wrap;gap:8px 12px;font-size:11px}
     .mtlegend span[style*="auto"]{margin-left:0!important}
     .card{padding:18px 16px;--r:18px}
@@ -308,6 +325,18 @@
       <div class="ctitle"><span>每月成交金額<span class="info" data-tip="集中市場每月成交金額（兆元）。柱上數字＝該月合計，柱下「日均」＝合計÷當月交易日數（約 20 日），可看出實際單日量能。今年為實色柱、去年同月為淡色柱；標 * 者為進行中月份。來源：FinMind 每日成交金額按月加總（原始為證交所，已與證交所官方逐日對帳一致），每日自動更新。">i</span></span><span class="dchip" id="dcMturn"></span></div>
       <div class="mtlegend" id="mtLegend"></div>
       <div class="mtchart" id="mtChart"></div>
+    </div>
+
+    <!-- 超額儲蓄（主計總處，季更・自動） -->
+    <div class="card a-save">
+      <div class="ctitle"><span>超額儲蓄（主計總處）<span class="info" data-tip="超額儲蓄＝國民儲蓄毛額 − 國內投資毛額（即國民所得統計之經常帳餘額）；超額儲蓄率＝超額儲蓄占 GDP 比率。台灣資金面指標：儲蓄多於投資形成的閒置資金，是推升股市與房市流動性的來源之一。來源：主計總處「國民所得統計及國內經濟情勢展望」新聞稿附表 5〈儲蓄與投資〉（每年 2／5／8／11 月發布），程式自動抓最新一期；(f)＝主計處預測、(p)＝初步統計、(r)＝修正。">i</span></span><span class="dchip" id="dcSave"></span></div>
+      <div class="sv">
+        <div>
+          <div class="mtlegend" id="svLegend"></div>
+          <div class="mtchart" id="svChart"></div>
+        </div>
+        <div class="svkpi" id="svKpi"></div>
+      </div>
     </div>
 
     <!-- 今年累計成交值（1月至今，自動） -->
@@ -423,6 +452,7 @@ const BROKERS = D.brokers;
     (m.turnoverMonth!=null) ? `${m.turnoverMonthLabel}　${m.turnoverMonth} 兆元` : "";
   renderTurnMini();
   renderMonthlyTurnover();
+  renderSavings();
 
   const rsub=document.getElementById("rsubTxt");
   if(rsub && m.shareYM) rsub.textContent = "經紀手續費收入市佔・"+m.shareYM;
@@ -658,6 +688,86 @@ function renderMonthlyTurnover(){
   if(dc) dc.innerHTML = `資料至 <b>${cy}/${String(lastMo).padStart(2,"0")}</b>${partial?"（進行中）":""}`;
 }
 
+/* 超額儲蓄：主計總處 表5（年度柱＝超額儲蓄兆元、折線＝超額儲蓄率；(f) 為預測） */
+function renderSavings(){
+  const S = D.savings, box = document.getElementById("svChart");
+  if(!S || !box || !(S.annual||[]).length) return;
+  const rows = S.annual;
+  const W = Math.max(320, Math.round(box.clientWidth || 640));
+  const narrow = W < 520;
+  const H = narrow ? 215 : 250;
+  const padL = narrow ? 40 : 50, padR = narrow ? 42 : 54, padT = 26, padB = 32;
+  const IH = H - padT - padB;
+  const hi  = Math.max(...rows.map(r=>r.ex)) * 1.2 || 1;
+  const rhi = Math.max(...rows.map(r=>r.exRate)) * 1.25 || 1;
+  const Y  = v => padT + (1 - v/hi)  * IH;
+  const YR = v => padT + (1 - v/rhi) * IH;
+  const n = rows.length, slot = (W-padL-padR)/n, bw = Math.min(narrow?18:30, slot*0.56);
+
+  let grid = "";
+  const step = hi > 9 ? 2 : 1;
+  for(let t=step; t<hi; t+=step){
+    const yy = Y(t).toFixed(1);
+    grid += `<line x1="${padL}" x2="${W-padR}" y1="${yy}" y2="${yy}" stroke="#8ec5ff" stroke-opacity="0.22" stroke-dasharray="4 5"/>
+      <text x="${padL-8}" y="${(+yy+4).toFixed(1)}" fill="#8ec5ff" fill-opacity="0.6" font-size="10" text-anchor="end">${t} 兆</text>`;
+  }
+  const rstep = rhi > 24 ? 10 : 5;
+  for(let t=rstep; t<rhi; t+=rstep)
+    grid += `<text x="${W-padR+8}" y="${(YR(t)+4).toFixed(1)}" fill="#ffb340" fill-opacity="0.7" font-size="10">${t}%</text>`;
+
+  let bars="", labs="", path="", dots="";
+  rows.forEach((r,i)=>{
+    const cx = padL + slot*i + slot/2, x = cx - bw/2, yb = H - padB;
+    const top = Y(r.ex), h = Math.max(1, yb - top);
+    bars += r.f
+      ? `<rect x="${x.toFixed(1)}" y="${top.toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" rx="3" fill="url(#svg1)" fill-opacity="0.32" stroke="#5fd0ff" stroke-opacity="0.85" stroke-dasharray="3 3"/>`
+      : `<rect x="${x.toFixed(1)}" y="${top.toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" rx="3" fill="url(#svg1)"/>`;
+    // 柱值：夠高就寫在柱內頂端，否則寫在柱上
+    if(!narrow || i%2===0 || i===n-1){
+      const inside = h > 30;
+      labs += `<text x="${cx.toFixed(1)}" y="${(inside? top+14 : top-6).toFixed(1)}" fill="${inside?'#0b1a33':'#cfe4ff'}" fill-opacity="${inside?0.95:0.9}" font-size="${narrow?9:10.5}" font-weight="700" text-anchor="middle">${r.ex.toFixed(2)}</text>`;
+    }
+    labs += `<text x="${cx.toFixed(1)}" y="${H-10}" fill="#8ec5ff" fill-opacity="${r.f?0.95:0.65}" font-size="${narrow?10:11}" text-anchor="middle">${narrow?"'"+String(r.y).slice(2):r.y}${r.f?"(f)":""}</text>`;
+    const py = YR(r.exRate);
+    path += (i?" L":"M") + cx.toFixed(1) + " " + py.toFixed(1);
+    dots += `<circle cx="${cx.toFixed(1)}" cy="${py.toFixed(1)}" r="3.2" fill="#ffb340" stroke="#15161f" stroke-width="1.5"/>`;
+    if(i===0 || i>=n-3)   // 只標首點與最近三點，避免與柱值打架
+      dots += `<text x="${cx.toFixed(1)}" y="${(py-9).toFixed(1)}" fill="#ffb340" font-size="${narrow?9:10}" font-weight="700" text-anchor="middle">${r.exRate.toFixed(1)}%</text>`;
+  });
+  box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" style="height:${H}px">
+    <defs><linearGradient id="svg1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5fd0ff"/><stop offset="1" stop-color="#3b82f6"/></linearGradient></defs>
+    ${grid}${bars}
+    <path d="${path}" fill="none" stroke="#ffb340" stroke-width="2" stroke-linejoin="round" stroke-opacity="0.9"/>
+    ${dots}${labs}
+  </svg>`;
+
+  document.getElementById("svLegend").innerHTML =
+    `<span><i style="background:linear-gradient(180deg,#5fd0ff,#3b82f6)"></i>超額儲蓄（兆元）</span>
+     <span><i style="background:rgba(95,208,255,.3);border:1px dashed #5fd0ff"></i>主計處預測 (f)</span>
+     <span><i style="background:#ffb340;border-radius:50%"></i>超額儲蓄率（占 GDP，右軸）</span>`;
+
+  const cy = new Date().getFullYear();
+  const cur  = rows.find(r=>r.y===cy) || rows[rows.length-1];
+  const prev = rows.find(r=>r.y===cur.y-1);
+  const next = rows.find(r=>r.y===cur.y+1);
+  const lastA = [...rows].reverse().find(r=>!r.f);
+  const q = (S.quarterly||[]).filter(x=>x.flag!=="f").slice(-1)[0];
+  const yoy = prev ? (cur.ex/prev.ex-1)*100 : null;
+  document.getElementById("svKpi").innerHTML = `
+    <div><div class="k">${cur.y} 年超額儲蓄${cur.f?'<span class="tag">主計處預測</span>':''}</div>
+      <div class="n">${cur.ex.toFixed(2)}<span class="u">兆元</span></div>
+      <div class="s">超額儲蓄率 <b>${cur.exRate.toFixed(2)}%</b>（占 GDP）${yoy!=null?`<br>較 ${prev.y} 年 ${yoy>=0?'+':''}${yoy.toFixed(0)}%（${prev.ex.toFixed(2)} 兆）`:''}</div></div>
+    <div class="row">
+      <div><div class="k">國民儲蓄率（占 GNI）</div><div class="n">${cur.savRate!=null?cur.savRate.toFixed(1):'—'}<span class="u">%</span></div></div>
+      <div><div class="k">國內投資率（占 GDP）</div><div class="n">${cur.invRate!=null?cur.invRate.toFixed(1):'—'}<span class="u">%</span></div></div>
+    </div>
+    ${next?`<div><div class="k">${next.y} 年${next.f?'預測':''}</div><div class="n sm">${next.ex.toFixed(2)}<span class="u">兆</span>・${next.exRate.toFixed(2)}<span class="u">%</span></div></div>`:''}
+    ${q?`<div class="s">最新季 ${q.q}${q.flag?'（'+q.flag+'）':''}：${q.ex.toFixed(2)} 兆・${q.exRate.toFixed(2)}%${lastA?`<br>${lastA.y} 年實際值 ${lastA.ex.toFixed(2)} 兆・${lastA.exRate.toFixed(2)}%`:''}</div>`:''}`;
+  const dc = document.getElementById("dcSave");
+  if(dc) dc.innerHTML = `主計處 <b>${(S.release||"").replace(/-/g,"/")}</b> 發布`;
+}
+
 /* 成交值小卡背景：今年月成交值 mini 線 */
 function renderTurnMini(){
   const all = (D.market.turnoverSeries || []);
@@ -687,7 +797,7 @@ document.getElementById("tabs").addEventListener("click", e=>{
   b.classList.add("on");
   renderChart(b.dataset.n === "ytd" ? "ytd" : +b.dataset.n);
 });
-let _rz; window.addEventListener("resize", ()=>{ clearTimeout(_rz); _rz=setTimeout(()=>{ renderChart(curN); renderIdxHero(); renderTurnMini(); renderMonthlyTurnover(); }, 150); });
+let _rz; window.addEventListener("resize", ()=>{ clearTimeout(_rz); _rz=setTimeout(()=>{ renderChart(curN); renderIdxHero(); renderTurnMini(); renderMonthlyTurnover(); renderSavings(); }, 150); });
 renderChart(0);
 
 /* ====================================================================

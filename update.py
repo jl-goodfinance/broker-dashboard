@@ -337,6 +337,98 @@ def main():
     except Exception as e:
         log.append(f"[警告] 開戶數更新失敗：{e}")
 
+    # ---- 7. 超額儲蓄：主計總處「國民所得統計及國內經濟情勢展望」新聞稿 附表5〈儲蓄與投資〉xlsx ----
+    #   每年 2/5/8/11 月發布。路徑：新聞稿列表 → 最新含「預測」之新聞稿 → 附件 t5.xlsx（標準庫解析）。
+    #   失敗則維持 data.json 既有值。單位：百萬元 → 兆元；(f)=預測、(p)=初步、(r)=修正。
+    try:
+        import re as _re, zipfile as _zf, io as _io, html as _html
+        import xml.etree.ElementTree as _ET
+        _NS = "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}"
+
+        def _get(u, binary=False):
+            req = urllib.request.Request(u, headers={"User-Agent": "Mozilla/5.0 dash-updater/1.0"})
+            try:
+                with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
+                    b = r.read()
+            except urllib.error.URLError as e:
+                # macOS python 對 stat.gov.tw / ws.dgbas.gov.tw 憑證鏈驗證失敗；公開資料改用未驗證 context 重試
+                if "CERTIFICATE" not in str(e):
+                    raise
+                with urllib.request.urlopen(req, timeout=TIMEOUT, context=ssl._create_unverified_context()) as r:
+                    b = r.read()
+            return b if binary else b.decode("utf-8", "ignore")
+
+        lst = _get("https://www.stat.gov.tw/News.aspx?n=2677&sms=10980")
+        href = title = None
+        for mm in _re.finditer(r'href="([^"]*News_Content\.aspx[^"]*)"[^>]*>(.*?)</a>', lst, _re.S):
+            t = _html.unescape(_re.sub(r"<[^>]+>", "", mm.group(2))).strip()
+            if "預測" in t:
+                href, title = _html.unescape(mm.group(1)), t
+                break
+        if not href:
+            raise RuntimeError("新聞稿列表找不到含「預測」之發布")
+        if not href.startswith("http"):
+            href = "https://www.stat.gov.tw/" + href.lstrip("/")
+        page = _get(href)
+        m5 = _re.search(r'href="([^"]+/t5\.xlsx)"', page)
+        if not m5:
+            raise RuntimeError("新聞稿頁面無 t5.xlsx 附件")
+        t5url = _html.unescape(m5.group(1))
+        md = _re.search(r'(1\d{2})[-/.](\d{2})[-/.](\d{2})', page)      # 發布日期（民國）
+        rel_iso = (f"{int(md.group(1))+1911}-{md.group(2)}-{md.group(3)}" if md
+                   else datetime.date.today().isoformat())
+
+        z = _zf.ZipFile(_io.BytesIO(_get(t5url, binary=True)))
+        ss = []
+        if "xl/sharedStrings.xml" in z.namelist():
+            ss = ["".join(t.text or "" for t in si.iter(_NS + "t"))
+                  for si in _ET.fromstring(z.read("xl/sharedStrings.xml")).iter(_NS + "si")]
+        def _cell(c):
+            t = c.get("t"); v = c.find(_NS + "v")
+            if t == "s" and v is not None: return ss[int(v.text)]
+            if t == "inlineStr": return "".join(x.text or "" for x in c.iter(_NS + "t"))
+            return v.text if v is not None else ""
+        def _num(x):
+            try: return float(str(x).replace(",", ""))
+            except Exception: return None
+        def _tri(x):                    # 百萬元 → 兆元
+            return None if x is None else round(x / 1e6, 2)
+
+        annual, quarterly, cur_year = [], [], None
+        sheet = sorted(n for n in z.namelist() if n.startswith("xl/worksheets/sheet"))[0]
+        for row in _ET.fromstring(z.read(sheet)).iter(_NS + "row"):
+            cols = {_re.match(r"[A-Z]+", c.get("r")).group(0): _cell(c) for c in row.iter(_NS + "c")}
+            a = (cols.get("A") or "").strip().replace(" ", "")
+            my = _re.match(r"^(\d{3})年(?:\((\w)\))?$", a)
+            mq = _re.match(r"^第(\d)季(?:\((\w)\))?$", a)
+            if not (my or mq):
+                continue
+            sav, savR = _num(cols.get("B")), _num(cols.get("C"))
+            inv, invR = _num(cols.get("D")), _num(cols.get("E"))
+            ex,  exR  = _num(cols.get("F")), _num(cols.get("G"))
+            if ex is None or exR is None:
+                continue
+            if my:
+                cur_year = int(my.group(1)) + 1911
+                annual.append({"y": cur_year, "f": (my.group(2) or "") == "f",
+                               "sav": _tri(sav), "savRate": savR, "inv": _tri(inv), "invRate": invR,
+                               "ex": _tri(ex), "exRate": exR})
+            elif cur_year:
+                quarterly.append({"q": f"{cur_year}Q{mq.group(1)}", "flag": mq.group(2) or "",
+                                  "ex": _tri(ex), "exRate": exR, "savRate": savR, "invRate": invR})
+        if len(annual) < 5:
+            raise RuntimeError(f"表5 解析僅得 {len(annual)} 個年度，疑似格式變動")
+        data["savings"] = {
+            "source": "主計總處 國民所得統計及國內經濟情勢展望 新聞稿 附表5〈儲蓄與投資〉",
+            "release": rel_iso, "releaseTitle": title[:80], "url": t5url,
+            "annual": annual, "quarterly": quarterly,
+        }
+        fc = [a for a in annual if a["f"]]
+        log.append(f"超額儲蓄（主計總處 {rel_iso} 發布）：年度 {len(annual)} 點、季 {len(quarterly)} 點；"
+                   + "；".join(f"{a['y']}(f) {a['ex']} 兆／{a['exRate']}%" for a in fc))
+    except Exception as e:
+        log.append(f"[警告] 超額儲蓄更新失敗（維持既有值）：{e}")
+
     data["meta"]["updated"] = datetime.date.today().isoformat()
     data["meta"]["asLabel"] = (f"財報 {data['meta'].get('finPeriod','—')}・"
                                f"市佔 {data['market'].get('shareYM','—')}（手續費口徑）")
