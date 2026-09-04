@@ -45,7 +45,7 @@ window.DASH_DATA = {
   "market": {
     "turnoverYear": 101.08,
     "turnoverPrev": 99.81,
-    "turnoverMonth": 4.01,
+    "turnoverMonth": 4.02,
     "turnoverMonthLabel": "2026/09 本月累計",
     "turnoverSeries": [
       {
@@ -1027,7 +1027,7 @@ window.DASH_DATA = {
       {
         "d": "09-04",
         "c": 46551.13,
-        "v": 8558
+        "v": 8582
       }
     ],
     "turnoverYTD": 156.0,
