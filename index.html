@@ -36,8 +36,8 @@
       "usco  usco  usco  usco  grow  grow"
       "chart chart chart chart rank  rank"
       "mturn mturn mturn mturn rank  rank"
-      "save  save  save  save  save  save"
       "mcap  mcap  mcap  idx   idx   idx"
+      "save  save  save  save  save  save"
       "table table table table table table"
       "note  note  note  note  note  note";}
   .card{background:linear-gradient(145deg,rgba(29,30,45,.98),rgba(23,24,37,.98));border:1px solid rgba(138,140,166,.10);border-radius:var(--r);padding:22px 24px;position:relative;overflow:hidden;box-shadow:0 14px 38px rgba(0,0,0,.12)}
@@ -206,7 +206,7 @@
 
   @media(max-width:920px){
     .bento{grid-template-columns:repeat(2,1fr);grid-template-areas:
-      "turn turn" "usco usco" "grow grow" "chart chart" "mturn mturn" "rank rank" "save save" "mcap idx"
+      "turn turn" "usco usco" "grow grow" "chart chart" "mturn mturn" "rank rank" "mcap idx" "save save"
       "table table" "note note";}
     .ibig{font-size:44px}
     .istats{gap:14px 24px}
@@ -217,7 +217,7 @@
   @media(max-width:560px){
     body{padding:20px 12px 48px}
     .bento{grid-template-columns:1fr;gap:12px;grid-template-areas:
-      "turn" "usco" "grow" "chart" "mturn" "rank" "save" "mcap" "idx" "table" "note";}
+      "turn" "usco" "grow" "chart" "mturn" "rank" "mcap" "idx" "save" "table" "note";}
     .mtlegend{flex-wrap:wrap;gap:8px 12px;font-size:11px}
     .mtlegend span[style*="auto"]{margin-left:0!important}
     .card{padding:18px 16px;--r:18px}
