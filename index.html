@@ -295,9 +295,9 @@
 
     <!-- 市佔排行（藍色長條） -->
     <div class="card a-rank">
-      <div class="ctitle"><span>券商市佔排行</span><span class="dchip" id="dcShare"></span></div>
+      <div class="ctitle"><span id="rankTitle">券商市佔排行</span><span class="dchip" id="dcShare"></span></div>
       <div class="rsub"><span id="rsubTxt">經紀手續費收入市佔</span><span class="info" id="rsubTip" data-tip="市佔率＝券商「經紀手續費收入」占全市場（65 家、含外資券商）比重。來源：證交所各券商收支概況表（t187ap21），每月自動更新。排名徽章＝全市場真實名次。">i</span></div>
-      <div class="tabs stabs" id="shareTabs"><button data-b="fee" class="on">手續費</button><button data-b="vol">成交量</button><button data-b="rev">營收</button></div>
+      <div class="tabs stabs" id="shareTabs"><button data-b="fee" class="on">手續費</button><button data-b="vol">成交量</button><button data-b="rev">全年營收</button></div>
       <div id="ranking"></div>
     </div>
 
@@ -820,9 +820,9 @@ const BASIS = {
   vol:{ key:'shareVol', rk:'rankVol', short:'成交量', label:'集中市場成交金額市佔', ym:()=>D.market.volYM,
         tip:()=>`市佔率＝券商（總＋分公司）在集中市場的成交金額（買＋賣合計）占整體市場比重。來源：證交所「證券商成交金額表」月報（${D.market.volFirms||'—'} 家、含外資），每月約第 7 個營業日上架後自動更新。統計範圍為上市證券，不含上櫃。排名徽章＝全市場真實名次。`,
         th:'集中市場成交金額（買賣合計）占整體市場比重・證交所證券商成交金額表・每月自動更新' },
-  rev:{ key:'shareRev', rk:'rankRev', short:'營收', label:'證券商月營收市佔', ym:()=>D.market.revYM,
-        tip:()=>`市佔率＝券商當月營業收入占「公發以上證券商」（${D.market.revFirms||'—'} 家）月營收合計比重。來源：TWSE／TPEX 月營收申報 t187ap05（證券子公司本身、非金控），每月 10 日後自動更新。不含外資分公司與非公發券商；證券業營收含自營評價損益，單月可能為負，占比會隨之波動。`,
-        th:'當月營收占公發以上證券商合計比重・月營收申報 t187ap05・每月自動更新' }
+  rev:{ key:'shareRev', rk:'rankRev', short:'全年營收', label:'今年累計營收市佔', ym:()=>D.market.revLabel||D.market.revYM,
+        tip:()=>`市佔率＝券商今年 1 月至最新申報月的累計營業收入，占「公發以上證券商」（${D.market.revFirms||'—'} 家）累計營收合計比重（合計 ${D.market.revTotal||'—'} 億）。來源：TWSE／TPEX 月營收申報 t187ap05（證券子公司本身、非金控），每月 10 日後自動更新。不含外資分公司與非公發券商；證券業營收含自營評價損益，可能為負。`,
+        th:'今年累計營收占公發以上證券商累計合計比重・月營收申報 t187ap05・每月自動更新' }
 };
 let curBasis = 'fee';
 try{ const _s = localStorage.getItem('shareBasis'); if(BASIS[_s]) curBasis = _s; }catch(e){}
@@ -840,6 +840,7 @@ function renderRanking(){
   </div>`;}).join('');
   const ym = B.ym() || '';
   const rsub = document.getElementById("rsubTxt"); if(rsub) rsub.textContent = B.label + (ym?'・'+ym:'');
+  const rt = document.getElementById("rankTitle"); if(rt) rt.textContent = `券商市佔排行・${B.short}`;
   const tip  = document.getElementById("rsubTip"); if(tip) tip.dataset.tip = B.tip();
   const dc   = document.getElementById("dcShare"); if(dc) dc.innerHTML = ym ? `資料 <b>${ym}</b>` : '';
   const th   = document.querySelector('thead th[data-sort="share"]');

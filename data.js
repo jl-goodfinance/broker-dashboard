@@ -204,10 +204,10 @@ window.DASH_DATA = {
         "d": 21
       }
     ],
-    "taiex": 46551.13,
-    "taiexChg": 693.47,
-    "taiexDate": "2026-09-04",
-    "taiexYearPct": 60.7,
+    "taiex": 47326.27,
+    "taiexChg": 0.0,
+    "taiexDate": "2026-09-07",
+    "taiexYearPct": 63.4,
     "turnoverTTM": 204.6,
     "turnoverTTMPrev": 87.5,
     "turnoverTTMLabel": "2025/08–2026/08",
@@ -1028,6 +1028,11 @@ window.DASH_DATA = {
         "d": "09-04",
         "c": 46551.13,
         "v": 8582
+      },
+      {
+        "d": "09-07",
+        "c": 47326.27,
+        "v": 0
       }
     ],
     "turnoverYTD": 156.0,
@@ -1035,11 +1040,12 @@ window.DASH_DATA = {
     "turnoverYTDLabel": "2026/01–09",
     "turnoverMonthDays": 4,
     "revYM": "2026/07",
-    "revTotal": 356.5,
+    "revTotal": 3194.5,
     "revFirms": 38,
     "volYM": "2026/08",
     "volTotal": 38.23,
-    "volFirms": 66
+    "volFirms": 66,
+    "revLabel": "2026/01–07"
   },
   "brokers": [
     {
@@ -1061,7 +1067,7 @@ window.DASH_DATA = {
       "yRevYoY": 114.9,
       "rank": 1,
       "yRevPrev": 449.2,
-      "shareRev": 39.54,
+      "shareRev": 30.22,
       "rankRev": 1,
       "rankVol": 1,
       "shareVol": 16.51,
@@ -1086,8 +1092,8 @@ window.DASH_DATA = {
       "yRevYoY": 108.9,
       "rank": 3,
       "yRevPrev": 202.4,
-      "shareRev": 11.77,
-      "rankRev": 3,
+      "shareRev": 13.23,
+      "rankRev": 2,
       "rankVol": 2,
       "shareVol": 10.5,
       "shareVolYtd": 10.88
@@ -1111,8 +1117,8 @@ window.DASH_DATA = {
       "yRevYoY": 116.8,
       "rank": 2,
       "yRevPrev": 140.8,
-      "shareRev": 14.0,
-      "rankRev": 2,
+      "shareRev": 9.55,
+      "rankRev": 3,
       "rankVol": 3,
       "shareVol": 6.84,
       "shareVolYtd": 6.9
@@ -1136,7 +1142,7 @@ window.DASH_DATA = {
       "yRevYoY": 102.2,
       "rank": 4,
       "yRevPrev": 113.5,
-      "shareRev": 11.0,
+      "shareRev": 7.19,
       "rankRev": 4,
       "rankVol": 6,
       "shareVol": 4.96,
@@ -1161,8 +1167,8 @@ window.DASH_DATA = {
       "yRevYoY": 116.1,
       "rank": 5,
       "yRevPrev": 65.7,
-      "shareRev": 6.75,
-      "rankRev": 5,
+      "shareRev": 4.44,
+      "rankRev": 7,
       "rankVol": 7,
       "shareVol": 4.66,
       "shareVolYtd": 4.63
@@ -1186,8 +1192,8 @@ window.DASH_DATA = {
       "yRevYoY": 111.0,
       "rank": 9,
       "yRevPrev": 100.8,
-      "shareRev": 5.74,
-      "rankRev": 6,
+      "shareRev": 6.66,
+      "rankRev": 5,
       "rankVol": 11,
       "shareVol": 3.39,
       "shareVolYtd": 3.28
@@ -1211,8 +1217,8 @@ window.DASH_DATA = {
       "yRevYoY": 252.7,
       "rank": 11,
       "yRevPrev": 54.5,
-      "shareRev": 4.74,
-      "rankRev": 7,
+      "shareRev": 6.02,
+      "rankRev": 6,
       "rankVol": 14,
       "shareVol": 2.26,
       "shareVolYtd": 2.36
@@ -1236,7 +1242,7 @@ window.DASH_DATA = {
       "yRevYoY": 126.7,
       "rank": 10,
       "yRevPrev": 37.7,
-      "shareRev": 2.99,
+      "shareRev": 2.67,
       "rankRev": 9,
       "rankVol": 13,
       "shareVol": 2.26,
@@ -1261,8 +1267,8 @@ window.DASH_DATA = {
       "yRevYoY": 103.2,
       "rank": 15,
       "yRevPrev": 41.6,
-      "shareRev": 0.8,
-      "rankRev": 15,
+      "shareRev": 2.64,
+      "rankRev": 10,
       "rankVol": 15,
       "shareVol": 2.08,
       "shareVolYtd": 2.07
@@ -1291,8 +1297,8 @@ window.DASH_DATA = {
       "sProfit": 21.48,
       "sYM": "2026/07",
       "yRevPrev": 6.7,
-      "shareRev": 0.26,
-      "rankRev": 18,
+      "shareRev": 0.96,
+      "rankRev": 17,
       "rankVol": 31,
       "shareVol": 0.25,
       "shareVolYtd": 0.27

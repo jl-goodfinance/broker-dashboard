@@ -190,7 +190,7 @@ def main():
         mhit.append(b["name"])
     log.append(f"當月營收({mym}) 證券層級更新 {len(mhit)} 家：{'、'.join(mhit)}")
 
-    # ---- 3b. 營收市佔：占「公發以上證券商」月營收合計（t187ap05 P+L+O；不含外資分公司與非公發券商）----
+    # ---- 3b. 營收市佔（全年口徑）：今年累計營收占「公發以上證券商」累計合計（t187ap05 P+L+O；不含外資分公司與非公發券商）----
     #   產業別標示不一致（公發=證券／上市=金融保險業／上櫃=金融業），故以「產業別含證券」或「名稱含證且不含期」認定券商。
     try:
         sec = {}
@@ -200,7 +200,7 @@ def main():
                 sec[code] = r
         yms = sorted({str(r.get("資料年月", "")) for r in sec.values() if r.get("資料年月")})
         rym = yms[-1] if yms else ""
-        cur = {c: _f(r.get("營業收入-當月營收")) for c, r in sec.items() if str(r.get("資料年月", "")) == rym}
+        cur = {c: _f(r.get("累計營業收入-當月累計營收")) for c, r in sec.items() if str(r.get("資料年月", "")) == rym}
         rtot = sum(cur.values())
         if len(cur) < 15 or rtot <= 0:
             raise RuntimeError(f"券商家數 {len(cur)}／合計 {rtot} 不合理")
@@ -212,9 +212,10 @@ def main():
                 b["shareRev"], b["rankRev"] = round(cur[c] / rtot * 100, 2), rpos[c]
                 rhit.append(b["name"])
         data["market"]["revYM"] = f"{int(rym[:3]) + 1911}/{rym[3:5]}" if len(rym) >= 5 else ""
-        data["market"]["revTotal"] = round(rtot / 1e5, 1)      # 億
+        data["market"]["revLabel"] = f"{int(rym[:3]) + 1911}/01–{rym[3:5]}" if len(rym) >= 5 else ""   # 今年累計期間
+        data["market"]["revTotal"] = round(rtot / 1e5, 1)      # 億（今年累計合計）
         data["market"]["revFirms"] = len(cur)
-        log.append(f"營收市佔（{data['market']['revYM']}・公發以上證券商 {len(cur)} 家、合計 {data['market']['revTotal']} 億）更新 {len(rhit)} 家")
+        log.append(f"營收市佔（今年累計 {data['market']['revLabel']}・公發以上證券商 {len(cur)} 家、累計合計 {data['market']['revTotal']} 億）更新 {len(rhit)} 家")
     except Exception as e:
         log.append(f"[警告] 營收市佔計算失敗（維持既有值）：{e}")
 
