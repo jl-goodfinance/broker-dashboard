@@ -210,6 +210,7 @@ def main():
             c = b.get("code")
             if c in cur:
                 b["shareRev"], b["rankRev"] = round(cur[c] / rtot * 100, 2), rpos[c]
+                b["revAmt"] = round(cur[c] / 1e5, 1)                # 今年累計營收（億）
                 rhit.append(b["name"])
         data["market"]["revYM"] = f"{int(rym[:3]) + 1911}/{rym[3:5]}" if len(rym) >= 5 else ""
         data["market"]["revLabel"] = f"{int(rym[:3]) + 1911}/01–{rym[3:5]}" if len(rym) >= 5 else ""   # 今年累計期間
@@ -226,7 +227,7 @@ def main():
         ranked = sorted(fee, key=lambda r: -_f(r["本月金額"]))
         pos = {}
         for i, r in enumerate(ranked, 1):
-            pos[r["券商名稱"].replace(" ", "").replace("　", "")] = (i, _f(r["本月金額"]) / total * 100)
+            pos[r["券商名稱"].replace(" ", "").replace("　", "")] = (i, _f(r["本月金額"]) / total * 100, _f(r["本月金額"]))
         NAME_MAP = {"元大證券": "元大", "凱基證券": "凱基", "富邦證券": "富邦", "永豐金證券": "永豐金",
                     "國泰證券": "國泰綜合", "群益金鼎證券": "群益金鼎", "統一證券": "統一",
                     "華南永昌證券": "華南永昌", "兆豐證券": "兆豐", "美好證券": "美好"}
@@ -240,6 +241,7 @@ def main():
             if key and key in pos:
                 b["rank"] = pos[key][0]
                 b["share"] = round(pos[key][1], 2)
+                b["feeAmt"] = round(pos[key][2] / 1e8, 2)          # 當月經紀手續費收入（億）
                 b.pop("rankApprox", None)
                 shit.append(b["name"])
         data["market"]["feeTotal"] = round(total / 1e8, 1)   # 全市場月手續費（億）
@@ -306,12 +308,13 @@ def main():
         firms = sorted(tot_rows.values(), key=lambda f: -f[1])
         if len(firms) < 20:
             raise RuntimeError(f"僅解析到 {len(firms)} 家，疑似格式變動")
-        vpos = {f[0]: (i, f[2], f[3]) for i, f in enumerate(firms, 1)}
+        vpos = {f[0]: (i, f[2], f[3], f[1]) for i, f in enumerate(firms, 1)}
         vhit = []
         for b in data["brokers"]:
             key = b["name"].replace("證券", "")
             if key in vpos:
                 b["rankVol"], b["shareVol"], b["shareVolYtd"] = vpos[key][0], round(vpos[key][1], 2), round(vpos[key][2], 2)
+                b["volAmt"] = round(vpos[key][3] / 1e8, 1)          # 當月集中市場成交金額（億，買賣合計）
                 vhit.append(b["name"])
         data["market"]["volYM"] = f"{vy}/{vm:02d}"
         data["market"]["volTotal"] = round(sum(f[1] for f in firms) / 1e12, 2)    # 兆（買＋賣合計）

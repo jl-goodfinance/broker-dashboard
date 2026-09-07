@@ -113,7 +113,8 @@
   .prow .pl{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;font-weight:600;margin-bottom:8px}
   .prow .pl .pn{display:inline-flex;align-items:center;gap:8px}
   .prow .pl .ri{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:20px;padding:0 6px;border-radius:6px;background:rgba(255,255,255,.06);color:var(--muted);font-size:10px;font-variant-numeric:tabular-nums}
-  .prow .pl .pv{font-size:13px;color:var(--muted);font-weight:600;font-variant-numeric:tabular-nums}
+  .prow .pl .pv{font-size:13px;color:var(--muted);font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
+  .prow .pl .pv .pa{display:block;font-size:11px;color:var(--muted2);font-weight:500;margin-top:1px}
   .ptrack{height:6px;border-radius:5px;background:#323237;overflow:hidden}
   .ptrack > i{display:block;height:100%;border-radius:5px;background:linear-gradient(90deg,var(--indigo),var(--cyan))}
   .prow.us .pl{color:var(--purple)}
@@ -815,12 +816,15 @@ const us = BROKERS.find(b => b.us);
 // ===== 市佔口徑：手續費／成交量／營收（排行卡、表格、美好卡同步切換）=====
 const BASIS = {
   fee:{ key:'share', rk:'rank', short:'手續費', label:'經紀手續費收入市佔', ym:()=>D.market.shareYM,
+        amt:b=>b.feeAmt, fmt:v=>v.toLocaleString(undefined,{maximumFractionDigits:2})+' 億', total:()=>D.market.feeTotal!=null?`全市場 ${D.market.feeTotal.toLocaleString()} 億`:'',
         tip:()=>`市佔率＝券商「經紀手續費收入」占全市場（65 家、含外資券商）比重。來源：證交所各券商收支概況表（t187ap21），每月自動更新。以手續費計、非成交金額——折扣較深的券商佔比會低於其成交量佔比。排名徽章＝全市場真實名次。`,
         th:'經紀手續費收入占全市場（65 家含外資）比重・證交所收支概況表・每月自動更新' },
   vol:{ key:'shareVol', rk:'rankVol', short:'成交量', label:'集中市場成交金額市佔', ym:()=>D.market.volYM,
+        amt:b=>b.volAmt, fmt:v=>v>=10000?(v/10000).toFixed(2)+' 兆':v.toLocaleString(undefined,{maximumFractionDigits:0})+' 億', total:()=>D.market.volTotal!=null?`集中市場 ${D.market.volTotal} 兆（買賣合計）`:'',
         tip:()=>`市佔率＝券商（總＋分公司）在集中市場的成交金額（買＋賣合計）占整體市場比重。來源：證交所「證券商成交金額表」月報（${D.market.volFirms||'—'} 家、含外資），每月約第 7 個營業日上架後自動更新。統計範圍為上市證券，不含上櫃。排名徽章＝全市場真實名次。`,
         th:'集中市場成交金額（買賣合計）占整體市場比重・證交所證券商成交金額表・每月自動更新' },
   rev:{ key:'shareRev', rk:'rankRev', short:'全年營收', label:'今年累計營收市佔', ym:()=>D.market.revLabel||D.market.revYM,
+        amt:b=>b.revAmt, fmt:v=>v.toLocaleString(undefined,{maximumFractionDigits:1})+' 億', total:()=>D.market.revTotal!=null?`${D.market.revFirms} 家合計 ${D.market.revTotal.toLocaleString()} 億`:'',
         tip:()=>`市佔率＝券商今年 1 月至最新申報月的累計營業收入，占「公發以上證券商」（${D.market.revFirms||'—'} 家）累計營收合計比重（合計 ${D.market.revTotal||'—'} 億）。來源：TWSE／TPEX 月營收申報 t187ap05（證券子公司本身、非金控），每月 10 日後自動更新。不含外資分公司與非公發券商；證券業營收含自營評價損益，可能為負。`,
         th:'今年累計營收占公發以上證券商累計合計比重・月營收申報 t187ap05・每月自動更新' }
 };
@@ -828,6 +832,7 @@ let curBasis = 'fee';
 try{ const _s = localStorage.getItem('shareBasis'); if(BASIS[_s]) curBasis = _s; }catch(e){}
 const bShare = b => { const v = b[BASIS[curBasis].key]; return (v==null) ? null : v; };
 const bRank  = b => b[BASIS[curBasis].rk] || null;
+const bAmt   = b => { const B=BASIS[curBasis]; const v=B.amt(b); return v==null ? '' : B.fmt(v); };
 
 function renderRanking(){
   const B = BASIS[curBasis];
@@ -835,11 +840,11 @@ function renderRanking(){
   const maxShare = Math.max(...list.map(b=>bShare(b)??0), 0.01);
   document.getElementById("ranking").innerHTML = list.map(b=>{ const s=bShare(b); return `
   <div class="prow ${b.us?'us':''}">
-    <div class="pl"><span class="pn"><span class="ri">#${bRank(b)||'—'}</span><span>${b.name}</span></span><span class="pv">${s!=null?s.toFixed(2)+'%':'—'}</span></div>
+    <div class="pl"><span class="pn"><span class="ri">#${bRank(b)||'—'}</span><span>${b.name}</span></span><span class="pv">${s!=null?s.toFixed(2)+'%':'—'}${bAmt(b)?`<span class="pa">${bAmt(b)}</span>`:''}</span></div>
     <div class="ptrack"><i style="width:${s!=null&&s>0?(s/maxShare*100).toFixed(1):0}%"></i></div>
   </div>`;}).join('');
   const ym = B.ym() || '';
-  const rsub = document.getElementById("rsubTxt"); if(rsub) rsub.textContent = B.label + (ym?'・'+ym:'');
+  const rsub = document.getElementById("rsubTxt"); if(rsub) rsub.textContent = B.label + (ym?'・'+ym:'') + (B.total()?'・'+B.total():'');
   const rt = document.getElementById("rankTitle"); if(rt) rt.textContent = `券商市佔排行・${B.short}`;
   const tip  = document.getElementById("rsubTip"); if(tip) tip.dataset.tip = B.tip();
   const dc   = document.getElementById("dcShare"); if(dc) dc.innerHTML = ym ? `資料 <b>${ym}</b>` : '';
@@ -877,7 +882,7 @@ document.getElementById("usTile").innerHTML = `
   <div class="stats">
     <div><div class="n">${us.mRev!=null?us.mRev:'—'}</div><div class="k">當月營收（億）${us.mRevYM?'・'+us.mRevYM:''}</div></div>
     <div><div class="n">${us.yRev!=null?us.yRev:'—'}</div><div class="k">今年累計收益（億）${us.mRevYM?'・至'+parseInt(us.mRevYM.slice(5))+'月':''}</div></div>
-    <div><div class="n">${bShare(us)!=null?bShare(us).toFixed(2)+'%':'—'}</div><div class="k">市佔率（${BASIS[curBasis].short}）</div></div>
+    <div><div class="n">${bShare(us)!=null?bShare(us).toFixed(2)+'%':'—'}</div><div class="k">市佔率（${BASIS[curBasis].short}）${bAmt(us)?'・'+bAmt(us):''}</div></div>
     <div><div class="n">${us.sProfit!=null?us.sProfit:us.p25}</div><div class="k">${us.sProfit!=null?`今年稅後淨利（億${usProfitYM?`・自結至${parseInt(usProfitYM.slice(5))}月`:"・自結"}）`:'淨利（億）'}</div></div>
   </div>`;
 }
@@ -912,7 +917,7 @@ function renderTable(){
     return `<tr class="${isUs?'usrow':''} ${isFast?'fast':''}">
       <td><span class="rank ${(!isUs&&bRank(b)&&bRank(b)<=3)?'rklead':''} ${isUs?'usrank':''}">${rk}</span>
         <span class="name">${b.name}</span>${isUs?'<span class="tag-us">本公司</span>':''}${isFast?'<span class="badge">🚀 成長最快</span>':''}</td>
-      <td class="num">${bShare(b)!=null?bShare(b).toFixed(2)+'%':'—'}</td>
+      <td class="num">${bShare(b)!=null?bShare(b).toFixed(2)+'%':'—'}${bAmt(b)?`<div class="qline">${bAmt(b)}</div>`:''}</td>
       <td class="num">${mCell}</td>
       <td class="num">${yCell}</td>
       <td class="num">${b.p25.toLocaleString()}<span class="dot ${conf}"></span><div class="qline">${annualYear} 全年</div>${qPf}${sPf}</td>

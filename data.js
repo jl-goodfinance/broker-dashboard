@@ -1071,7 +1071,10 @@ window.DASH_DATA = {
       "rankRev": 1,
       "rankVol": 1,
       "shareVol": 16.51,
-      "shareVolYtd": 16.36
+      "shareVolYtd": 16.36,
+      "revAmt": 965.4,
+      "feeAmt": 43.7,
+      "volAmt": 65741.7
     },
     {
       "name": "凱基證券",
@@ -1096,7 +1099,10 @@ window.DASH_DATA = {
       "rankRev": 2,
       "rankVol": 2,
       "shareVol": 10.5,
-      "shareVolYtd": 10.88
+      "shareVolYtd": 10.88,
+      "revAmt": 422.7,
+      "feeAmt": 22.49,
+      "volAmt": 41814.8
     },
     {
       "name": "富邦證券",
@@ -1121,7 +1127,10 @@ window.DASH_DATA = {
       "rankRev": 3,
       "rankVol": 3,
       "shareVol": 6.84,
-      "shareVolYtd": 6.9
+      "shareVolYtd": 6.9,
+      "revAmt": 305.2,
+      "feeAmt": 23.0,
+      "volAmt": 27222.1
     },
     {
       "name": "永豐金證券",
@@ -1146,7 +1155,10 @@ window.DASH_DATA = {
       "rankRev": 4,
       "rankVol": 6,
       "shareVol": 4.96,
-      "shareVolYtd": 4.97
+      "shareVolYtd": 4.97,
+      "revAmt": 229.6,
+      "feeAmt": 18.29,
+      "volAmt": 19726.2
     },
     {
       "name": "國泰證券",
@@ -1171,7 +1183,10 @@ window.DASH_DATA = {
       "rankRev": 7,
       "rankVol": 7,
       "shareVol": 4.66,
-      "shareVolYtd": 4.63
+      "shareVolYtd": 4.63,
+      "revAmt": 141.9,
+      "feeAmt": 16.09,
+      "volAmt": 18558.3
     },
     {
       "name": "群益金鼎證券",
@@ -1196,7 +1211,10 @@ window.DASH_DATA = {
       "rankRev": 5,
       "rankVol": 11,
       "shareVol": 3.39,
-      "shareVolYtd": 3.28
+      "shareVolYtd": 3.28,
+      "revAmt": 212.7,
+      "feeAmt": 9.55,
+      "volAmt": 13479.7
     },
     {
       "name": "統一證券",
@@ -1221,7 +1239,10 @@ window.DASH_DATA = {
       "rankRev": 6,
       "rankVol": 14,
       "shareVol": 2.26,
-      "shareVolYtd": 2.36
+      "shareVolYtd": 2.36,
+      "revAmt": 192.3,
+      "feeAmt": 7.92,
+      "volAmt": 8989.7
     },
     {
       "name": "華南永昌證券",
@@ -1246,7 +1267,10 @@ window.DASH_DATA = {
       "rankRev": 9,
       "rankVol": 13,
       "shareVol": 2.26,
-      "shareVolYtd": 2.33
+      "shareVolYtd": 2.33,
+      "revAmt": 85.4,
+      "feeAmt": 7.95,
+      "volAmt": 8998.9
     },
     {
       "name": "兆豐證券",
@@ -1271,7 +1295,10 @@ window.DASH_DATA = {
       "rankRev": 10,
       "rankVol": 15,
       "shareVol": 2.08,
-      "shareVolYtd": 2.07
+      "shareVolYtd": 2.07,
+      "revAmt": 84.4,
+      "feeAmt": 6.57,
+      "volAmt": 8269.5
     },
     {
       "name": "美好證券",
@@ -1301,7 +1328,10 @@ window.DASH_DATA = {
       "rankRev": 17,
       "rankVol": 31,
       "shareVol": 0.25,
-      "shareVolYtd": 0.27
+      "shareVolYtd": 0.27,
+      "revAmt": 30.6,
+      "feeAmt": 1.1,
+      "volAmt": 1011.4
     }
   ],
   "accountsMonthly": [
