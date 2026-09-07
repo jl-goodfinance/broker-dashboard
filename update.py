@@ -190,6 +190,34 @@ def main():
         mhit.append(b["name"])
     log.append(f"當月營收({mym}) 證券層級更新 {len(mhit)} 家：{'、'.join(mhit)}")
 
+    # ---- 3b. 營收市佔：占「公發以上證券商」月營收合計（t187ap05 P+L+O；不含外資分公司與非公發券商）----
+    #   產業別標示不一致（公發=證券／上市=金融保險業／上櫃=金融業），故以「產業別含證券」或「名稱含證且不含期」認定券商。
+    try:
+        sec = {}
+        for code, r in rev_m.items():
+            nm, ind = str(r.get("公司名稱", "")), str(r.get("產業別", ""))
+            if ("證券" in ind) or ("證" in nm and "期" not in nm):
+                sec[code] = r
+        yms = sorted({str(r.get("資料年月", "")) for r in sec.values() if r.get("資料年月")})
+        rym = yms[-1] if yms else ""
+        cur = {c: _f(r.get("營業收入-當月營收")) for c, r in sec.items() if str(r.get("資料年月", "")) == rym}
+        rtot = sum(cur.values())
+        if len(cur) < 15 or rtot <= 0:
+            raise RuntimeError(f"券商家數 {len(cur)}／合計 {rtot} 不合理")
+        rpos = {c: i for i, (c, v) in enumerate(sorted(cur.items(), key=lambda kv: -kv[1]), 1)}
+        rhit = []
+        for b in data["brokers"]:
+            c = b.get("code")
+            if c in cur:
+                b["shareRev"], b["rankRev"] = round(cur[c] / rtot * 100, 2), rpos[c]
+                rhit.append(b["name"])
+        data["market"]["revYM"] = f"{int(rym[:3]) + 1911}/{rym[3:5]}" if len(rym) >= 5 else ""
+        data["market"]["revTotal"] = round(rtot / 1e5, 1)      # 億
+        data["market"]["revFirms"] = len(cur)
+        log.append(f"營收市佔（{data['market']['revYM']}・公發以上證券商 {len(cur)} 家、合計 {data['market']['revTotal']} 億）更新 {len(rhit)} 家")
+    except Exception as e:
+        log.append(f"[警告] 營收市佔計算失敗（維持既有值）：{e}")
+
     # ---- 4. 全券商市佔率＋真實排名（經紀手續費收入口徑，t187ap21，月更）----
     try:
         fee = [r for r in fetch("/opendata/t187ap21") if r.get("會計科目名稱") == "經紀手續費收入"]
@@ -219,6 +247,77 @@ def main():
                    f"全市場月手續費 {data['market']['feeTotal']} 億")
     except Exception as e:
         log.append(f"[警告] 市佔(t187ap21) 失敗：{e}")
+
+    # ---- 4b. 成交量市佔：證交所「證券商成交金額表」月報（集中市場、買賣合計、含外資；約第 7 個營業日上架）----
+    #   URL：/staticFiles/inspection/inspection/03/003/YYYYMM_C03003.zip → 內含 BIFF .xls，需 xlrd（Actions 已 pip install）。
+    #   券商「合計」列已含其占整體市場百分比（當月＋年初至當月累計）；無分公司者取其「證券／自營商」單列。
+    try:
+        try:
+            import xlrd
+        except ImportError:
+            raise RuntimeError("缺少 xlrd（pip install xlrd）")
+        import zipfile as _zf, io as _io, re as _re
+
+        def _vol_zip(ym):
+            u = f"https://www.twse.com.tw/staticFiles/inspection/inspection/03/003/{ym}_C03003.zip"
+            req = urllib.request.Request(u, headers={"User-Agent": "Mozilla/5.0 dash-updater/1.0",
+                                                     "Referer": "https://www.twse.com.tw/"})
+            try:
+                with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
+                    return r.read()
+            except urllib.error.HTTPError as e:
+                if e.code == 404:
+                    return None
+                raise
+
+        vy, vm = datetime.date.today().year, datetime.date.today().month
+        blob = None
+        for _ in range(4):                       # 從上月起往回最多找 4 個月
+            vm -= 1
+            if vm == 0:
+                vy, vm = vy - 1, 12
+            blob = _vol_zip(f"{vy}{vm:02d}")
+            if blob and blob[:2] == b"PK":
+                break
+            blob = None
+        if not blob:
+            raise RuntimeError("近 4 個月證交所成交金額表皆不存在")
+        z = _zf.ZipFile(_io.BytesIO(blob))
+        xls = [n for n in z.namelist() if n.lower().endswith(".xls")][0]
+        sh = xlrd.open_workbook(file_contents=z.read(xls)).sheets()[0]
+
+        def _n(x):
+            try: return float(x)
+            except Exception: return 0.0
+        tot_rows, single = {}, {}
+        for i in range(sh.nrows):
+            v = [sh.cell_value(i, c) for c in range(sh.ncols)]
+            if len(v) < 7:
+                continue
+            code, kind = str(v[0]).strip(), str(v[2]).replace(" ", "").replace("　", "")
+            rec = (str(v[1]).strip(), _n(v[3]), _n(v[4]), _n(v[6]))          # 名稱, 當月金額, 當月%, 累計%
+            if kind == "合計" and _re.fullmatch(r"[0-9A-Za-z]{3}\*", code):
+                tot_rows[code[:3]] = rec
+            elif kind in ("證券", "自營商") and _re.fullmatch(r"[0-9A-Za-z]{4}", code):
+                single.setdefault(code[:3], rec)
+        for k, rec in single.items():
+            tot_rows.setdefault(k, rec)
+        firms = sorted(tot_rows.values(), key=lambda f: -f[1])
+        if len(firms) < 20:
+            raise RuntimeError(f"僅解析到 {len(firms)} 家，疑似格式變動")
+        vpos = {f[0]: (i, f[2], f[3]) for i, f in enumerate(firms, 1)}
+        vhit = []
+        for b in data["brokers"]:
+            key = b["name"].replace("證券", "")
+            if key in vpos:
+                b["rankVol"], b["shareVol"], b["shareVolYtd"] = vpos[key][0], round(vpos[key][1], 2), round(vpos[key][2], 2)
+                vhit.append(b["name"])
+        data["market"]["volYM"] = f"{vy}/{vm:02d}"
+        data["market"]["volTotal"] = round(sum(f[1] for f in firms) / 1e12, 2)    # 兆（買＋賣合計）
+        data["market"]["volFirms"] = len(firms)
+        log.append(f"成交量市佔（集中市場 {data['market']['volYM']}・{len(firms)} 家含外資）更新 {len(vhit)} 家")
+    except Exception as e:
+        log.append(f"[警告] 成交量市佔（證交所成交金額表）失敗（維持既有值）：{e}")
 
     # ---- 5. 月自結損益（重大訊息 t187ap04；公告只在當日 API 出現，抓到即長存）----
     import re

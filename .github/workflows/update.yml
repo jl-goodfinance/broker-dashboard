@@ -18,6 +18,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - run: pip install xlrd
 
       - name: 跑 update.py（抓 TWSE + FinMind）
         run: python3 update.py
