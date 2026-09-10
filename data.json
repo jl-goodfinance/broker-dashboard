@@ -44,7 +44,7 @@
   "market": {
     "turnoverYear": 101.08,
     "turnoverPrev": 99.81,
-    "turnoverMonth": 6.75,
+    "turnoverMonth": 7.5,
     "turnoverMonthLabel": "2026/09 本月累計",
     "turnoverSeries": [
       {
@@ -203,10 +203,10 @@
         "d": 21
       }
     ],
-    "taiex": 47183.36,
-    "taiexChg": 77.58,
-    "taiexDate": "2026-09-09",
-    "taiexYearPct": 62.9,
+    "taiex": 46940.49,
+    "taiexChg": -242.87,
+    "taiexDate": "2026-09-10",
+    "taiexYearPct": 62.1,
     "turnoverTTM": 204.6,
     "turnoverTTMPrev": 87.5,
     "turnoverTTMLabel": "2025/08–2026/08",
@@ -1042,12 +1042,17 @@
         "d": "09-09",
         "c": 47183.36,
         "v": 8160
+      },
+      {
+        "d": "09-10",
+        "c": 46940.49,
+        "v": 7507
       }
     ],
-    "turnoverYTD": 158.7,
+    "turnoverYTD": 159.5,
     "turnoverYTDPrev": 68.1,
     "turnoverYTDLabel": "2026/01–09",
-    "turnoverMonthDays": 7,
+    "turnoverMonthDays": 8,
     "revYM": "2026/07",
     "revTotal": 3194.5,
     "revFirms": 38,
@@ -1329,9 +1334,9 @@
       "code": "6021",
       "yRev": 30.6,
       "yRevYoY": 353.8,
-      "sProfitM": -0.26,
-      "sProfit": 21.48,
-      "sYM": "2026/07",
+      "sProfitM": 0.52,
+      "sProfit": 21.99,
+      "sYM": "2026/08",
       "yRevPrev": 6.7,
       "shareRev": 0.96,
       "rankRev": 17,
