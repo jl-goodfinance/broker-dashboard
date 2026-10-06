@@ -1,7 +1,7 @@
 {
   "_readme": "真實資料來源。全欄位由 update.py 自動更新（TWSE/TPEX/FinMind 官方API；開戶數來自證交所「投資人開戶人數變動統計表」月報 xlsx，次月首個營業日上架）。改完跑 python3 update.py 產生 data.js。",
   "meta": {
-    "updated": "2026-10-05",
+    "updated": "2026-10-06",
     "asLabel": "財報 2026Q2・市佔 2026/08（手續費口徑）",
     "finPeriod": "2026Q2"
   },
@@ -208,10 +208,10 @@
         "d": 20
       }
     ],
-    "taiex": 49712.04,
-    "taiexChg": 1236.3,
-    "taiexDate": "2026-10-05",
-    "taiexYearPct": 71.6,
+    "taiex": 49822.55,
+    "taiexChg": 0.0,
+    "taiexDate": "2026-10-06",
+    "taiexYearPct": 72.0,
     "turnoverTTM": 212.8,
     "turnoverTTMPrev": 88.0,
     "turnoverTTMLabel": "2025/09–2026/09",
@@ -1127,6 +1127,11 @@
         "d": "10-05",
         "c": 49712.04,
         "v": 12110
+      },
+      {
+        "d": "10-06",
+        "c": 49822.55,
+        "v": 0
       }
     ],
     "turnoverYTD": 172.6,
