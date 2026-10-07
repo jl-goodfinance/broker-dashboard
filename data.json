@@ -1,7 +1,7 @@
 {
   "_readme": "真實資料來源。全欄位由 update.py 自動更新（TWSE/TPEX/FinMind 官方API；開戶數來自證交所「投資人開戶人數變動統計表」月報 xlsx，次月首個營業日上架）。改完跑 python3 update.py 產生 data.js。",
   "meta": {
-    "updated": "2026-10-06",
+    "updated": "2026-10-07",
     "asLabel": "財報 2026Q2・市佔 2026/08（手續費口徑）",
     "finPeriod": "2026Q2"
   },
@@ -1141,8 +1141,8 @@
     "revYM": "2026/08",
     "revTotal": 3742.8,
     "revFirms": 38,
-    "volYM": "2026/08",
-    "volTotal": 38.23,
+    "volYM": "2026/09",
+    "volTotal": 33.7,
     "volFirms": 66,
     "revLabel": "2026/01–08"
   },
@@ -1169,11 +1169,11 @@
       "shareRev": 29.49,
       "rankRev": 1,
       "rankVol": 1,
-      "shareVol": 16.51,
-      "shareVolYtd": 16.36,
+      "shareVol": 15.92,
+      "shareVolYtd": 16.31,
       "revAmt": 1103.7,
       "feeAmt": 38.82,
-      "volAmt": 65741.7
+      "volAmt": 56111.5
     },
     {
       "name": "凱基證券",
@@ -1197,11 +1197,11 @@
       "shareRev": 13.57,
       "rankRev": 2,
       "rankVol": 2,
-      "shareVol": 10.5,
-      "shareVolYtd": 10.88,
+      "shareVol": 10.02,
+      "shareVolYtd": 10.8,
       "revAmt": 507.9,
       "feeAmt": 20.0,
-      "volAmt": 41814.8
+      "volAmt": 35320.8
     },
     {
       "name": "富邦證券",
@@ -1229,7 +1229,7 @@
       "shareVolYtd": 6.9,
       "revAmt": 357.0,
       "feeAmt": 20.78,
-      "volAmt": 27222.1
+      "volAmt": 24122.8
     },
     {
       "name": "永豐金證券",
@@ -1253,11 +1253,11 @@
       "shareRev": 7.18,
       "rankRev": 4,
       "rankVol": 6,
-      "shareVol": 4.96,
-      "shareVolYtd": 4.97,
+      "shareVol": 4.95,
+      "shareVolYtd": 4.96,
       "revAmt": 268.9,
       "feeAmt": 16.78,
-      "volAmt": 19726.2
+      "volAmt": 17440.9
     },
     {
       "name": "國泰證券",
@@ -1280,12 +1280,12 @@
       "yRevPrev": 78.7,
       "shareRev": 4.4,
       "rankRev": 8,
-      "rankVol": 7,
-      "shareVol": 4.66,
+      "rankVol": 8,
+      "shareVol": 4.69,
       "shareVolYtd": 4.63,
       "revAmt": 164.5,
       "feeAmt": 16.15,
-      "volAmt": 18558.3
+      "volAmt": 16546.6
     },
     {
       "name": "群益金鼎證券",
@@ -1309,11 +1309,11 @@
       "shareRev": 6.49,
       "rankRev": 5,
       "rankVol": 11,
-      "shareVol": 3.39,
-      "shareVolYtd": 3.28,
+      "shareVol": 3.45,
+      "shareVolYtd": 3.3,
       "revAmt": 243.0,
       "feeAmt": 8.42,
-      "volAmt": 13479.7
+      "volAmt": 12151.2
     },
     {
       "name": "統一證券",
@@ -1337,11 +1337,11 @@
       "shareRev": 6.14,
       "rankRev": 6,
       "rankVol": 14,
-      "shareVol": 2.26,
-      "shareVolYtd": 2.36,
+      "shareVol": 2.22,
+      "shareVolYtd": 2.35,
       "revAmt": 229.9,
       "feeAmt": 7.18,
-      "volAmt": 8989.7
+      "volAmt": 7827.8
     },
     {
       "name": "華南永昌證券",
@@ -1365,11 +1365,11 @@
       "shareRev": 2.59,
       "rankRev": 10,
       "rankVol": 13,
-      "shareVol": 2.26,
+      "shareVol": 2.29,
       "shareVolYtd": 2.33,
       "revAmt": 96.8,
       "feeAmt": 6.93,
-      "volAmt": 8998.9
+      "volAmt": 8061.3
     },
     {
       "name": "兆豐證券",
@@ -1393,11 +1393,11 @@
       "shareRev": 2.65,
       "rankRev": 9,
       "rankVol": 15,
-      "shareVol": 2.08,
+      "shareVol": 2.1,
       "shareVolYtd": 2.07,
       "revAmt": 99.4,
       "feeAmt": 5.9,
-      "volAmt": 8269.5
+      "volAmt": 7418.2
     },
     {
       "name": "美好證券",
@@ -1425,12 +1425,12 @@
       "yRevPrev": 9.6,
       "shareRev": 0.87,
       "rankRev": 17,
-      "rankVol": 31,
-      "shareVol": 0.25,
+      "rankVol": 32,
+      "shareVol": 0.26,
       "shareVolYtd": 0.27,
       "revAmt": 32.4,
       "feeAmt": 1.0,
-      "volAmt": 1011.4
+      "volAmt": 914.8
     }
   ],
   "accountsMonthly": [
