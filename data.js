@@ -2,7 +2,7 @@
 window.DASH_DATA = {
   "_readme": "真實資料來源。全欄位由 update.py 自動更新（TWSE/TPEX/FinMind 官方API；開戶數來自證交所「投資人開戶人數變動統計表」月報 xlsx，次月首個營業日上架）。改完跑 python3 update.py 產生 data.js。",
   "meta": {
-    "updated": "2026-10-12",
+    "updated": "2026-10-13",
     "asLabel": "財報 2026Q2・市佔 2026/08（手續費口徑）",
     "finPeriod": "2026Q2"
   },
@@ -209,10 +209,10 @@ window.DASH_DATA = {
         "d": 20
       }
     ],
-    "taiex": 49301.96,
-    "taiexChg": -11.48,
-    "taiexDate": "2026-10-12",
-    "taiexYearPct": 70.2,
+    "taiex": 48341.31,
+    "taiexChg": 0.0,
+    "taiexDate": "2026-10-13",
+    "taiexYearPct": 66.9,
     "turnoverTTM": 212.8,
     "turnoverTTMPrev": 88.0,
     "turnoverTTMLabel": "2025/09–2026/09",
@@ -1148,6 +1148,11 @@ window.DASH_DATA = {
         "d": "10-12",
         "c": 49301.96,
         "v": 8945
+      },
+      {
+        "d": "10-13",
+        "c": 48341.31,
+        "v": 0
       }
     ],
     "turnoverYTD": 176.4,
