@@ -6,7 +6,7 @@ window.DASH_DATA = {
     "asLabel": "財報 2026Q2・市佔 2026/09（手續費口徑）",
     "finPeriod": "2026Q2"
   },
-  "totalAccounts": 1476.3,
+  "totalAccounts": 1482.7,
   "accounts": [
     {
       "y": 2019,
@@ -38,15 +38,15 @@ window.DASH_DATA = {
     },
     {
       "y": 2026,
-      "v": 1476.3,
-      "p": 9
+      "v": 1482.7,
+      "p": 10
     }
   ],
   "market": {
     "turnoverYear": 101.08,
     "turnoverPrev": 99.81,
-    "turnoverMonth": 18.49,
-    "turnoverMonthLabel": "2026/10 本月累計",
+    "turnoverMonth": 0.8,
+    "turnoverMonthLabel": "2026/11 本月累計",
     "turnoverSeries": [
       {
         "ym": "2024-01",
@@ -207,15 +207,20 @@ window.DASH_DATA = {
         "ym": "2026-09",
         "v": 17.62,
         "d": 20
+      },
+      {
+        "ym": "2026-10",
+        "v": 18.49,
+        "d": 19
       }
     ],
-    "taiex": 45211.83,
-    "taiexChg": -1156.5,
-    "taiexDate": "2026-10-30",
-    "taiexYearPct": 56.1,
-    "turnoverTTM": 212.8,
-    "turnoverTTMPrev": 88.0,
-    "turnoverTTMLabel": "2025/09–2026/09",
+    "taiex": 44920.14,
+    "taiexChg": -291.69,
+    "taiexDate": "2026-11-02",
+    "taiexYearPct": 55.1,
+    "turnoverTTM": 221.1,
+    "turnoverTTMPrev": 91.2,
+    "turnoverTTMLabel": "2025/10–2026/10",
     "feeTotal": 213.6,
     "shareYM": "2026/09",
     "taiexSeries": [
@@ -1208,12 +1213,17 @@ window.DASH_DATA = {
         "d": "10-30",
         "c": 45211.83,
         "v": 9396
+      },
+      {
+        "d": "11-02",
+        "c": 44920.14,
+        "v": 7997
       }
     ],
-    "turnoverYTD": 188.1,
-    "turnoverYTDPrev": 79.0,
-    "turnoverYTDLabel": "2026/01–10",
-    "turnoverMonthDays": 19,
+    "turnoverYTD": 188.9,
+    "turnoverYTDPrev": 90.4,
+    "turnoverYTDLabel": "2026/01–11",
+    "turnoverMonthDays": 1,
     "revYM": "2026/09",
     "revTotal": 4170.2,
     "revFirms": 38,
@@ -1545,6 +1555,10 @@ window.DASH_DATA = {
     {
       "ym": "2026-09",
       "v": 1476.3
+    },
+    {
+      "ym": "2026-10",
+      "v": 1482.7
     }
   ],
   "savings": {
