@@ -2,7 +2,7 @@
 window.DASH_DATA = {
   "_readme": "真實資料來源。全欄位由 update.py 自動更新（TWSE/TPEX/FinMind 官方API；開戶數來自證交所「投資人開戶人數變動統計表」月報 xlsx，次月首個營業日上架）。改完跑 python3 update.py 產生 data.js。",
   "meta": {
-    "updated": "2026-11-06",
+    "updated": "2026-11-07",
     "asLabel": "財報 2026Q3・市佔 2026/09（手續費口徑）",
     "finPeriod": "2026Q3"
   },
@@ -1247,8 +1247,8 @@ window.DASH_DATA = {
     "revYM": "2026/09",
     "revTotal": 4170.2,
     "revFirms": 38,
-    "volYM": "2026/10",
-    "volTotal": 35.04,
+    "volYM": "2026/09",
+    "volTotal": 33.7,
     "volFirms": 66,
     "revLabel": "2026/01–09"
   },
@@ -1275,11 +1275,11 @@ window.DASH_DATA = {
       "shareRev": 29.26,
       "rankRev": 1,
       "rankVol": 1,
-      "shareVol": 15.95,
-      "shareVolYtd": 16.28,
+      "shareVol": 15.92,
+      "shareVolYtd": 16.31,
       "revAmt": 1220.0,
       "feeAmt": 35.44,
-      "volAmt": 58979.1
+      "volAmt": 56111.5
     },
     {
       "name": "凱基證券",
@@ -1303,11 +1303,11 @@ window.DASH_DATA = {
       "shareRev": 13.35,
       "rankRev": 2,
       "rankVol": 2,
-      "shareVol": 9.87,
-      "shareVolYtd": 10.71,
+      "shareVol": 10.02,
+      "shareVolYtd": 10.8,
       "revAmt": 556.6,
       "feeAmt": 17.97,
-      "volAmt": 36494.7
+      "volAmt": 35320.8
     },
     {
       "name": "富邦證券",
@@ -1331,11 +1331,11 @@ window.DASH_DATA = {
       "shareRev": 9.72,
       "rankRev": 3,
       "rankVol": 3,
-      "shareVol": 6.8,
-      "shareVolYtd": 6.89,
+      "shareVol": 6.84,
+      "shareVolYtd": 6.9,
       "revAmt": 405.2,
       "feeAmt": 18.65,
-      "volAmt": 25136.9
+      "volAmt": 24122.8
     },
     {
       "name": "永豐金證券",
@@ -1359,11 +1359,11 @@ window.DASH_DATA = {
       "shareRev": 7.37,
       "rankRev": 4,
       "rankVol": 6,
-      "shareVol": 5.29,
-      "shareVolYtd": 4.99,
+      "shareVol": 4.95,
+      "shareVolYtd": 4.96,
       "revAmt": 307.5,
       "feeAmt": 15.39,
-      "volAmt": 19562.5
+      "volAmt": 17440.9
     },
     {
       "name": "國泰證券",
@@ -1386,12 +1386,12 @@ window.DASH_DATA = {
       "yRevPrev": 91.8,
       "shareRev": 4.41,
       "rankRev": 8,
-      "rankVol": 7,
-      "shareVol": 4.62,
+      "rankVol": 8,
+      "shareVol": 4.69,
       "shareVolYtd": 4.63,
       "revAmt": 183.7,
       "feeAmt": 15.25,
-      "volAmt": 17078.3
+      "volAmt": 16546.6
     },
     {
       "name": "群益金鼎證券",
@@ -1415,11 +1415,11 @@ window.DASH_DATA = {
       "shareRev": 6.43,
       "rankRev": 5,
       "rankVol": 11,
-      "shareVol": 3.44,
-      "shareVolYtd": 3.31,
+      "shareVol": 3.45,
+      "shareVolYtd": 3.3,
       "revAmt": 268.0,
       "feeAmt": 7.73,
-      "volAmt": 12725.4
+      "volAmt": 12151.2
     },
     {
       "name": "統一證券",
@@ -1443,11 +1443,11 @@ window.DASH_DATA = {
       "shareRev": 6.22,
       "rankRev": 6,
       "rankVol": 14,
-      "shareVol": 2.18,
-      "shareVolYtd": 2.33,
+      "shareVol": 2.22,
+      "shareVolYtd": 2.35,
       "revAmt": 259.2,
       "feeAmt": 6.41,
-      "volAmt": 8072.9
+      "volAmt": 7827.8
     },
     {
       "name": "華南永昌證券",
@@ -1471,11 +1471,11 @@ window.DASH_DATA = {
       "shareRev": 2.54,
       "rankRev": 10,
       "rankVol": 13,
-      "shareVol": 2.26,
-      "shareVolYtd": 2.32,
+      "shareVol": 2.29,
+      "shareVolYtd": 2.33,
       "revAmt": 106.1,
       "feeAmt": 6.44,
-      "volAmt": 8346.2
+      "volAmt": 8061.3
     },
     {
       "name": "兆豐證券",
@@ -1499,11 +1499,11 @@ window.DASH_DATA = {
       "shareRev": 2.86,
       "rankRev": 9,
       "rankVol": 15,
-      "shareVol": 2.04,
+      "shareVol": 2.1,
       "shareVolYtd": 2.07,
       "revAmt": 119.3,
       "feeAmt": 5.47,
-      "volAmt": 7534.4
+      "volAmt": 7418.2
     },
     {
       "name": "美好證券",
@@ -1536,7 +1536,7 @@ window.DASH_DATA = {
       "shareVolYtd": 0.27,
       "revAmt": 35.7,
       "feeAmt": 0.92,
-      "volAmt": 943.3
+      "volAmt": 914.8
     }
   ],
   "accountsMonthly": [
