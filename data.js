@@ -45,7 +45,7 @@ window.DASH_DATA = {
   "market": {
     "turnoverYear": 101.08,
     "turnoverPrev": 99.81,
-    "turnoverMonth": 5.29,
+    "turnoverMonth": 6.16,
     "turnoverMonthLabel": "2026/11 本月累計",
     "turnoverSeries": [
       {
@@ -215,7 +215,7 @@ window.DASH_DATA = {
       }
     ],
     "taiex": 41661.7,
-    "taiexChg": 0.0,
+    "taiexChg": 1960.06,
     "taiexDate": "2026-11-09",
     "taiexYearPct": 43.8,
     "turnoverTTM": 221.1,
@@ -1242,13 +1242,13 @@ window.DASH_DATA = {
       {
         "d": "11-09",
         "c": 41661.7,
-        "v": 0
+        "v": 8770
       }
     ],
-    "turnoverYTD": 193.4,
+    "turnoverYTD": 194.2,
     "turnoverYTDPrev": 90.4,
     "turnoverYTDLabel": "2026/01–11",
-    "turnoverMonthDays": 5,
+    "turnoverMonthDays": 6,
     "revYM": "2026/09",
     "revTotal": 4170.2,
     "revFirms": 38,
