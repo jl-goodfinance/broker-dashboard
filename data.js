@@ -2,7 +2,7 @@
 window.DASH_DATA = {
   "_readme": "真實資料來源。全欄位由 update.py 自動更新（TWSE/TPEX/FinMind 官方API；開戶數來自證交所「投資人開戶人數變動統計表」月報 xlsx，次月首個營業日上架）。改完跑 python3 update.py 產生 data.js。",
   "meta": {
-    "updated": "2026-11-12",
+    "updated": "2026-11-13",
     "asLabel": "財報 2026Q3・市佔 2026/09（手續費口徑）",
     "finPeriod": "2026Q3"
   },
@@ -214,10 +214,10 @@ window.DASH_DATA = {
         "d": 19
       }
     ],
-    "taiex": 43091.87,
-    "taiexChg": -1165.28,
-    "taiexDate": "2026-11-12",
-    "taiexYearPct": 48.8,
+    "taiex": 43675.12,
+    "taiexChg": 0.0,
+    "taiexDate": "2026-11-13",
+    "taiexYearPct": 50.8,
     "turnoverTTM": 221.1,
     "turnoverTTMPrev": 91.2,
     "turnoverTTMLabel": "2025/10–2026/10",
@@ -1258,6 +1258,11 @@ window.DASH_DATA = {
         "d": "11-12",
         "c": 43091.87,
         "v": 10568
+      },
+      {
+        "d": "11-13",
+        "c": 43675.12,
+        "v": 0
       }
     ],
     "turnoverYTD": 197.2,
@@ -1280,10 +1285,10 @@ window.DASH_DATA = {
       "rev": 640,
       "p25": 244.2,
       "p24": 211.5,
-      "qRev": 824.4,
-      "qProfit": 256.6,
-      "qEps": 3.44,
-      "qPeriod": "2026Q2",
+      "qRev": 1220.0,
+      "qProfit": 386.0,
+      "qEps": 5.2,
+      "qPeriod": "2026Q3",
       "mRev": 118.6,
       "mRevMoM": 2.0,
       "mRevYoY": 49.1,
@@ -1308,10 +1313,10 @@ window.DASH_DATA = {
       "rev": 340,
       "p25": 118,
       "p24": 101.38,
-      "qRev": 380.7,
-      "qProfit": 179.4,
-      "qEps": 9.87,
-      "qPeriod": "2026Q2",
+      "qRev": 556.6,
+      "qProfit": 242.3,
+      "qEps": 11.44,
+      "qPeriod": "2026Q3",
       "mRev": 46.7,
       "mRevMoM": -4.0,
       "mRevYoY": 32.7,
