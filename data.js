@@ -2,7 +2,7 @@
 window.DASH_DATA = {
   "_readme": "真實資料來源。全欄位由 update.py 自動更新（TWSE/TPEX/FinMind 官方API；開戶數來自證交所「投資人開戶人數變動統計表」月報 xlsx，次月首個營業日上架）。改完跑 python3 update.py 產生 data.js。",
   "meta": {
-    "updated": "2026-11-26",
+    "updated": "2026-11-27",
     "asLabel": "財報 2026Q3・市佔 2026/10（手續費口徑）",
     "finPeriod": "2026Q3"
   },
@@ -45,7 +45,7 @@ window.DASH_DATA = {
   "market": {
     "turnoverYear": 101.08,
     "turnoverPrev": 99.81,
-    "turnoverMonth": 18.57,
+    "turnoverMonth": 19.26,
     "turnoverMonthLabel": "2026/11 本月累計",
     "turnoverSeries": [
       {
@@ -214,10 +214,10 @@ window.DASH_DATA = {
         "d": 19
       }
     ],
-    "taiex": 39151.81,
-    "taiexChg": 956.38,
-    "taiexDate": "2026-11-26",
-    "taiexYearPct": 35.2,
+    "taiex": 39308.08,
+    "taiexChg": 156.27,
+    "taiexDate": "2026-11-27",
+    "taiexYearPct": 35.7,
     "turnoverTTM": 221.1,
     "turnoverTTMPrev": 91.2,
     "turnoverTTMLabel": "2025/10–2026/10",
@@ -1308,12 +1308,17 @@ window.DASH_DATA = {
         "d": "11-26",
         "c": 39151.81,
         "v": 8453
+      },
+      {
+        "d": "11-27",
+        "c": 39308.08,
+        "v": 6816
       }
     ],
-    "turnoverYTD": 206.6,
+    "turnoverYTD": 207.3,
     "turnoverYTDPrev": 90.4,
     "turnoverYTDLabel": "2026/01–11",
-    "turnoverMonthDays": 19,
+    "turnoverMonthDays": 20,
     "revYM": "2026/10",
     "revTotal": 4475.3,
     "revFirms": 38,
@@ -1653,9 +1658,9 @@ window.DASH_DATA = {
   ],
   "savings": {
     "source": "主計總處 國民所得統計及國內經濟情勢展望 新聞稿 附表5〈儲蓄與投資〉",
-    "release": "2026-08-14",
-    "releaseTitle": "115年第2季經濟成長率saar為5.70％，yoy為12.93％；預測115年與116年分別成長11.05％及6.04％；114年每戶可支配所得差距6.17倍",
-    "url": "https://ws.dgbas.gov.tw/001/Upload/463/relfile/10980/236591/t5.xlsx",
+    "release": "2026-11-27",
+    "releaseTitle": "115年第3季經濟成長率saar為11.94％，yoy為14.39％；預測115及116年成長13.28％及6.51％",
+    "url": "https://ws.dgbas.gov.tw/001/Upload/463/relfile/10980/236908/t5.xlsx",
     "annual": [
       {
         "y": 2019,
@@ -1710,172 +1715,172 @@ window.DASH_DATA = {
       {
         "y": 2024,
         "f": false,
-        "sav": 10.99,
-        "savRate": 41.14,
-        "inv": 6.91,
-        "invRate": 26.86,
-        "ex": 4.08,
-        "exRate": 15.84
+        "sav": 11.08,
+        "savRate": 41.44,
+        "inv": 6.92,
+        "invRate": 26.89,
+        "ex": 4.16,
+        "exRate": 16.17
       },
       {
         "y": 2025,
         "f": false,
-        "sav": 12.98,
+        "sav": 13.04,
         "savRate": 43.94,
         "inv": 7.28,
-        "invRate": 25.35,
-        "ex": 5.7,
-        "exRate": 19.84
+        "invRate": 25.25,
+        "ex": 5.76,
+        "exRate": 19.98
       },
       {
         "y": 2026,
         "f": true,
-        "sav": 17.21,
-        "savRate": 49.63,
-        "inv": 8.74,
-        "invRate": 25.95,
-        "ex": 8.47,
-        "exRate": 25.13
+        "sav": 18.32,
+        "savRate": 51.14,
+        "inv": 8.95,
+        "invRate": 25.73,
+        "ex": 9.37,
+        "exRate": 26.95
       },
       {
         "y": 2027,
         "f": true,
-        "sav": 20.23,
-        "savRate": 52.73,
-        "inv": 9.22,
-        "invRate": 24.72,
-        "ex": 11.0,
-        "exRate": 29.49
+        "sav": 21.41,
+        "savRate": 53.85,
+        "inv": 9.73,
+        "invRate": 25.17,
+        "ex": 11.68,
+        "exRate": 30.23
       }
     ],
     "quarterly": [
       {
         "q": "2024Q1",
-        "flag": "",
-        "ex": 0.97,
-        "exRate": 15.74,
-        "savRate": 39.11,
-        "invRate": 25.26
+        "flag": "r",
+        "ex": 0.96,
+        "exRate": 15.62,
+        "savRate": 38.98,
+        "invRate": 25.29
       },
       {
         "q": "2024Q2",
-        "flag": "",
-        "ex": 0.99,
-        "exRate": 15.81,
-        "savRate": 42.42,
-        "invRate": 28.22
+        "flag": "r",
+        "ex": 1.04,
+        "exRate": 16.54,
+        "savRate": 43.09,
+        "invRate": 28.25
       },
       {
         "q": "2024Q3",
-        "flag": "",
-        "ex": 1.03,
-        "exRate": 15.96,
-        "savRate": 41.72,
-        "invRate": 26.21
+        "flag": "r",
+        "ex": 1.06,
+        "exRate": 16.35,
+        "savRate": 42.06,
+        "invRate": 26.23
       },
       {
         "q": "2024Q4",
-        "flag": "",
-        "ex": 1.08,
-        "exRate": 15.83,
-        "savRate": 41.26,
-        "invRate": 27.65
-      },
-      {
-        "q": "2025Q1",
-        "flag": "",
-        "ex": 0.97,
-        "exRate": 14.48,
-        "savRate": 40.81,
+        "flag": "r",
+        "ex": 1.1,
+        "exRate": 16.16,
+        "savRate": 41.57,
         "invRate": 27.71
       },
       {
+        "q": "2025Q1",
+        "flag": "r",
+        "ex": 1.0,
+        "exRate": 14.92,
+        "savRate": 41.01,
+        "invRate": 27.53
+      },
+      {
         "q": "2025Q2",
-        "flag": "",
-        "ex": 1.35,
-        "exRate": 19.65,
-        "savRate": 45.42,
-        "invRate": 27.06
+        "flag": "r",
+        "ex": 1.39,
+        "exRate": 20.28,
+        "savRate": 45.93,
+        "invRate": 26.99
       },
       {
         "q": "2025Q3",
-        "flag": "",
-        "ex": 1.42,
-        "exRate": 19.88,
-        "savRate": 43.69,
-        "invRate": 24.27
+        "flag": "r",
+        "ex": 1.44,
+        "exRate": 20.16,
+        "savRate": 43.84,
+        "invRate": 24.19
       },
       {
         "q": "2025Q4",
-        "flag": "",
-        "ex": 1.97,
-        "exRate": 24.41,
-        "savRate": 45.49,
-        "invRate": 22.88
+        "flag": "r",
+        "ex": 1.92,
+        "exRate": 23.78,
+        "savRate": 44.79,
+        "invRate": 22.84
       },
       {
         "q": "2026Q1",
         "flag": "r",
-        "ex": 1.73,
-        "exRate": 21.72,
-        "savRate": 45.26,
-        "invRate": 25.13
+        "ex": 1.76,
+        "exRate": 21.96,
+        "savRate": 45.37,
+        "invRate": 25.06
       },
       {
         "q": "2026Q2",
-        "flag": "p",
-        "ex": 2.01,
-        "exRate": 25.01,
-        "savRate": 51.16,
-        "invRate": 27.69
+        "flag": "r",
+        "ex": 2.15,
+        "exRate": 26.41,
+        "savRate": 52.16,
+        "invRate": 27.68
       },
       {
         "q": "2026Q3",
-        "flag": "f",
-        "ex": 2.11,
-        "exRate": 24.74,
-        "savRate": 49.81,
-        "invRate": 25.71
+        "flag": "p",
+        "ex": 2.34,
+        "exRate": 26.32,
+        "savRate": 51.91,
+        "invRate": 26.13
       },
       {
         "q": "2026Q4",
         "flag": "f",
-        "ex": 2.61,
-        "exRate": 28.58,
-        "savRate": 51.93,
-        "invRate": 25.36
+        "ex": 3.12,
+        "exRate": 32.12,
+        "savRate": 54.37,
+        "invRate": 24.3
       },
       {
         "q": "2027Q1",
         "flag": "f",
-        "ex": 2.5,
-        "exRate": 28.08,
-        "savRate": 52.34,
-        "invRate": 26.06
+        "ex": 2.64,
+        "exRate": 28.79,
+        "savRate": 52.83,
+        "invRate": 25.83
       },
       {
         "q": "2027Q2",
         "flag": "f",
-        "ex": 2.47,
-        "exRate": 27.48,
-        "savRate": 51.97,
-        "invRate": 26.01
+        "ex": 2.6,
+        "exRate": 28.27,
+        "savRate": 52.94,
+        "invRate": 26.55
       },
       {
         "q": "2027Q3",
         "flag": "f",
-        "ex": 2.73,
-        "exRate": 29.14,
-        "savRate": 52.27,
-        "invRate": 23.78
+        "ex": 2.86,
+        "exRate": 29.27,
+        "savRate": 53.54,
+        "invRate": 24.79
       },
       {
         "q": "2027Q4",
         "flag": "f",
-        "ex": 3.3,
-        "exRate": 32.88,
-        "savRate": 54.17,
-        "invRate": 23.24
+        "ex": 3.58,
+        "exRate": 34.08,
+        "savRate": 55.8,
+        "invRate": 23.72
       }
     ]
   }
